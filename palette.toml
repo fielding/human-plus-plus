@@ -1,0 +1,43 @@
+[meta]
+name = "Neo Noir"
+author = "fielding"
+description = "Cyberpunk Blade Runner aesthetic - rain-soaked neon"
+
+[base]
+bg = "#1f1f1f"
+bg_light = "#2b2b2b"
+fg = "#ededed"
+fg_dim = "#696969"
+
+[accent]
+primary = "#d9048e"      # hot pink - default mode
+secondary = "#04b372"    # teal - switcher mode
+tertiary = "#0a878c"     # dark teal - swap mode
+
+[semantic]
+black = "#262626"
+red = "#d9048e"
+green = "#04b372"
+yellow = "#f26c33"
+blue = "#317ad6"
+magenta = "#8d57ff"
+cyan = "#0a878c"
+white = "#ededed"
+
+[semantic_bright]
+black = "#4f4f4f"
+red = "#f26bce"
+green = "#05f29b"
+yellow = "#f2a633"
+blue = "#57a0ff"
+magenta = "#ad7fff"
+cyan = "#1ad0d6"
+white = "#ffffff"
+
+[modes]
+default = "#d9048e"      # hot pink
+switcher = "#04b372"     # teal
+swap = "#1ad0d6"         # bright cyan
+tree = "#f26c33"         # orange
+layout = "#8d57ff"       # purple
+meet = "#f26bce"         # bright pink
