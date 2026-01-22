@@ -1,43 +1,22 @@
 [meta]
-name = "Neo Noir"
+name = "Human++"
 author = "fielding"
-description = "Cyberpunk Blade Runner aesthetic - rain-soaked neon"
+description = "Warm humane grayscale - the quiet room where bright ideas can talk"
 
-[base]
-bg = "#1f1f1f"
-bg_light = "#2b2b2b"
-fg = "#ededed"
-fg_dim = "#696969"
-
-[accent]
-primary = "#d9048e"      # hot pink - default mode
-secondary = "#04b372"    # teal - switcher mode
-tertiary = "#0a878c"     # dark teal - swap mode
-
-[semantic]
-black = "#262626"
-red = "#d9048e"
-green = "#04b372"
-yellow = "#f26c33"
-blue = "#317ad6"
-magenta = "#8d57ff"
-cyan = "#0a878c"
-white = "#ededed"
-
-[semantic_bright]
-black = "#4f4f4f"
-red = "#f26bce"
-green = "#05f29b"
-yellow = "#f2a633"
-blue = "#57a0ff"
-magenta = "#ad7fff"
-cyan = "#1ad0d6"
-white = "#ffffff"
-
-[modes]
-default = "#d9048e"      # hot pink
-switcher = "#04b372"     # teal
-swap = "#1ad0d6"         # bright cyan
-tree = "#f26c33"         # orange
-layout = "#8d57ff"       # purple
-meet = "#f26bce"         # bright pink
+[base16]
+base00 = "#1c1917"    # bg (warm charcoal, hint of brown)
+base01 = "#262321"    # bg+ (subtle elevation)
+base02 = "#353230"    # selection (gentle separation)
+base03 = "#8a7b6b"    # comments (coffee with milk - human narrative)
+base04 = "#8a8279"    # fg- (secondary text, readable)
+base05 = "#c4bbb2"    # fg (main text - warm, NOT white)
+base06 = "#ddd5cc"    # fg+ (emphasis)
+base07 = "#f2ebe4"    # fg++ (highlights - warm near-white, NOT pure white)
+base08 = "#d9048e"    # red (hot pink)
+base09 = "#f26c33"    # orange
+base0A = "#f2a633"    # yellow (amber)
+base0B = "#04b372"    # green (teal)
+base0C = "#1ad0d6"    # cyan
+base0D = "#317ad6"    # blue
+base0E = "#8d57ff"    # magenta (purple - thinking about thinking)
+base0F = "#bbff00"    # lime (highlighter - human attention marker)
