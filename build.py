@@ -1152,23 +1152,6 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {{
       quiet.appendChild(createSwatch(key, palette[key]));
     }});
 
-    // Custom Human++ marker highlighting for comments
-    function highlightMarkers() {{
-      document.querySelectorAll('.hljs-comment').forEach(el => {{
-        const text = el.textContent;
-        if (text.includes('!!')) {{
-          el.classList.add('humanpp-attention');
-        }} else if (text.includes('??')) {{
-          el.classList.add('humanpp-uncertainty');
-        }} else if (text.includes('>>')) {{
-          el.classList.add('humanpp-reference');
-        }}
-      }});
-    }}
-
-    // Initialize highlight.js
-    hljs.highlightAll();
-    highlightMarkers();
     // Tab switching
     document.querySelectorAll('.code-tab').forEach(tab => {{
       tab.addEventListener('click', () => {{
@@ -1183,13 +1166,17 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {{
       }});
     }});
   </script>
+
+  <!-- Highlight.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
   <script>
+    // Initialize highlight.js
     hljs.highlightAll();
-    // Human++ marker highlighting
+
+    // Human++ marker highlighting - add background colors to special comments
     function highlightMarkers() {{
       document.querySelectorAll('.hljs-comment').forEach(el => {{
         const text = el.textContent;
