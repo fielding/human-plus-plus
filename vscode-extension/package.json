@@ -1,0 +1,118 @@
+{
+  "name": "humanpp",
+  "displayName": "Human++",
+  "description": "A Base24 color scheme for the post-artisanal coding era. Code is cheap. Intent is scarce.",
+  "version": "1.0.0",
+  "publisher": "fielding",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fldnnn/humanpp"
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "keywords": [
+    "theme",
+    "dark theme",
+    "base24",
+    "syntax highlighting",
+    "human intent",
+    "code review"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "themes": [
+      {
+        "label": "Human++ Cool Balanced",
+        "uiTheme": "vs-dark",
+        "path": "./themes/humanpp-cool-balanced.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "humanpp.toggle",
+        "title": "Human++: Toggle Marker Highlighting"
+      },
+      {
+        "command": "humanpp.refresh",
+        "title": "Human++: Refresh Marker Decorations"
+      }
+    ],
+    "configuration": {
+      "title": "Human++",
+      "properties": {
+        "humanpp.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Human++ marker highlighting"
+        },
+        "humanpp.debounceMs": {
+          "type": "number",
+          "default": 200,
+          "minimum": 50,
+          "maximum": 1000,
+          "description": "Debounce delay in milliseconds for rescanning on edit"
+        },
+        "humanpp.markerColor": {
+          "type": "string",
+          "default": "#bbff00",
+          "description": "Background color for marker tokens (!! ?? >>)"
+        },
+        "humanpp.markerTextColor": {
+          "type": "string",
+          "default": "#1b1d20",
+          "description": "Text color for marker tokens"
+        },
+        "humanpp.highlightRestOfLine": {
+          "type": "boolean",
+          "default": true,
+          "description": "Apply subtle background to rest of comment line after marker"
+        },
+        "humanpp.restOfLineBackground": {
+          "type": "string",
+          "default": "#32343a",
+          "description": "Background color for rest of comment line"
+        },
+        "humanpp.restOfLineForeground": {
+          "type": "string",
+          "default": "#f2ebe4",
+          "description": "Text color for rest of comment line"
+        },
+        "humanpp.markers.intervention.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable !! (intervention/attention) marker"
+        },
+        "humanpp.markers.uncertainty.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable ?? (uncertainty/verify) marker"
+        },
+        "humanpp.markers.directive.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable >> (directive/decision) marker"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.0.0"
+  }
+}

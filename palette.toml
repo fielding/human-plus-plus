@@ -1,22 +1,33 @@
 [meta]
-name = "Human++"
+name = "Human++ Cool Balanced"
 author = "fielding"
-description = "Warm humane grayscale - the quiet room where bright ideas can talk"
+description = "Cool balanced grayscale with quiet syntax, loud diagnostics - code is cheap, intent is scarce"
 
 [base16]
-base00 = "#1c1917"    # bg (warm charcoal, hint of brown)
-base01 = "#262321"    # bg+ (subtle elevation)
-base02 = "#353230"    # selection (gentle separation)
-base03 = "#8a7b6b"    # comments (coffee with milk - human narrative)
-base04 = "#8a8279"    # fg- (secondary text, readable)
-base05 = "#c4bbb2"    # fg (main text - warm, NOT white)
-base06 = "#ddd5cc"    # fg+ (emphasis)
-base07 = "#f2ebe4"    # fg++ (highlights - warm near-white, NOT pure white)
-base08 = "#d9048e"    # red (hot pink)
-base09 = "#f26c33"    # orange
-base0A = "#f2a633"    # yellow (amber)
-base0B = "#04b372"    # green (teal)
-base0C = "#1ad0d6"    # cyan
-base0D = "#317ad6"    # blue
-base0E = "#8d57ff"    # magenta (purple - thinking about thinking)
-base0F = "#bbff00"    # lime (highlighter - human attention marker)
+base00 = "#1b1d20"    # bg (cool charcoal)
+base01 = "#24262a"    # bg+ (elevation)
+base02 = "#32343a"    # selection (panels)
+base03 = "#8a7b6b"    # comments (coffee brown - human voice, EXCLUSIVE)
+base04 = "#8a8279"    # fg- (UI secondary, structure)
+base05 = "#e5ded6"    # fg (main text - bright warm cream)
+base06 = "#f2ebe4"    # fg+ (emphasis)
+base07 = "#faf5ef"    # fg++ (highlights - near-white with warmth)
+base08 = "#d9048e"    # red/pink (LOUD - errors, attention)
+base09 = "#f26c33"    # orange (LOUD - warnings)
+base0A = "#f2a633"    # yellow/amber (LOUD - caution)
+base0B = "#04b372"    # green/teal (LOUD - success)
+base0C = "#1ad0d6"    # cyan (LOUD - info)
+base0D = "#317ad6"    # blue (LOUD - focus, links)
+base0E = "#8d57ff"    # purple (LOUD - special)
+base0F = "#bbff00"    # lime (RESERVED - human intent marker)
+
+[base24]
+# Quiet accent variants - for syntax, UI state (less urgent than diagnostics)
+base10 = "#c8518f"    # quiet red
+base11 = "#d68c6f"    # quiet orange
+base12 = "#dfb683"    # quiet yellow (strings)
+base13 = "#61b186"    # quiet green (functions)
+base14 = "#72d1d5"    # quiet cyan (types, declarations)
+base15 = "#5283c5"    # quiet blue (hints)
+base16 = "#8f72e3"    # quiet purple (constants)
+base17 = "#d2fc91"    # quiet lime

@@ -1,22 +1,39 @@
 #!/bin/bash
-# Human++ - Warm humane grayscale
+# Human++ Cool Balanced - Base24
+# Generated from palette.toml
 
-export COLOR_BG=0xff1c1917           # warm charcoal
-export COLOR_BG_LIGHT=0xff262321     # subtle elevation
-export COLOR_FG=0xffc4bbb2           # warm main text
-export COLOR_FG_DIM=0xff8a7b6b       # coffee with milk comments
-export COLOR_ACCENT=0xffd9048e       # hot pink
-export COLOR_MINT=0xff04b372         # teal
-export COLOR_CYAN=0xff1ad0d6         # cyan
-export COLOR_ORANGE=0xfff26c33       # orange
-export COLOR_PURPLE=0xff8d57ff       # purple
-export COLOR_RED=0xffd9048e          # hot pink
+# Base grayscale (cool)
+export COLOR_BG=0xff1b1d20           # base00 - background
+export COLOR_BG_LIGHT=0xff24262a     # base01 - elevation
+export COLOR_BG_ALT=0xff32343a       # base02 - selection/panels
+export COLOR_FG=0xffe5ded6           # base05 - main text
+export COLOR_FG_DIM=0xff8a7b6b       # base03 - comments
+export COLOR_FG_SECONDARY=0xff8a8279 # base04 - UI secondary
 export COLOR_TRANSPARENT=0x00000000
 
-# Mode colors
-export MODE_DEFAULT=0xffd9048e       # hot pink
-export MODE_SWITCHER=0xff04b372      # teal
-export MODE_SWAP=0xff1ad0d6          # cyan
-export MODE_TREE=0xfff2a633          # amber
-export MODE_LAYOUT=0xff8d57ff        # purple
-export MODE_MEET=0xfff26c33          # orange
+# Loud accents (diagnostics, signals)
+export COLOR_RED=0xffd9048e          # base08 - errors, attention
+export COLOR_ORANGE=0xfff26c33       # base09 - warnings
+export COLOR_YELLOW=0xfff2a633       # base0A - caution
+export COLOR_GREEN=0xff04b372        # base0B - success
+export COLOR_CYAN=0xff1ad0d6         # base0C - info
+export COLOR_BLUE=0xff317ad6         # base0D - links, focus
+export COLOR_PURPLE=0xff8d57ff       # base0E - special
+export COLOR_HUMAN=0xffbbff00        # base0F - human intent marker
+
+# Quiet accents (UI state, less urgent)
+export COLOR_RED_QUIET=0xffc8518f    # base10
+export COLOR_ORANGE_QUIET=0xffd68c6f # base11
+export COLOR_YELLOW_QUIET=0xffdfb683 # base12
+export COLOR_GREEN_QUIET=0xff61b186  # base13
+export COLOR_CYAN_QUIET=0xff72d1d5   # base14
+export COLOR_BLUE_QUIET=0xff5283c5   # base15
+export COLOR_PURPLE_QUIET=0xff8f72e3 # base16
+
+# Mode colors (using loud accents for visibility)
+export MODE_DEFAULT=0xffd9048e       # base08 - hot pink
+export MODE_SWITCHER=0xff04b372      # base0B - green
+export MODE_SWAP=0xff1ad0d6          # base0C - cyan
+export MODE_TREE=0xfff2a633          # base0A - amber
+export MODE_LAYOUT=0xff8d57ff        # base0E - purple
+export MODE_MEET=0xfff26c33          # base09 - orange

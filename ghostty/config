@@ -1,27 +1,28 @@
-# Human++ - Warm humane grayscale
+# Human++ Cool Balanced - Base24
+# Generated from palette.toml
 
-background = #1c1917
-foreground = #c4bbb2
-cursor-color = #f2ebe4
-selection-background = #353230
-selection-foreground = #c4bbb2
+background = 1b1d20
+foreground = faf5ef
+cursor-color = faf5ef
+selection-background = 32343a
+selection-foreground = e5ded6
 
-# Normal colors
-palette = 0=#1c1917
+# Normal colors (LOUD accents)
+palette = 0=#1b1d20
 palette = 1=#d9048e
 palette = 2=#04b372
 palette = 3=#f2a633
 palette = 4=#317ad6
 palette = 5=#8d57ff
 palette = 6=#1ad0d6
-palette = 7=#c4bbb2
+palette = 7=#f2ebe4
 
-# Bright colors
+# Bright colors (QUIET accents)
 palette = 8=#8a7b6b
-palette = 9=#f26c33
-palette = 10=#04b372
-palette = 11=#f2a633
-palette = 12=#317ad6
-palette = 13=#bbff00
-palette = 14=#1ad0d6
-palette = 15=#f2ebe4
+palette = 9=#c8518f
+palette = 10=#61b186
+palette = 11=#dfb683
+palette = 12=#5283c5
+palette = 13=#8f72e3
+palette = 14=#72d1d5
+palette = 15=#faf5ef

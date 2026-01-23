@@ -1,0 +1,8 @@
+.gitignore
+src/**
+tsconfig.json
+node_modules/**
+*.vsix
+.vscode/**
+.DS_Store
+**/*.map
