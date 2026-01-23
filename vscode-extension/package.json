@@ -62,30 +62,16 @@
           "maximum": 1000,
           "description": "Debounce delay in milliseconds for rescanning on edit"
         },
-        "humanpp.markerColor": {
+        "humanpp.style": {
           "type": "string",
-          "default": "#bbff00",
-          "description": "Background color for marker tokens (!! ?? >>)"
-        },
-        "humanpp.markerTextColor": {
-          "type": "string",
-          "default": "#1b1d20",
-          "description": "Text color for marker tokens"
-        },
-        "humanpp.highlightRestOfLine": {
-          "type": "boolean",
-          "default": true,
-          "description": "Apply subtle background to rest of comment line after marker"
-        },
-        "humanpp.restOfLineBackground": {
-          "type": "string",
-          "default": "#32343a",
-          "description": "Background color for rest of comment line"
-        },
-        "humanpp.restOfLineForeground": {
-          "type": "string",
-          "default": "#f2ebe4",
-          "description": "Text color for rest of comment line"
+          "enum": ["badge", "line", "both"],
+          "default": "both",
+          "enumDescriptions": [
+            "Badge only: bright background on marker token (!! ?? >>)",
+            "Line only: subtle colored background on entire line (like errors/warnings)",
+            "Both: badge on marker + colored line background"
+          ],
+          "description": "How to highlight Human++ markers"
         },
         "humanpp.markers.intervention.enable": {
           "type": "boolean",

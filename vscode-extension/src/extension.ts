@@ -1,46 +1,77 @@
 import * as vscode from 'vscode';
 
-// Marker definitions (language-agnostic, detected inside comments only)
+// Marker types and their default colors
 type MarkerType = 'intervention' | 'uncertainty' | 'directive';
 
-const MARKER_CONFIG: Record<MarkerType, { pattern: string; configKey: string }> = {
-  intervention: { pattern: '!!', configKey: 'markers.intervention.enable' },
-  uncertainty: { pattern: '\\?\\?', configKey: 'markers.uncertainty.enable' },
-  directive: { pattern: '>>', configKey: 'markers.directive.enable' },
+interface MarkerDef {
+  pattern: string;
+  regex: RegExp;
+  configKey: string;
+  color: string;        // LOUD color for badge
+  colorDim: string;     // Low opacity for line background
+  textColor: string;    // Text color on badge
+}
+
+const MARKERS: Record<MarkerType, MarkerDef> = {
+  intervention: {
+    pattern: '!!',
+    regex: /!!/,
+    configKey: 'markers.intervention.enable',
+    color: '#bbff00',      // base0F lime
+    colorDim: '#bbff0018', // ~10% opacity
+    textColor: '#1b1d20',
+  },
+  uncertainty: {
+    pattern: '??',
+    regex: /\?\?/,
+    configKey: 'markers.uncertainty.enable',
+    color: '#8d57ff',      // base0E purple
+    colorDim: '#8d57ff18',
+    textColor: '#faf5ef',
+  },
+  directive: {
+    pattern: '>>',
+    regex: />>/,
+    configKey: 'markers.directive.enable',
+    color: '#1ad0d6',      // base0C cyan
+    colorDim: '#1ad0d618',
+    textColor: '#1b1d20',
+  },
 };
 
-// Combined marker regex: matches at start of comment text
-// ^(\s*)(!!|\?\?|>>)(?=\s|$)
-const MARKER_REGEX = /^(\s*)(!!|\?\?|>>)(?=\s|$)/;
-
-// Common comment prefix patterns (language-agnostic detection)
-// These identify where a comment starts - deliberately don't consume trailing space
-// so the marker highlight can include the space before the marker
+// Common comment prefix patterns
 const COMMENT_PATTERNS: RegExp[] = [
-  /^(\s*)(\/\/\/)/,        // /// doc comments (C#, Rust, etc) - check before //
+  /^(\s*)(\/\/\/)/,        // /// doc comments
   /^(\s*)(\/\/)/,          // // C-style
   /^(\s*)(#)/,             // # Python/Shell/Ruby
   /^(\s*)(--)/,            // -- SQL/Lua/Haskell
   /^(\s*)(;)/,             // ; Lisp/Assembly
-  /^(\s*)(\/\*+)/,         // /* or /** C-style block
-  /^(\s*)(\*)/,            // * block comment continuation
+  /^(\s*)(\/\*+)/,         // /* block
+  /^(\s*)(\*)/,            // * block continuation
   /^(\s*)(<!--)/,          // <!-- HTML/XML
-  /^(\s*)(%)/,             // % LaTeX/Prolog/Erlang
+  /^(\s*)(%)/,             // % LaTeX/Prolog
   /^(\s*)(rem\s)/i,        // REM Basic/Batch
-  /^(\s*)(dnl\s)/,         // dnl m4
-  /^(\s*)(@c\s)/,          // @c Texinfo
 ];
 
-// Note: patterns are ordered by specificity (/// before //, etc.)
+type StyleMode = 'badge' | 'line' | 'both';
+
+interface MarkerMatch {
+  type: MarkerType;
+  lineNum: number;
+  markerStart: number;
+  markerEnd: number;
+  lineEnd: number;
+}
 
 interface ScanResult {
-  markerRanges: vscode.Range[];
-  restOfLineRanges: vscode.Range[];
+  matches: MarkerMatch[];
 }
 
 class DecorationManager {
-  private markerDecorationType: vscode.TextEditorDecorationType | undefined;
-  private restOfLineDecorationType: vscode.TextEditorDecorationType | undefined;
+  // Badge decorations (one per marker type)
+  private badgeDecorations: Map<MarkerType, vscode.TextEditorDecorationType> = new Map();
+  // Line background decorations (one per marker type)
+  private lineDecorations: Map<MarkerType, vscode.TextEditorDecorationType> = new Map();
 
   constructor() {
     this.createDecorationTypes();
@@ -49,75 +80,68 @@ class DecorationManager {
   createDecorationTypes(): void {
     this.dispose();
 
-    const config = vscode.workspace.getConfiguration('humanpp');
+    for (const [type, def] of Object.entries(MARKERS) as [MarkerType, MarkerDef][]) {
+      // Badge decoration - bright background on marker
+      this.badgeDecorations.set(type, vscode.window.createTextEditorDecorationType({
+        backgroundColor: def.color,
+        color: def.textColor,
+        fontWeight: 'bold',
+        borderRadius: '3px',
+        overviewRulerColor: def.color,
+        overviewRulerLane: vscode.OverviewRulerLane.Right,
+      }));
 
-    // Marker token decoration - bright highlight
-    this.markerDecorationType = vscode.window.createTextEditorDecorationType({
-      backgroundColor: config.get('markerColor', '#bbff00'),
-      color: config.get('markerTextColor', '#1b1d20'),
-      fontWeight: 'bold',
-      borderRadius: '2px',
-      overviewRulerColor: config.get('markerColor', '#bbff00'),
-      overviewRulerLane: vscode.OverviewRulerLane.Right,
-    });
-
-    // Rest of line decoration - subtle background (base02), light text
-    this.restOfLineDecorationType = vscode.window.createTextEditorDecorationType({
-      backgroundColor: config.get('restOfLineBackground', '#32343a'),
-      color: config.get('restOfLineForeground', '#f2ebe4'),
-    });
+      // Line decoration - subtle colored background
+      this.lineDecorations.set(type, vscode.window.createTextEditorDecorationType({
+        backgroundColor: def.colorDim,
+        isWholeLine: true,
+      }));
+    }
   }
 
-  getMarkerDecorationType(): vscode.TextEditorDecorationType | undefined {
-    return this.markerDecorationType;
+  getBadgeDecoration(type: MarkerType): vscode.TextEditorDecorationType | undefined {
+    return this.badgeDecorations.get(type);
   }
 
-  getRestOfLineDecorationType(): vscode.TextEditorDecorationType | undefined {
-    return this.restOfLineDecorationType;
+  getLineDecoration(type: MarkerType): vscode.TextEditorDecorationType | undefined {
+    return this.lineDecorations.get(type);
+  }
+
+  getAllTypes(): MarkerType[] {
+    return Object.keys(MARKERS) as MarkerType[];
   }
 
   dispose(): void {
-    this.markerDecorationType?.dispose();
-    this.restOfLineDecorationType?.dispose();
-    this.markerDecorationType = undefined;
-    this.restOfLineDecorationType = undefined;
+    for (const dec of this.badgeDecorations.values()) {
+      dec.dispose();
+    }
+    for (const dec of this.lineDecorations.values()) {
+      dec.dispose();
+    }
+    this.badgeDecorations.clear();
+    this.lineDecorations.clear();
   }
 }
 
 class Scanner {
-  /**
-   * Scans a document for Human++ markers inside comments.
-   *
-   * Strategy:
-   * 1. For each line, detect if it's a comment using common patterns
-   * 2. Extract the comment text (after the prefix)
-   * 3. Check if comment text starts with a marker (!! | ?? | >>)
-   * 4. Return ranges for the marker token and optionally rest of line
-   */
   scan(document: vscode.TextDocument): ScanResult {
     const config = vscode.workspace.getConfiguration('humanpp');
-    const highlightRestOfLine = config.get('highlightRestOfLine', false);
-
-    const markerRanges: vscode.Range[] = [];
-    const restOfLineRanges: vscode.Range[] = [];
+    const matches: MarkerMatch[] = [];
 
     const text = document.getText();
     const lines = text.split('\n');
 
-    // Build enabled marker pattern
-    const enabledMarkers: string[] = [];
-    for (const [type, { pattern, configKey }] of Object.entries(MARKER_CONFIG)) {
-      if (config.get(configKey, true)) {
-        enabledMarkers.push(pattern);
+    // Build list of enabled markers
+    const enabledMarkers: [MarkerType, MarkerDef][] = [];
+    for (const [type, def] of Object.entries(MARKERS) as [MarkerType, MarkerDef][]) {
+      if (config.get(def.configKey, true)) {
+        enabledMarkers.push([type, def]);
       }
     }
 
     if (enabledMarkers.length === 0) {
-      return { markerRanges, restOfLineRanges };
+      return { matches };
     }
-
-    // Dynamic regex based on enabled markers
-    const markerRegex = new RegExp(`^(\\s*)(${enabledMarkers.join('|')})(?=\\s|$)`);
 
     for (let lineNum = 0; lineNum < lines.length; lineNum++) {
       const line = lines[lineNum];
@@ -129,49 +153,42 @@ class Scanner {
           continue;
         }
 
-        // commentMatch[1] = leading whitespace before comment
-        // commentMatch[2] = the comment prefix (including its trailing space if any)
         const prefixEnd = commentMatch[0].length;
         const commentText = line.slice(prefixEnd);
 
-        // Check if comment text starts with a marker
-        const markerMatch = markerRegex.exec(commentText);
-        if (markerMatch) {
-          // markerMatch[1] = whitespace between prefix and marker (usually empty)
-          // markerMatch[2] = the marker itself (!! | ?? | >>)
-          const wsBeforeMarker = markerMatch[1] || '';
-          const marker = markerMatch[2];
+        // Check for each marker type
+        for (const [type, def] of enabledMarkers) {
+          // Match marker at start of comment (with optional whitespace)
+          const markerRegex = new RegExp(`^(\\s*)(${def.pattern.replace(/\?/g, '\\?')})(?=\\s|$)`);
+          const markerMatch = markerRegex.exec(commentText);
 
-          // Include space before marker in highlight
-          const markerStart = prefixEnd;
-          const markerTokenEnd = prefixEnd + wsBeforeMarker.length + marker.length;
+          if (markerMatch) {
+            const wsBeforeMarker = markerMatch[1] || '';
+            const marker = markerMatch[2];
 
-          // Include space after marker if present
-          const afterMarker = commentText.slice(wsBeforeMarker.length + marker.length);
-          const trailingSpace = afterMarker.match(/^\s/) ? 1 : 0;
-          const markerEnd = markerTokenEnd + trailingSpace;
+            const markerStart = prefixEnd;
+            const markerTokenEnd = prefixEnd + wsBeforeMarker.length + marker.length;
+            const afterMarker = commentText.slice(wsBeforeMarker.length + marker.length);
+            const trailingSpace = afterMarker.match(/^\s/) ? 1 : 0;
+            const markerEnd = markerTokenEnd + trailingSpace;
 
-          // Highlight the marker token (with surrounding spaces)
-          markerRanges.push(new vscode.Range(
-            new vscode.Position(lineNum, markerStart),
-            new vscode.Position(lineNum, markerEnd)
-          ));
+            matches.push({
+              type,
+              lineNum,
+              markerStart,
+              markerEnd,
+              lineEnd: line.length,
+            });
 
-          // Optionally highlight rest of comment
-          if (highlightRestOfLine && markerEnd < line.length) {
-            restOfLineRanges.push(new vscode.Range(
-              new vscode.Position(lineNum, markerEnd),
-              new vscode.Position(lineNum, line.length)
-            ));
+            break; // Only one marker per line
           }
         }
 
-        // Only match first comment pattern per line
-        break;
+        break; // Only check first comment pattern per line
       }
     }
 
-    return { markerRanges, restOfLineRanges };
+    return { matches };
   }
 }
 
@@ -191,24 +208,55 @@ class HumanPPHighlighter {
     return vscode.workspace.getConfiguration('humanpp').get('debounceMs', 200);
   }
 
+  private getStyleMode(): StyleMode {
+    return vscode.workspace.getConfiguration('humanpp').get('style', 'both') as StyleMode;
+  }
+
   updateDecorations(editor: vscode.TextEditor | undefined): void {
     if (!editor || !this.enabled) {
       return;
     }
 
-    const { markerRanges, restOfLineRanges } = this.scanner.scan(editor.document);
+    const { matches } = this.scanner.scan(editor.document);
+    const style = this.getStyleMode();
 
-    const markerDecorationType = this.decorationManager.getMarkerDecorationType();
-    const restOfLineDecorationType = this.decorationManager.getRestOfLineDecorationType();
+    // Group matches by marker type
+    const badgeRanges: Map<MarkerType, vscode.Range[]> = new Map();
+    const lineRanges: Map<MarkerType, vscode.Range[]> = new Map();
 
-    if (markerDecorationType) {
-      editor.setDecorations(markerDecorationType, markerRanges);
+    for (const type of this.decorationManager.getAllTypes()) {
+      badgeRanges.set(type, []);
+      lineRanges.set(type, []);
     }
 
-    if (restOfLineDecorationType) {
-      const config = vscode.workspace.getConfiguration('humanpp');
-      const highlightRestOfLine = config.get('highlightRestOfLine', false);
-      editor.setDecorations(restOfLineDecorationType, highlightRestOfLine ? restOfLineRanges : []);
+    for (const match of matches) {
+      // Badge range (just the marker)
+      badgeRanges.get(match.type)?.push(new vscode.Range(
+        new vscode.Position(match.lineNum, match.markerStart),
+        new vscode.Position(match.lineNum, match.markerEnd)
+      ));
+
+      // Line range (whole line for background)
+      lineRanges.get(match.type)?.push(new vscode.Range(
+        new vscode.Position(match.lineNum, 0),
+        new vscode.Position(match.lineNum, match.lineEnd)
+      ));
+    }
+
+    // Apply decorations based on style mode
+    for (const type of this.decorationManager.getAllTypes()) {
+      const badgeDec = this.decorationManager.getBadgeDecoration(type);
+      const lineDec = this.decorationManager.getLineDecoration(type);
+
+      if (badgeDec) {
+        const showBadge = style === 'badge' || style === 'both';
+        editor.setDecorations(badgeDec, showBadge ? badgeRanges.get(type) || [] : []);
+      }
+
+      if (lineDec) {
+        const showLine = style === 'line' || style === 'both';
+        editor.setDecorations(lineDec, showLine ? lineRanges.get(type) || [] : []);
+      }
     }
   }
 
@@ -217,14 +265,16 @@ class HumanPPHighlighter {
       return;
     }
 
-    const markerDecorationType = this.decorationManager.getMarkerDecorationType();
-    const restOfLineDecorationType = this.decorationManager.getRestOfLineDecorationType();
+    for (const type of this.decorationManager.getAllTypes()) {
+      const badgeDec = this.decorationManager.getBadgeDecoration(type);
+      const lineDec = this.decorationManager.getLineDecoration(type);
 
-    if (markerDecorationType) {
-      editor.setDecorations(markerDecorationType, []);
-    }
-    if (restOfLineDecorationType) {
-      editor.setDecorations(restOfLineDecorationType, []);
+      if (badgeDec) {
+        editor.setDecorations(badgeDec, []);
+      }
+      if (lineDec) {
+        editor.setDecorations(lineDec, []);
+      }
     }
   }
 
