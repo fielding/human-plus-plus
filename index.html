@@ -71,10 +71,28 @@
     .hljs-addition { color: var(--base0B); background-color: rgba(4, 179, 114, 0.1); }
     .hljs-deletion { color: var(--base08); background-color: rgba(217, 4, 142, 0.1); }
 
-    /* Human++ marker highlighting */
-    .hljs-comment.humanpp-attention { color: var(--base0F); font-weight: bold; }
-    .hljs-comment.humanpp-uncertainty { color: var(--base0E); font-weight: bold; }
-    .hljs-comment.humanpp-reference { color: var(--base0C); font-weight: bold; }
+    /* Human++ marker highlighting - matches VS Code extension */
+    .hljs-comment.humanpp-attention {
+      color: var(--base00);
+      background: var(--base0F);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    .hljs-comment.humanpp-uncertainty {
+      color: var(--base07);
+      background: var(--base0E);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    .hljs-comment.humanpp-reference {
+      color: var(--base00);
+      background: var(--base0C);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
     
 
     body {
@@ -499,6 +517,14 @@
       font-size: 14px;
       margin-bottom: 32px;
       position: relative;
+      line-height: 1.8;
+    }
+
+    .install-code pre {
+      margin: 0;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
     .install-code .prompt {
@@ -852,14 +878,14 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
       </div>
 
       <div class="install-code">
-<span class="comment"># Clone the repo</span>
+<pre><span class="comment"># Clone the repo</span>
 <span class="prompt">$</span> <span class="command">git clone https://github.com/fielding/human-plus-plus</span>
 
 <span class="comment"># Build all theme files from palette.toml</span>
 <span class="prompt">$</span> <span class="command">python3 build.py</span>
 
 <span class="comment"># Apply with tinty</span>
-<span class="prompt">$</span> <span class="command">tinty apply base24-human-plus-plus</span>
+<span class="prompt">$</span> <span class="command">tinty apply base24-human-plus-plus</span></pre>
       </div>
 
       <div class="apps-grid">
