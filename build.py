@@ -1189,7 +1189,9 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {{
         }}
       }});
     }}
-    highlightMarkers();
+
+    // Run after hljs finishes processing
+    setTimeout(highlightMarkers, 50);
   </script>
 </body>
 </html>
