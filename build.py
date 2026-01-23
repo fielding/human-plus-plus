@@ -552,42 +552,6 @@ def generate_swatches_html(colors, meta):
       padding: 0 4px;
     }}
 
-    /* Comparison */
-    .comparison-grid {{
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 12px;
-    }}
-
-    .comparison-pair {{
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      text-align: center;
-    }}
-
-    .comparison-swatch {{
-      height: 56px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.1s;
-    }}
-
-    .comparison-swatch:hover {{
-      transform: scale(1.05);
-    }}
-
-    .comparison-label {{
-      font-size: 10px;
-      color: var(--base04);
-      margin-top: 8px;
-    }}
-
     /* Markers section */
     .markers-grid {{
       display: grid;
@@ -917,11 +881,6 @@ def generate_swatches_html(colors, meta):
         <div class="palette-label">Quiet Accents — Syntax & UI (base10–17)</div>
         <div class="swatches" id="quiet"></div>
       </div>
-
-      <div class="palette-row">
-        <div class="palette-label">Loud vs Quiet Comparison</div>
-        <div class="comparison-grid" id="comparison"></div>
-      </div>
     </div>
   </section>
 
@@ -1191,34 +1150,6 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {{
     const quiet = document.getElementById('quiet');
     ['base10','base11','base12','base13','base14','base15','base16','base17'].forEach(key => {{
       quiet.appendChild(createSwatch(key, palette[key]));
-    }});
-
-    // Render comparison
-    const comparison = document.getElementById('comparison');
-    const pairs = [
-      ['base08', 'base10', 'Red'],
-      ['base09', 'base11', 'Orange'],
-      ['base0A', 'base12', 'Yellow'],
-      ['base0B', 'base13', 'Green'],
-      ['base0C', 'base14', 'Cyan'],
-      ['base0D', 'base15', 'Blue'],
-      ['base0E', 'base16', 'Purple'],
-      ['base0F', 'base17', 'Lime'],
-    ];
-
-    pairs.forEach(([loudKey, quietKey, label]) => {{
-      const pair = document.createElement('div');
-      pair.className = 'comparison-pair';
-
-      const loudColor = palette[loudKey].hex;
-      const quietColor = palette[quietKey].hex;
-
-      pair.innerHTML = `
-        <div class="comparison-swatch" style="background:${{loudColor}};color:${{isLight(loudColor)?'#1b1d20':'#faf5ef'}}" onclick="navigator.clipboard.writeText('${{loudColor}}');showToast('Copied ${{loudColor}}')">LOUD</div>
-        <div class="comparison-swatch" style="background:${{quietColor}};color:${{isLight(quietColor)?'#1b1d20':'#faf5ef'}}" onclick="navigator.clipboard.writeText('${{quietColor}}');showToast('Copied ${{quietColor}}')">quiet</div>
-        <div class="comparison-label">${{label}}</div>
-      `;
-      comparison.appendChild(pair);
     }});
 
     // Custom Human++ marker highlighting for comments
