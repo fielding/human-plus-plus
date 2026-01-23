@@ -732,6 +732,171 @@ def generate_swatches_html(colors, meta):
       color: var(--base04);
     }}
 
+    /* Diagnostics Demo */
+    .diagnostics-grid {{
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      background: var(--base00);
+      border: 1px solid var(--base02);
+      border-radius: 16px;
+      overflow: hidden;
+    }}
+
+    /* Mock File Explorer */
+    .file-explorer {{
+      background: var(--base01);
+      padding: 16px 0;
+      border-right: 1px solid var(--base02);
+    }}
+
+    .file-explorer-header {{
+      padding: 8px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--base04);
+      margin-bottom: 8px;
+    }}
+
+    .file-item {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--base05);
+      cursor: default;
+    }}
+
+    .file-item:hover {{
+      background: var(--base02);
+    }}
+
+    .file-item.active {{
+      background: var(--base02);
+    }}
+
+    .file-item.folder {{
+      color: var(--base04);
+    }}
+
+    .file-item .icon {{
+      width: 16px;
+      text-align: center;
+      font-size: 12px;
+    }}
+
+    .file-item.modified .name {{
+      color: var(--base0A);
+    }}
+
+    .file-item.added .name {{
+      color: var(--base0B);
+    }}
+
+    .file-item.untracked .name {{
+      color: var(--base13);
+    }}
+
+    .file-item.has-error .name {{
+      color: var(--base08);
+    }}
+
+    .file-item .badge {{
+      margin-left: auto;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }}
+
+    .file-item .badge.error {{
+      background: var(--base08);
+      color: var(--base00);
+    }}
+
+    .file-item .badge.warning {{
+      background: var(--base09);
+      color: var(--base00);
+    }}
+
+    .file-item .badge.modified {{
+      background: var(--base0A);
+      color: var(--base00);
+    }}
+
+    /* Diagnostic Code */
+    .diagnostic-code {{
+      padding: 24px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 14px;
+      line-height: 2;
+      overflow-x: auto;
+    }}
+
+    .diagnostic-code .line {{
+      display: flex;
+      align-items: flex-start;
+    }}
+
+    .diagnostic-code .line-number {{
+      width: 40px;
+      color: var(--base04);
+      text-align: right;
+      padding-right: 16px;
+      user-select: none;
+      flex-shrink: 0;
+    }}
+
+    .diagnostic-code .line-content {{
+      flex: 1;
+      white-space: pre;
+    }}
+
+    .diagnostic-code .line.has-error {{
+      background: rgba(217, 4, 142, 0.1);
+      margin: 0 -24px;
+      padding: 0 24px;
+    }}
+
+    .diagnostic-code .line.has-warning {{
+      background: rgba(242, 108, 51, 0.1);
+      margin: 0 -24px;
+      padding: 0 24px;
+    }}
+
+    .diagnostic-code .error-text {{
+      border-bottom: 2px wavy var(--base08);
+    }}
+
+    .diagnostic-code .warning-text {{
+      border-bottom: 2px wavy var(--base09);
+    }}
+
+    .diagnostic-code .hint-text {{
+      opacity: 0.5;
+    }}
+
+    .diagnostic-code .diagnostic-msg {{
+      color: var(--base04);
+      font-size: 12px;
+      margin-left: 16px;
+    }}
+
+    .diagnostic-code .diagnostic-msg.error {{
+      color: var(--base08);
+    }}
+
+    .diagnostic-code .diagnostic-msg.warning {{
+      color: var(--base09);
+    }}
+
+    .diagnostic-code .diagnostic-msg.hint {{
+      color: var(--base15);
+    }}
+
     /* Footer */
     .footer {{
       padding: 48px 0;
@@ -776,6 +941,13 @@ def generate_swatches_html(colors, meta):
 
     /* Responsive */
     @media (max-width: 900px) {{
+      .diagnostics-grid {{
+        grid-template-columns: 1fr;
+      }}
+      .file-explorer {{
+        border-right: none;
+        border-bottom: 1px solid var(--base02);
+      }}
       .philosophy-grid,
       .markers-grid {{
         grid-template-columns: 1fr;
@@ -854,6 +1026,104 @@ def generate_swatches_html(colors, meta):
           <div class="philosophy-icon" style="background: var(--base0F); color: var(--base00);">></div>
           <h3>Terminal Exception</h3>
           <p>Terminal output is intentional — you typed it. Terminals get loud colors for normal text, quiet for bright. Inverted from the editor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Diagnostics Demo -->
+  <section class="section" id="diagnostics">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Diagnostics in Action</h2>
+        <p class="section-subtitle">Errors and warnings pop. Syntax stays quiet. Problems are impossible to miss.</p>
+      </div>
+
+      <div class="diagnostics-grid">
+        <div class="file-explorer">
+          <div class="file-explorer-header">Explorer</div>
+          <div class="file-item folder">
+            <span class="icon">▼</span>
+            <span class="name">src</span>
+          </div>
+          <div class="file-item has-error active" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">user.ts</span>
+            <span class="badge error">2</span>
+          </div>
+          <div class="file-item modified" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">api.ts</span>
+            <span class="badge modified">M</span>
+          </div>
+          <div class="file-item added" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">cache.ts</span>
+            <span class="badge" style="background: var(--base0B); color: var(--base00);">A</span>
+          </div>
+          <div class="file-item folder">
+            <span class="icon">▶</span>
+            <span class="name">utils</span>
+          </div>
+          <div class="file-item untracked">
+            <span class="icon">📄</span>
+            <span class="name">temp.ts</span>
+            <span class="badge" style="background: var(--base13); color: var(--base00);">U</span>
+          </div>
+        </div>
+
+        <div class="diagnostic-code">
+          <div class="line">
+            <span class="line-number">1</span>
+            <span class="line-content"><span style="color: var(--base10);">interface</span> <span style="color: var(--base14);">User</span> {{</span>
+          </div>
+          <div class="line">
+            <span class="line-number">2</span>
+            <span class="line-content">  <span style="color: var(--base05);">id</span>: <span style="color: var(--base14);">string</span>;</span>
+          </div>
+          <div class="line">
+            <span class="line-number">3</span>
+            <span class="line-content">  <span style="color: var(--base05);">name</span>: <span style="color: var(--base14);">string</span>;</span>
+          </div>
+          <div class="line">
+            <span class="line-number">4</span>
+            <span class="line-content">}}</span>
+          </div>
+          <div class="line">
+            <span class="line-number">5</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line">
+            <span class="line-number">6</span>
+            <span class="line-content"><span style="color: var(--base10);">const</span> <span style="color: var(--base05);">user</span>: <span style="color: var(--base14);">User</span> = <span style="color: var(--base13);">getUser</span>();</span>
+          </div>
+          <div class="line">
+            <span class="line-number">7</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line has-error">
+            <span class="line-number">8</span>
+            <span class="line-content"><span style="color: var(--base05);">user</span>.<span style="color: var(--base05);">name</span> = <span class="error-text" style="color: var(--base16);">null</span>;</span>
+            <span class="diagnostic-msg error">Type 'null' is not assignable to type 'string'</span>
+          </div>
+          <div class="line">
+            <span class="line-number">9</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line has-warning">
+            <span class="line-number">10</span>
+            <span class="line-content"><span style="color: var(--base10);">if</span> (<span class="warning-text" style="color: var(--base05);">user</span></span>) {{</span>
+            <span class="diagnostic-msg warning">Condition always evaluates to true</span>
+          </div>
+          <div class="line">
+            <span class="line-number">11</span>
+            <span class="line-content">  <span style="color: var(--base13);">console</span>.<span style="color: var(--base13);">log</span>(<span style="color: var(--base05);">user</span>.<span class="hint-text" style="color: var(--base05);">id</span>);</span>
+            <span class="diagnostic-msg hint">'id' is declared but never used</span>
+          </div>
+          <div class="line">
+            <span class="line-number">12</span>
+            <span class="line-content">}}</span>
+          </div>
         </div>
       </div>
     </div>
