@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+out/
+*.vsix
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Test/dev directories
+testbed/
+
+# Lock files
+# package-lock.json is tracked for reproducible builds

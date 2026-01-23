@@ -1,5 +1,6 @@
-" Human++ - Warm humane grayscale for the post-artisanal coding era
+" Human++ Cool Balanced - Base24
 " Author: fielding
+" Code is cheap, intent is scarce
 
 set background=dark
 hi clear
@@ -8,10 +9,10 @@ if exists("syntax_on")
 endif
 let g:colors_name = "humanplusplus"
 
-" Base16 palette
-let s:base00 = "#1c1917"
-let s:base01 = "#262321"
-let s:base02 = "#353230"
+" Base16 palette (loud accents for diagnostics)
+let s:base00 = "#1b1d20"
+let s:base01 = "#24262a"
+let s:base02 = "#32343a"
 let s:base03 = "#8a7b6b"
 let s:base04 = "#8a8279"
 let s:base05 = "#c4bbb2"
@@ -26,51 +27,60 @@ let s:base0D = "#317ad6"
 let s:base0E = "#8d57ff"
 let s:base0F = "#bbff00"
 
+" Base24 quiet variants (for syntax - less urgent)
+let s:base10 = "#c8518f"
+let s:base11 = "#d68c6f"
+let s:base12 = "#dfb683"
+let s:base13 = "#61b186"
+let s:base14 = "#72d1d5"
+let s:base15 = "#5283c5"
+let s:base16 = "#8f72e3"
+
 " Base
 exe "hi Normal guifg=".s:base05." guibg=".s:base00
 exe "hi NonText guifg=".s:base03." guibg=NONE"
-exe "hi LineNr guifg=".s:base03." guibg=".s:base00
+exe "hi LineNr guifg=".s:base04." guibg=".s:base00
 exe "hi CursorLine guibg=".s:base01." cterm=NONE"
 exe "hi CursorLineNr guifg=".s:base05." guibg=".s:base01
 exe "hi Visual guibg=".s:base02
 exe "hi Search guifg=".s:base00." guibg=".s:base0A
 exe "hi IncSearch guifg=".s:base00." guibg=".s:base09
 
-" Syntax
+" Syntax (using quiet variants for calm code)
 exe "hi Comment guifg=".s:base03." gui=italic"
-exe "hi String guifg=".s:base0B
-exe "hi Number guifg=".s:base09
-exe "hi Boolean guifg=".s:base09
-exe "hi Float guifg=".s:base09
-exe "hi Constant guifg=".s:base09
-exe "hi Character guifg=".s:base08
-exe "hi Identifier guifg=".s:base08
-exe "hi Function guifg=".s:base0D
-exe "hi Statement guifg=".s:base0E
-exe "hi Conditional guifg=".s:base0E
-exe "hi Repeat guifg=".s:base0E
-exe "hi Label guifg=".s:base0A
-exe "hi Operator guifg=".s:base05
-exe "hi Keyword guifg=".s:base0E
-exe "hi Exception guifg=".s:base08
-exe "hi Type guifg=".s:base0A
-exe "hi StorageClass guifg=".s:base0A
-exe "hi Structure guifg=".s:base0E
-exe "hi Typedef guifg=".s:base0A
-exe "hi PreProc guifg=".s:base0A
-exe "hi Include guifg=".s:base0D
-exe "hi Define guifg=".s:base0E
-exe "hi Macro guifg=".s:base08
-exe "hi PreCondit guifg=".s:base0A
-exe "hi Special guifg=".s:base0C
-exe "hi SpecialChar guifg=".s:base0F
-exe "hi Tag guifg=".s:base0A
-exe "hi Delimiter guifg=".s:base05
-exe "hi SpecialComment guifg=".s:base0C
+exe "hi String guifg=".s:base12
+exe "hi Number guifg=".s:base16
+exe "hi Boolean guifg=".s:base16
+exe "hi Float guifg=".s:base16
+exe "hi Constant guifg=".s:base16
+exe "hi Character guifg=".s:base12
+exe "hi Identifier guifg=".s:base05
+exe "hi Function guifg=".s:base13
+exe "hi Statement guifg=".s:base10
+exe "hi Conditional guifg=".s:base10
+exe "hi Repeat guifg=".s:base10
+exe "hi Label guifg=".s:base12
+exe "hi Operator guifg=".s:base04
+exe "hi Keyword guifg=".s:base10
+exe "hi Exception guifg=".s:base10
+exe "hi Type guifg=".s:base14
+exe "hi StorageClass guifg=".s:base14
+exe "hi Structure guifg=".s:base14
+exe "hi Typedef guifg=".s:base14
+exe "hi PreProc guifg=".s:base10
+exe "hi Include guifg=".s:base14
+exe "hi Define guifg=".s:base10
+exe "hi Macro guifg=".s:base13
+exe "hi PreCondit guifg=".s:base10
+exe "hi Special guifg=".s:base11
+exe "hi SpecialChar guifg=".s:base16
+exe "hi Tag guifg=".s:base10
+exe "hi Delimiter guifg=".s:base04
+exe "hi SpecialComment guifg=".s:base14
 exe "hi Debug guifg=".s:base08
 exe "hi Underlined guifg=".s:base0D." gui=underline"
-exe "hi Error guifg=".s:base00." guibg=".s:base08
-exe "hi Todo guifg=".s:base0A." guibg=".s:base01." gui=bold"
+exe "hi Error guifg=".s:base07." guibg=".s:base08
+exe "hi Todo guifg=".s:base00." guibg=".s:base0F." gui=bold"
 
 " Human++ markers (!! and ??)
 exe "hi HumanAttention guifg=".s:base00." guibg=".s:base0F." gui=bold"
@@ -97,7 +107,7 @@ exe "hi Cursor guifg=".s:base00." guibg=".s:base05
 exe "hi CursorColumn guibg=".s:base01
 exe "hi MatchParen guifg=".s:base05." guibg=".s:base03
 
-" Git/Diff
+" Git/Diff (loud - important signals)
 exe "hi DiffAdd guifg=".s:base0B." guibg=".s:base01
 exe "hi DiffDelete guifg=".s:base08." guibg=".s:base01
 exe "hi DiffChange guifg=".s:base0A." guibg=".s:base01
@@ -106,17 +116,17 @@ exe "hi GitGutterAdd guifg=".s:base0B." guibg=".s:base00
 exe "hi GitGutterChange guifg=".s:base0A." guibg=".s:base00
 exe "hi GitGutterDelete guifg=".s:base08." guibg=".s:base00
 
-" Spelling
+" Spelling (loud - errors)
 exe "hi SpellBad guisp=".s:base08." gui=undercurl"
 exe "hi SpellCap guisp=".s:base0D." gui=undercurl"
 exe "hi SpellLocal guisp=".s:base0C." gui=undercurl"
 exe "hi SpellRare guisp=".s:base0E." gui=undercurl"
 
-" Neovim diagnostics
+" Neovim diagnostics (LOUD - must cut through)
 exe "hi DiagnosticError guifg=".s:base08
 exe "hi DiagnosticWarn guifg=".s:base0A
 exe "hi DiagnosticInfo guifg=".s:base0D
-exe "hi DiagnosticHint guifg=".s:base0C
+exe "hi DiagnosticHint guifg=".s:base15
 
 " Match Human++ markers in comments
 " Add to your config: match HumanAttention /\/\/\s*!!/

@@ -1,41 +1,60 @@
 import * as vscode from 'vscode';
 
-// Marker types and their default colors
+// Marker types and their colors
 type MarkerType = 'intervention' | 'uncertainty' | 'directive';
 
 interface MarkerDef {
   pattern: string;
-  regex: RegExp;
   configKey: string;
-  color: string;        // LOUD color for badge
-  colorDim: string;     // Low opacity for line background
-  textColor: string;    // Text color on badge
+  background: string;
+  foreground: string;
 }
 
 const MARKERS: Record<MarkerType, MarkerDef> = {
   intervention: {
     pattern: '!!',
-    regex: /!!/,
     configKey: 'markers.intervention.enable',
-    color: '#bbff00',      // base0F lime
-    colorDim: '#bbff0018', // ~10% opacity
-    textColor: '#1b1d20',
+    background: '#bbff00',      // Lime (base0F) - attention/critical
+    foreground: '#1c1917',      // Dark text on bright background
   },
   uncertainty: {
     pattern: '??',
-    regex: /\?\?/,
     configKey: 'markers.uncertainty.enable',
-    color: '#8d57ff',      // base0E purple
-    colorDim: '#8d57ff18',
-    textColor: '#faf5ef',
+    background: '#8d57ff',      // Purple (base0E) - uncertainty
+    foreground: '#faf5ef',      // Light text on dark background
   },
   directive: {
     pattern: '>>',
-    regex: />>/,
     configKey: 'markers.directive.enable',
-    color: '#1ad0d6',      // base0C cyan
-    colorDim: '#1ad0d618',
-    textColor: '#1b1d20',
+    background: '#1ad0d6',      // Cyan (base0C) - directive/reference
+    foreground: '#1c1917',      // Dark text on bright background
+  },
+};
+
+// Diagnostic colors (for inline error/warning badges)
+type DiagnosticLevel = 'error' | 'warning' | 'info' | 'hint';
+
+interface DiagnosticStyle {
+  background: string;
+  foreground: string;
+}
+
+const DIAGNOSTIC_COLORS: Record<DiagnosticLevel, DiagnosticStyle> = {
+  error: {
+    background: '#d9048e',
+    foreground: '#faf5ef',      // Light text on dark background
+  },
+  warning: {
+    background: '#f2a633',      // Yellow (base0A)
+    foreground: '#1c1917',      // Dark text on bright background
+  },
+  info: {
+    background: '#1ad0d6',
+    foreground: '#1c1917',      // Dark text on bright background
+  },
+  hint: {
+    background: '#8a7b6b',
+    foreground: '#faf5ef',      // Light text on dark background
   },
 };
 
@@ -53,25 +72,19 @@ const COMMENT_PATTERNS: RegExp[] = [
   /^(\s*)(rem\s)/i,        // REM Basic/Batch
 ];
 
-type StyleMode = 'badge' | 'line' | 'both';
-
 interface MarkerMatch {
   type: MarkerType;
   lineNum: number;
-  markerStart: number;
-  markerEnd: number;
-  lineEnd: number;
+  startChar: number;      // Start of comment (including leading whitespace for padding)
+  endChar: number;        // End of line text
 }
 
-interface ScanResult {
-  matches: MarkerMatch[];
-}
+// ============================================================================
+// Marker Decoration Manager (left-aligned comment badges)
+// ============================================================================
 
-class DecorationManager {
-  // Badge decorations (one per marker type)
-  private badgeDecorations: Map<MarkerType, vscode.TextEditorDecorationType> = new Map();
-  // Line background decorations (one per marker type)
-  private lineDecorations: Map<MarkerType, vscode.TextEditorDecorationType> = new Map();
+class MarkerDecorationManager {
+  private decorations: Map<MarkerType, vscode.TextEditorDecorationType> = new Map();
 
   constructor() {
     this.createDecorationTypes();
@@ -81,30 +94,21 @@ class DecorationManager {
     this.dispose();
 
     for (const [type, def] of Object.entries(MARKERS) as [MarkerType, MarkerDef][]) {
-      // Badge decoration - bright background on marker
-      this.badgeDecorations.set(type, vscode.window.createTextEditorDecorationType({
-        backgroundColor: def.color,
-        color: def.textColor,
+      this.decorations.set(type, vscode.window.createTextEditorDecorationType({
+        backgroundColor: def.background,
+        color: def.foreground,
         fontWeight: 'bold',
-        borderRadius: '3px',
-        overviewRulerColor: def.color,
+        fontStyle: 'normal',      // Override italic from comment styling
+        borderRadius: '4px',
+        overviewRulerColor: def.background,
         overviewRulerLane: vscode.OverviewRulerLane.Right,
-      }));
-
-      // Line decoration - subtle colored background
-      this.lineDecorations.set(type, vscode.window.createTextEditorDecorationType({
-        backgroundColor: def.colorDim,
-        isWholeLine: true,
+        textDecoration: '; font-size: 0.9em;',
       }));
     }
   }
 
-  getBadgeDecoration(type: MarkerType): vscode.TextEditorDecorationType | undefined {
-    return this.badgeDecorations.get(type);
-  }
-
-  getLineDecoration(type: MarkerType): vscode.TextEditorDecorationType | undefined {
-    return this.lineDecorations.get(type);
+  getDecoration(type: MarkerType): vscode.TextEditorDecorationType | undefined {
+    return this.decorations.get(type);
   }
 
   getAllTypes(): MarkerType[] {
@@ -112,19 +116,19 @@ class DecorationManager {
   }
 
   dispose(): void {
-    for (const dec of this.badgeDecorations.values()) {
+    for (const dec of this.decorations.values()) {
       dec.dispose();
     }
-    for (const dec of this.lineDecorations.values()) {
-      dec.dispose();
-    }
-    this.badgeDecorations.clear();
-    this.lineDecorations.clear();
+    this.decorations.clear();
   }
 }
 
-class Scanner {
-  scan(document: vscode.TextDocument): ScanResult {
+// ============================================================================
+// Marker Scanner
+// ============================================================================
+
+class MarkerScanner {
+  scan(document: vscode.TextDocument): MarkerMatch[] {
     const config = vscode.workspace.getConfiguration('humanpp');
     const matches: MarkerMatch[] = [];
 
@@ -140,7 +144,7 @@ class Scanner {
     }
 
     if (enabledMarkers.length === 0) {
-      return { matches };
+      return matches;
     }
 
     for (let lineNum = 0; lineNum < lines.length; lineNum++) {
@@ -153,34 +157,23 @@ class Scanner {
           continue;
         }
 
+        const leadingWhitespace = commentMatch[1].length;
         const prefixEnd = commentMatch[0].length;
         const commentText = line.slice(prefixEnd);
 
         // Check for each marker type
         for (const [type, def] of enabledMarkers) {
-          // Match marker at start of comment (with optional whitespace)
-          const markerRegex = new RegExp(`^(\\s*)(${def.pattern.replace(/\?/g, '\\?')})(?=\\s|$)`);
-          const markerMatch = markerRegex.exec(commentText);
-
-          if (markerMatch) {
-            const wsBeforeMarker = markerMatch[1] || '';
-            const marker = markerMatch[2];
-
-            const markerStart = prefixEnd;
-            const markerTokenEnd = prefixEnd + wsBeforeMarker.length + marker.length;
-            const afterMarker = commentText.slice(wsBeforeMarker.length + marker.length);
-            const trailingSpace = afterMarker.match(/^\s/) ? 1 : 0;
-            const markerEnd = markerTokenEnd + trailingSpace;
-
+          const markerRegex = new RegExp(`^\\s*(${def.pattern.replace(/\?/g, '\\?')})(?=\\s|$)`);
+          if (markerRegex.test(commentText)) {
+            // Find end of actual text (trim trailing whitespace)
+            const trimmedEnd = line.trimEnd().length;
             matches.push({
               type,
               lineNum,
-              markerStart,
-              markerEnd,
-              lineEnd: line.length,
+              startChar: leadingWhitespace,  // Start from the comment symbol
+              endChar: trimmedEnd,
             });
-
-            break; // Only one marker per line
+            break;
           }
         }
 
@@ -188,19 +181,156 @@ class Scanner {
       }
     }
 
-    return { matches };
+    return matches;
   }
 }
 
+// ============================================================================
+// Diagnostic Decoration Manager (right-aligned inline badges)
+// ============================================================================
+
+class DiagnosticDecorationManager {
+  // One decoration type per severity level (reused)
+  private decorationTypes: Map<DiagnosticLevel, vscode.TextEditorDecorationType> = new Map();
+
+  constructor() {
+    this.createDecorationTypes();
+  }
+
+  createDecorationTypes(): void {
+    this.dispose();
+
+    for (const [level, style] of Object.entries(DIAGNOSTIC_COLORS) as [DiagnosticLevel, DiagnosticStyle][]) {
+      this.decorationTypes.set(level, vscode.window.createTextEditorDecorationType({
+        after: {
+          // contentText will be overridden per-range via renderOptions
+          backgroundColor: style.background,
+          color: style.foreground,
+          margin: '0 0 0 3em',
+          textDecoration: '; border-radius: 4px;',
+        },
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+      }));
+    }
+  }
+
+  updateDiagnostics(editor: vscode.TextEditor): void {
+    const config = vscode.workspace.getConfiguration('humanpp');
+
+    // Clear all decorations first (but don't dispose types)
+    for (const decType of this.decorationTypes.values()) {
+      editor.setDecorations(decType, []);
+    }
+
+    if (!config.get('diagnostics.enable', true)) {
+      return;
+    }
+
+    const document = editor.document;
+    const diagnostics = vscode.languages.getDiagnostics(document.uri);
+
+    // Group diagnostics by line (only show first per line to avoid clutter)
+    const diagnosticsByLine: Map<number, vscode.Diagnostic> = new Map();
+
+    for (const diagnostic of diagnostics) {
+      const line = diagnostic.range.start.line;
+      if (!diagnosticsByLine.has(line)) {
+        diagnosticsByLine.set(line, diagnostic);
+      } else {
+        // Prefer higher severity (lower number = higher severity)
+        const existing = diagnosticsByLine.get(line)!;
+        if (diagnostic.severity < existing.severity) {
+          diagnosticsByLine.set(line, diagnostic);
+        }
+      }
+    }
+
+    // Group by severity level for batch application
+    const decorationsByLevel: Map<DiagnosticLevel, vscode.DecorationOptions[]> = new Map();
+    for (const level of this.decorationTypes.keys()) {
+      decorationsByLevel.set(level, []);
+    }
+
+    for (const [lineNum, diagnostic] of diagnosticsByLine) {
+      const level = this.severityToLevel(diagnostic.severity);
+
+      // Check if this level is enabled
+      if (!config.get(`diagnostics.${level}.enable`, true)) {
+        continue;
+      }
+
+      const line = document.lineAt(lineNum);
+      const truncatedMessage = diagnostic.message.length > 50
+        ? diagnostic.message.slice(0, 47) + '...'
+        : diagnostic.message;
+
+      // Create decoration option with custom message via renderOptions
+      const style = DIAGNOSTIC_COLORS[level];
+      const decorationOption: vscode.DecorationOptions = {
+        range: new vscode.Range(
+          lineNum, line.text.trimEnd().length,
+          lineNum, line.text.trimEnd().length
+        ),
+        renderOptions: {
+          after: {
+            contentText: `  ${truncatedMessage}  `,
+            backgroundColor: style.background,
+            color: style.foreground,
+          },
+        },
+      };
+
+      decorationsByLevel.get(level)?.push(decorationOption);
+    }
+
+    // Apply decorations by level
+    for (const [level, options] of decorationsByLevel) {
+      const decType = this.decorationTypes.get(level);
+      if (decType) {
+        editor.setDecorations(decType, options);
+      }
+    }
+  }
+
+  private severityToLevel(severity: vscode.DiagnosticSeverity): DiagnosticLevel {
+    switch (severity) {
+      case vscode.DiagnosticSeverity.Error:
+        return 'error';
+      case vscode.DiagnosticSeverity.Warning:
+        return 'warning';
+      case vscode.DiagnosticSeverity.Information:
+        return 'info';
+      case vscode.DiagnosticSeverity.Hint:
+        return 'hint';
+      default:
+        return 'info';
+    }
+  }
+
+  dispose(): void {
+    for (const dec of this.decorationTypes.values()) {
+      dec.dispose();
+    }
+    this.decorationTypes.clear();
+  }
+}
+
+// ============================================================================
+// Main Highlighter
+// ============================================================================
+
 class HumanPPHighlighter {
-  private decorationManager: DecorationManager;
-  private scanner: Scanner;
+  private markerDecorationManager: MarkerDecorationManager;
+  private diagnosticDecorationManager: DiagnosticDecorationManager;
+  private markerScanner: MarkerScanner;
   private debounceTimer: NodeJS.Timeout | undefined;
+  private diagnosticDebounceTimer: NodeJS.Timeout | undefined;
   private enabled: boolean = true;
 
   constructor(private context: vscode.ExtensionContext) {
-    this.decorationManager = new DecorationManager();
-    this.scanner = new Scanner();
+    this.markerDecorationManager = new MarkerDecorationManager();
+    this.diagnosticDecorationManager = new DiagnosticDecorationManager();
+    this.markerScanner = new MarkerScanner();
     this.enabled = vscode.workspace.getConfiguration('humanpp').get('enable', true);
   }
 
@@ -208,56 +338,47 @@ class HumanPPHighlighter {
     return vscode.workspace.getConfiguration('humanpp').get('debounceMs', 200);
   }
 
-  private getStyleMode(): StyleMode {
-    return vscode.workspace.getConfiguration('humanpp').get('style', 'both') as StyleMode;
-  }
-
-  updateDecorations(editor: vscode.TextEditor | undefined): void {
+  updateMarkerDecorations(editor: vscode.TextEditor | undefined): void {
     if (!editor || !this.enabled) {
       return;
     }
 
-    const { matches } = this.scanner.scan(editor.document);
-    const style = this.getStyleMode();
+    const matches = this.markerScanner.scan(editor.document);
 
     // Group matches by marker type
-    const badgeRanges: Map<MarkerType, vscode.Range[]> = new Map();
-    const lineRanges: Map<MarkerType, vscode.Range[]> = new Map();
-
-    for (const type of this.decorationManager.getAllTypes()) {
-      badgeRanges.set(type, []);
-      lineRanges.set(type, []);
+    const ranges: Map<MarkerType, vscode.Range[]> = new Map();
+    for (const type of this.markerDecorationManager.getAllTypes()) {
+      ranges.set(type, []);
     }
 
     for (const match of matches) {
-      // Badge range (just the marker)
-      badgeRanges.get(match.type)?.push(new vscode.Range(
-        new vscode.Position(match.lineNum, match.markerStart),
-        new vscode.Position(match.lineNum, match.markerEnd)
-      ));
-
-      // Line range (whole line for background)
-      lineRanges.get(match.type)?.push(new vscode.Range(
-        new vscode.Position(match.lineNum, 0),
-        new vscode.Position(match.lineNum, match.lineEnd)
-      ));
+      const range = new vscode.Range(
+        match.lineNum, match.startChar,
+        match.lineNum, match.endChar
+      );
+      ranges.get(match.type)?.push(range);
     }
 
-    // Apply decorations based on style mode
-    for (const type of this.decorationManager.getAllTypes()) {
-      const badgeDec = this.decorationManager.getBadgeDecoration(type);
-      const lineDec = this.decorationManager.getLineDecoration(type);
-
-      if (badgeDec) {
-        const showBadge = style === 'badge' || style === 'both';
-        editor.setDecorations(badgeDec, showBadge ? badgeRanges.get(type) || [] : []);
-      }
-
-      if (lineDec) {
-        const showLine = style === 'line' || style === 'both';
-        editor.setDecorations(lineDec, showLine ? lineRanges.get(type) || [] : []);
+    // Apply decorations
+    for (const type of this.markerDecorationManager.getAllTypes()) {
+      const dec = this.markerDecorationManager.getDecoration(type);
+      if (dec) {
+        editor.setDecorations(dec, ranges.get(type) || []);
       }
     }
+  }
+
+  updateDiagnosticDecorations(editor: vscode.TextEditor | undefined): void {
+    if (!editor || !this.enabled) {
+      return;
+    }
+
+    this.diagnosticDecorationManager.updateDiagnostics(editor);
+  }
+
+  updateAllDecorations(editor: vscode.TextEditor | undefined): void {
+    this.updateMarkerDecorations(editor);
+    this.updateDiagnosticDecorations(editor);
   }
 
   clearDecorations(editor: vscode.TextEditor | undefined): void {
@@ -265,26 +386,33 @@ class HumanPPHighlighter {
       return;
     }
 
-    for (const type of this.decorationManager.getAllTypes()) {
-      const badgeDec = this.decorationManager.getBadgeDecoration(type);
-      const lineDec = this.decorationManager.getLineDecoration(type);
-
-      if (badgeDec) {
-        editor.setDecorations(badgeDec, []);
-      }
-      if (lineDec) {
-        editor.setDecorations(lineDec, []);
+    for (const type of this.markerDecorationManager.getAllTypes()) {
+      const dec = this.markerDecorationManager.getDecoration(type);
+      if (dec) {
+        editor.setDecorations(dec, []);
       }
     }
+
+    this.diagnosticDecorationManager.dispose();
   }
 
-  scheduleUpdate(editor: vscode.TextEditor | undefined): void {
+  scheduleMarkerUpdate(editor: vscode.TextEditor | undefined): void {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
 
     this.debounceTimer = setTimeout(() => {
-      this.updateDecorations(editor);
+      this.updateMarkerDecorations(editor);
+    }, this.getDebounceMs());
+  }
+
+  scheduleDiagnosticUpdate(editor: vscode.TextEditor | undefined): void {
+    if (this.diagnosticDebounceTimer) {
+      clearTimeout(this.diagnosticDebounceTimer);
+    }
+
+    this.diagnosticDebounceTimer = setTimeout(() => {
+      this.updateDiagnosticDecorations(editor);
     }, this.getDebounceMs());
   }
 
@@ -294,11 +422,11 @@ class HumanPPHighlighter {
 
     const editor = vscode.window.activeTextEditor;
     if (this.enabled) {
-      this.updateDecorations(editor);
-      vscode.window.showInformationMessage('Human++ marker highlighting enabled');
+      this.updateAllDecorations(editor);
+      vscode.window.showInformationMessage('Human++ highlighting enabled');
     } else {
       this.clearDecorations(editor);
-      vscode.window.showInformationMessage('Human++ marker highlighting disabled');
+      vscode.window.showInformationMessage('Human++ highlighting disabled');
     }
   }
 
@@ -306,18 +434,25 @@ class HumanPPHighlighter {
     if (!this.enabled) {
       return;
     }
-    this.updateDecorations(vscode.window.activeTextEditor);
+    this.updateAllDecorations(vscode.window.activeTextEditor);
   }
 
   onConfigurationChanged(): void {
     this.enabled = vscode.workspace.getConfiguration('humanpp').get('enable', true);
-    this.decorationManager.createDecorationTypes();
+    this.markerDecorationManager.createDecorationTypes();
 
     const editor = vscode.window.activeTextEditor;
     if (this.enabled) {
-      this.updateDecorations(editor);
+      this.updateAllDecorations(editor);
     } else {
       this.clearDecorations(editor);
+    }
+  }
+
+  onDiagnosticsChanged(uri: vscode.Uri): void {
+    const editor = vscode.window.activeTextEditor;
+    if (editor && editor.document.uri.toString() === uri.toString()) {
+      this.scheduleDiagnosticUpdate(editor);
     }
   }
 
@@ -325,9 +460,17 @@ class HumanPPHighlighter {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
-    this.decorationManager.dispose();
+    if (this.diagnosticDebounceTimer) {
+      clearTimeout(this.diagnosticDebounceTimer);
+    }
+    this.markerDecorationManager.dispose();
+    this.diagnosticDecorationManager.dispose();
   }
 }
+
+// ============================================================================
+// Extension Activation
+// ============================================================================
 
 let highlighter: HumanPPHighlighter | undefined;
 
@@ -348,7 +491,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor((editor) => {
-      highlighter?.updateDecorations(editor);
+      highlighter?.updateAllDecorations(editor);
     })
   );
 
@@ -356,7 +499,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.workspace.onDidChangeTextDocument((event) => {
       const editor = vscode.window.activeTextEditor;
       if (editor && event.document === editor.document) {
-        highlighter?.scheduleUpdate(editor);
+        highlighter?.scheduleMarkerUpdate(editor);
       }
     })
   );
@@ -369,8 +512,17 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
+  // Listen for diagnostic changes
+  context.subscriptions.push(
+    vscode.languages.onDidChangeDiagnostics((event) => {
+      for (const uri of event.uris) {
+        highlighter?.onDiagnosticsChanged(uri);
+      }
+    })
+  );
+
   if (vscode.window.activeTextEditor) {
-    highlighter.updateDecorations(vscode.window.activeTextEditor);
+    highlighter.updateAllDecorations(vscode.window.activeTextEditor);
   }
 }
 

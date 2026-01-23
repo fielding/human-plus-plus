@@ -9,7 +9,6 @@
     "type": "git",
     "url": "https://github.com/fldnnn/humanpp"
   },
-  "icon": "icon.png",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -62,17 +61,6 @@
           "maximum": 1000,
           "description": "Debounce delay in milliseconds for rescanning on edit"
         },
-        "humanpp.style": {
-          "type": "string",
-          "enum": ["badge", "line", "both"],
-          "default": "both",
-          "enumDescriptions": [
-            "Badge only: bright background on marker token (!! ?? >>)",
-            "Line only: subtle colored background on entire line (like errors/warnings)",
-            "Both: badge on marker + colored line background"
-          ],
-          "description": "How to highlight Human++ markers"
-        },
         "humanpp.markers.intervention.enable": {
           "type": "boolean",
           "default": true,
@@ -87,6 +75,31 @@
           "type": "boolean",
           "default": true,
           "description": "Enable >> (directive/decision) marker"
+        },
+        "humanpp.diagnostics.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline diagnostic badges (errors, warnings, etc.)"
+        },
+        "humanpp.diagnostics.error.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show error diagnostics inline"
+        },
+        "humanpp.diagnostics.warning.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warning diagnostics inline"
+        },
+        "humanpp.diagnostics.info.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show info diagnostics inline"
+        },
+        "humanpp.diagnostics.hint.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show hint diagnostics inline"
         }
       }
     }
