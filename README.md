@@ -24,26 +24,26 @@ Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full B
 
 | Slot | Hex | Role |
 |------|-----|------|
-| base00 | `#1b1d20` | Background |
-| base01 | `#24262a` | Elevation |
-| base02 | `#32343a` | Selection |
-| base03 | `#8a7b6b` | Comments (coffee brown) |
-| base04 | `#8a8279` | UI secondary |
-| base05 | `#e5ded6` | Main text |
-| base06 | `#f2ebe4` | Emphasis |
-| base07 | `#faf5ef` | Brightest |
+| base00 | `#1a1c22` | Background |
+| base01 | `#282b31` | Elevation |
+| base02 | `#3a3d42` | Selection |
+| base03 | `#5a5d62` | Comments (coffee brown) |
+| base04 | `#828079` | UI secondary |
+| base05 | `#dbd6cc` | Main text |
+| base06 | `#eeeae2` | Emphasis |
+| base07 | `#f8f6f2` | Brightest |
 
 ### Loud Accents (Diagnostics & Signals)
 
 | Slot | Hex | Role |
 |------|-----|------|
-| base08 | `#d9048e` | Errors, attention |
+| base08 | `#e7349c` | Errors, attention |
 | base09 | `#f26c33` | Warnings |
 | base0A | `#f2a633` | Caution |
 | base0B | `#04b372` | Success |
 | base0C | `#1ad0d6` | Info |
-| base0D | `#317ad6` | Links, focus |
-| base0E | `#8d57ff` | Special |
+| base0D | `#458ae2` | Links, focus |
+| base0E | `#9871fe` | Special |
 | base0F | `#bbff00` | Human intent marker |
 
 ### Quiet Accents (Syntax & UI)
@@ -54,8 +54,8 @@ Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full B
 | base11 | `#d68c6f` | Secondary |
 | base12 | `#dfb683` | Strings |
 | base13 | `#61b186` | Functions |
-| base14 | `#72d1d5` | Types |
-| base15 | `#5283c5` | Hints |
+| base14 | `#91cbcd` | Types |
+| base15 | `#5e84b6` | Hints |
 | base16 | `#8f72e3` | Constants |
 | base17 | `#d2fc91` | Quiet lime |
 

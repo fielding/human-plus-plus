@@ -18,5 +18,8 @@ out/
 # Test/dev directories
 testbed/
 
+# Build cache
+.palette-cache.json
+
 # Lock files
 # package-lock.json is tracked for reproducible builds

@@ -2,7 +2,7 @@
 # Human++ Cool Balanced - borders config
 # Generated from palette.toml
 
-borders active_color=0xffd9048e \
+borders active_color=0xffe7349c \
         inactive_color=0x00000000 \
         width=8.0 \
         style=square \

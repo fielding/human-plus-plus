@@ -4,30 +4,33 @@ author = "fielding"
 description = "Cool balanced grayscale with quiet syntax, loud diagnostics - code is cheap, intent is scarce"
 
 [base16]
-base00 = "#1b1d20"    # bg (cool charcoal)
-base01 = "#24262a"    # bg+ (elevation)
-base02 = "#32343a"    # selection (panels)
-base03 = "#8a7b6b"    # comments (coffee brown - human voice, EXCLUSIVE)
-base04 = "#8a8279"    # fg- (UI secondary, structure)
-base05 = "#e5ded6"    # fg (main text - bright warm cream)
-base06 = "#f2ebe4"    # fg+ (emphasis)
-base07 = "#faf5ef"    # fg++ (highlights - near-white with warmth)
-base08 = "#d9048e"    # red/pink (LOUD - errors, attention)
+# Grayscale: cool backgrounds → warm readable text
+base00 = "#1a1c22"    # bg (cool charcoal)
+base01 = "#282b31"    # bg+ (elevation)
+base02 = "#3a3d42"    # selection (panels)
+base03 = "#5a5d62"    # comments (cool gray - AI voice, fades into bg)
+base04 = "#828079"    # fg- (UI secondary, neutral bridge)
+base05 = "#dbd6cc"    # fg (main text - warm cream)
+base06 = "#eeeae2"    # fg+ (emphasis)
+base07 = "#f8f6f2"    # fg++ (near-white)
+
+# Loud accents - diagnostics, signals, human markers
+base08 = "#e7349c"    # red/pink (LOUD - errors, attention)
 base09 = "#f26c33"    # orange (LOUD - warnings)
 base0A = "#f2a633"    # yellow/amber (LOUD - caution)
 base0B = "#04b372"    # green/teal (LOUD - success)
 base0C = "#1ad0d6"    # cyan (LOUD - info)
-base0D = "#317ad6"    # blue (LOUD - focus, links)
-base0E = "#8d57ff"    # purple (LOUD - special)
-base0F = "#bbff00"    # lime (RESERVED - human intent marker)
+base0D = "#458ae2"    # blue (LOUD - focus, links)
+base0E = "#9871fe"    # purple (LOUD - special)
+base0F = "#bbff00"    # lime (RESERVED - human intent marker !!)
 
 [base24]
 # Quiet accent variants - for syntax, UI state (less urgent than diagnostics)
-base10 = "#c8518f"    # quiet red
-base11 = "#d68c6f"    # quiet orange
+base10 = "#c8518f"    # quiet red (keywords)
+base11 = "#d68c6f"    # quiet orange (secondary)
 base12 = "#dfb683"    # quiet yellow (strings)
 base13 = "#61b186"    # quiet green (functions)
-base14 = "#72d1d5"    # quiet cyan (types, declarations)
-base15 = "#5283c5"    # quiet blue (hints)
+base14 = "#91cbcd"    # quiet cyan (types, declarations)
+base15 = "#5e84b6"    # quiet blue (hints)
 base16 = "#8f72e3"    # quiet purple (constants)
 base17 = "#d2fc91"    # quiet lime
