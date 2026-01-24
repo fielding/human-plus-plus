@@ -297,6 +297,403 @@ def generate_site(colors, meta):
         print("  ! templates/site/index.html.tmpl not found, skipping site generation")
 
 
+def generate_svgs(colors, meta):
+    """Generate SVG assets for README and site."""
+    c = colors
+    assets_dir = SITE / "assets"
+    assets_dir.mkdir(parents=True, exist_ok=True)
+
+    # Banner (dark mode)
+    banner_dark = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="humanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:{c['base07']}"/>
+      <stop offset="100%" style="stop-color:{c['base05']}"/>
+    </linearGradient>
+    <linearGradient id="plusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:{c['base0F']}"/>
+      <stop offset="100%" style="stop-color:{c['base0B']}"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="200" fill="{c['base00']}"/>
+  <text x="400" y="95" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="72" font-weight="700" letter-spacing="-3">
+    <tspan fill="url(#humanGradient)">Human</tspan><tspan fill="url(#plusGradient)">++</tspan>
+  </text>
+  <text x="400" y="145" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="20" font-weight="300" fill="{c['base04']}">
+    <tspan font-weight="500" fill="{c['base07']}">Code is cheap.</tspan>
+    <tspan> Intent is scarce.</tspan>
+  </text>
+</svg>
+'''
+    (assets_dir / "banner-dark.svg").write_text(banner_dark)
+
+    # Banner (light mode - transparent bg, inverted text)
+    banner_light = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <defs>
+    <linearGradient id="humanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:{c['base00']}"/>
+      <stop offset="100%" style="stop-color:{c['base02']}"/>
+    </linearGradient>
+    <linearGradient id="plusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:{c['base0B']}"/>
+      <stop offset="100%" style="stop-color:{c['base0B']}"/>
+    </linearGradient>
+  </defs>
+  <text x="400" y="95" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="72" font-weight="700" letter-spacing="-3">
+    <tspan fill="url(#humanGradient)">Human</tspan><tspan fill="url(#plusGradient)">++</tspan>
+  </text>
+  <text x="400" y="145" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="20" font-weight="300" fill="{c['base03']}">
+    <tspan font-weight="500" fill="{c['base00']}">Code is cheap.</tspan>
+    <tspan> Intent is scarce.</tspan>
+  </text>
+</svg>
+'''
+    (assets_dir / "banner-light.svg").write_text(banner_light)
+    print("  ✓ site/assets/banner-dark.svg, banner-light.svg")
+
+    # Palette visualization (dark mode)
+    palette_dark = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
+  <rect width="800" height="320" fill="{c['base00']}"/>
+
+  <!-- Grayscale row -->
+  <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base04']}" letter-spacing="1">Grayscale</text>
+  <rect x="24" y="48" width="88" height="56" rx="8" fill="{c['base00']}" stroke="{c['base02']}" stroke-width="1"/>
+  <rect x="120" y="48" width="88" height="56" rx="8" fill="{c['base01']}"/>
+  <rect x="216" y="48" width="88" height="56" rx="8" fill="{c['base02']}"/>
+  <rect x="312" y="48" width="88" height="56" rx="8" fill="{c['base03']}"/>
+  <rect x="408" y="48" width="88" height="56" rx="8" fill="{c['base04']}"/>
+  <rect x="504" y="48" width="88" height="56" rx="8" fill="{c['base05']}"/>
+  <rect x="600" y="48" width="88" height="56" rx="8" fill="{c['base06']}"/>
+  <rect x="696" y="48" width="88" height="56" rx="8" fill="{c['base07']}"/>
+
+  <text x="68" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">00</text>
+  <text x="164" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">01</text>
+  <text x="260" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">02</text>
+  <text x="356" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">03</text>
+  <text x="452" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">04</text>
+  <text x="548" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">05</text>
+  <text x="644" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">06</text>
+  <text x="740" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">07</text>
+
+  <!-- Loud Accents row -->
+  <text x="24" y="135" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base04']}" letter-spacing="1">Loud Accents — Diagnostics</text>
+  <rect x="24" y="148" width="88" height="56" rx="8" fill="{c['base08']}"/>
+  <rect x="120" y="148" width="88" height="56" rx="8" fill="{c['base09']}"/>
+  <rect x="216" y="148" width="88" height="56" rx="8" fill="{c['base0A']}"/>
+  <rect x="312" y="148" width="88" height="56" rx="8" fill="{c['base0B']}"/>
+  <rect x="408" y="148" width="88" height="56" rx="8" fill="{c['base0C']}"/>
+  <rect x="504" y="148" width="88" height="56" rx="8" fill="{c['base0D']}"/>
+  <rect x="600" y="148" width="88" height="56" rx="8" fill="{c['base0E']}"/>
+  <rect x="696" y="148" width="88" height="56" rx="8" fill="{c['base0F']}"/>
+
+  <text x="68" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">08</text>
+  <text x="164" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">09</text>
+  <text x="260" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0A</text>
+  <text x="356" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0B</text>
+  <text x="452" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0C</text>
+  <text x="548" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">0D</text>
+  <text x="644" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">0E</text>
+  <text x="740" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0F</text>
+
+  <!-- Quiet Accents row -->
+  <text x="24" y="235" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base04']}" letter-spacing="1">Quiet Accents — Syntax</text>
+  <rect x="24" y="248" width="88" height="56" rx="8" fill="{c['base10']}"/>
+  <rect x="120" y="248" width="88" height="56" rx="8" fill="{c['base11']}"/>
+  <rect x="216" y="248" width="88" height="56" rx="8" fill="{c['base12']}"/>
+  <rect x="312" y="248" width="88" height="56" rx="8" fill="{c['base13']}"/>
+  <rect x="408" y="248" width="88" height="56" rx="8" fill="{c['base14']}"/>
+  <rect x="504" y="248" width="88" height="56" rx="8" fill="{c['base15']}"/>
+  <rect x="600" y="248" width="88" height="56" rx="8" fill="{c['base16']}"/>
+  <rect x="696" y="248" width="88" height="56" rx="8" fill="{c['base17']}"/>
+
+  <text x="68" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">10</text>
+  <text x="164" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">11</text>
+  <text x="260" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">12</text>
+  <text x="356" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">13</text>
+  <text x="452" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">14</text>
+  <text x="548" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">15</text>
+  <text x="644" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">16</text>
+  <text x="740" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">17</text>
+</svg>
+'''
+    (assets_dir / "palette-dark.svg").write_text(palette_dark)
+
+    # Palette visualization (light mode - transparent bg)
+    palette_light = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
+  <!-- Grayscale row -->
+  <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base03']}" letter-spacing="1">Grayscale</text>
+  <rect x="24" y="48" width="88" height="56" rx="8" fill="{c['base00']}"/>
+  <rect x="120" y="48" width="88" height="56" rx="8" fill="{c['base01']}"/>
+  <rect x="216" y="48" width="88" height="56" rx="8" fill="{c['base02']}"/>
+  <rect x="312" y="48" width="88" height="56" rx="8" fill="{c['base03']}"/>
+  <rect x="408" y="48" width="88" height="56" rx="8" fill="{c['base04']}"/>
+  <rect x="504" y="48" width="88" height="56" rx="8" fill="{c['base05']}"/>
+  <rect x="600" y="48" width="88" height="56" rx="8" fill="{c['base06']}"/>
+  <rect x="696" y="48" width="88" height="56" rx="8" fill="{c['base07']}" stroke="{c['base04']}" stroke-width="1"/>
+
+  <text x="68" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">00</text>
+  <text x="164" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">01</text>
+  <text x="260" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">02</text>
+  <text x="356" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">03</text>
+  <text x="452" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">04</text>
+  <text x="548" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">05</text>
+  <text x="644" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">06</text>
+  <text x="740" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">07</text>
+
+  <!-- Loud Accents row -->
+  <text x="24" y="135" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base03']}" letter-spacing="1">Loud Accents — Diagnostics</text>
+  <rect x="24" y="148" width="88" height="56" rx="8" fill="{c['base08']}"/>
+  <rect x="120" y="148" width="88" height="56" rx="8" fill="{c['base09']}"/>
+  <rect x="216" y="148" width="88" height="56" rx="8" fill="{c['base0A']}"/>
+  <rect x="312" y="148" width="88" height="56" rx="8" fill="{c['base0B']}"/>
+  <rect x="408" y="148" width="88" height="56" rx="8" fill="{c['base0C']}"/>
+  <rect x="504" y="148" width="88" height="56" rx="8" fill="{c['base0D']}"/>
+  <rect x="600" y="148" width="88" height="56" rx="8" fill="{c['base0E']}"/>
+  <rect x="696" y="148" width="88" height="56" rx="8" fill="{c['base0F']}"/>
+
+  <text x="68" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">08</text>
+  <text x="164" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">09</text>
+  <text x="260" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0A</text>
+  <text x="356" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0B</text>
+  <text x="452" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0C</text>
+  <text x="548" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">0D</text>
+  <text x="644" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">0E</text>
+  <text x="740" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">0F</text>
+
+  <!-- Quiet Accents row -->
+  <text x="24" y="235" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base03']}" letter-spacing="1">Quiet Accents — Syntax</text>
+  <rect x="24" y="248" width="88" height="56" rx="8" fill="{c['base10']}"/>
+  <rect x="120" y="248" width="88" height="56" rx="8" fill="{c['base11']}"/>
+  <rect x="216" y="248" width="88" height="56" rx="8" fill="{c['base12']}"/>
+  <rect x="312" y="248" width="88" height="56" rx="8" fill="{c['base13']}"/>
+  <rect x="408" y="248" width="88" height="56" rx="8" fill="{c['base14']}"/>
+  <rect x="504" y="248" width="88" height="56" rx="8" fill="{c['base15']}"/>
+  <rect x="600" y="248" width="88" height="56" rx="8" fill="{c['base16']}"/>
+  <rect x="696" y="248" width="88" height="56" rx="8" fill="{c['base17']}"/>
+
+  <text x="68" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">10</text>
+  <text x="164" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">11</text>
+  <text x="260" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">12</text>
+  <text x="356" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">13</text>
+  <text x="452" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">14</text>
+  <text x="548" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">15</text>
+  <text x="644" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" text-anchor="middle">16</text>
+  <text x="740" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" text-anchor="middle">17</text>
+</svg>
+'''
+    (assets_dir / "palette-light.svg").write_text(palette_light)
+    print("  ✓ site/assets/palette-dark.svg, palette-light.svg")
+
+    # Code preview (dark mode)
+    preview_dark = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 340">
+  <rect width="680" height="340" rx="10" fill="{c['base00']}"/>
+
+  <!-- Title bar -->
+  <rect width="680" height="36" rx="10" fill="{c['base01']}"/>
+  <rect y="26" width="680" height="10" fill="{c['base01']}"/>
+  <circle cx="20" cy="18" r="6" fill="{c['base08']}"/>
+  <circle cx="40" cy="18" r="6" fill="{c['base0A']}"/>
+  <circle cx="60" cy="18" r="6" fill="{c['base0B']}"/>
+  <text x="340" y="23" text-anchor="middle" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base04']}">user-service.ts</text>
+
+  <!-- Line numbers -->
+  <text x="28" y="68" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">1</text>
+  <text x="28" y="92" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">2</text>
+  <text x="28" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">3</text>
+  <text x="28" y="140" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">4</text>
+  <text x="28" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">5</text>
+  <text x="28" y="188" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">6</text>
+  <text x="28" y="212" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">7</text>
+  <text x="28" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">8</text>
+  <text x="28" y="260" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">9</text>
+  <text x="28" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">10</text>
+  <text x="28" y="308" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">11</text>
+
+  <!-- Line 1: interface User {{ -->
+  <text x="44" y="68" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base10']}">interface</tspan>
+    <tspan fill="{c['base05']}"> </tspan>
+    <tspan fill="{c['base14']}">User</tspan>
+    <tspan fill="{c['base05']}"> {{</tspan>
+  </text>
+
+  <!-- Line 2: id: string; -->
+  <text x="44" y="92" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base05']}">  id: </tspan>
+    <tspan fill="{c['base14']}">string</tspan>
+    <tspan fill="{c['base05']}">;</tspan>
+  </text>
+
+  <!-- Line 3: }} -->
+  <text x="44" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base05']}">}}</text>
+
+  <!-- Line 5: !! marker -->
+  <rect x="40" y="150" width="596" height="22" rx="4" fill="{c['base0F']}"/>
+  <text x="44" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="bold">// !! Critical: rate limiting depends on this cache format</text>
+
+  <!-- Line 6: async function -->
+  <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base10']}">async function</tspan>
+    <tspan fill="{c['base05']}"> </tspan>
+    <tspan fill="{c['base13']}">getUser</tspan>
+    <tspan fill="{c['base05']}">(id: </tspan>
+    <tspan fill="{c['base14']}">string</tspan>
+    <tspan fill="{c['base05']}">): </tspan>
+    <tspan fill="{c['base14']}">Promise</tspan>
+    <tspan fill="{c['base05']}">&lt;</tspan>
+    <tspan fill="{c['base14']}">User</tspan>
+    <tspan fill="{c['base05']}">&gt; {{</tspan>
+  </text>
+
+  <!-- Line 7: const cached -->
+  <text x="44" y="212" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base05']}">  </tspan>
+    <tspan fill="{c['base10']}">const</tspan>
+    <tspan fill="{c['base05']}"> cached = </tspan>
+    <tspan fill="{c['base10']}">await</tspan>
+    <tspan fill="{c['base05']}"> redis.</tspan>
+    <tspan fill="{c['base13']}">get</tspan>
+    <tspan fill="{c['base05']}">(</tspan>
+    <tspan fill="{c['base12']}">`user:</tspan>
+    <tspan fill="{c['base05']}">${{id}}</tspan>
+    <tspan fill="{c['base12']}">`</tspan>
+    <tspan fill="{c['base05']}">);</tspan>
+  </text>
+
+  <!-- Line 8: ?? marker -->
+  <rect x="40" y="222" width="380" height="22" rx="4" fill="{c['base0E']}"/>
+  <text x="44" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base07']}" font-weight="bold">  // ?? Should we add retry logic here?</text>
+
+  <!-- Line 9: return -->
+  <text x="44" y="260" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base05']}">  </tspan>
+    <tspan fill="{c['base10']}">return</tspan>
+    <tspan fill="{c['base05']}"> cached;</tspan>
+  </text>
+
+  <!-- Line 10: }} -->
+  <text x="44" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base05']}">}}</text>
+
+  <!-- Line 11: error -->
+  <text x="44" y="308" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base05']}">user.</tspan>
+    <tspan fill="{c['base05']}">name</tspan>
+    <tspan fill="{c['base05']}"> = </tspan>
+    <tspan fill="{c['base16']}">null</tspan>
+    <tspan fill="{c['base05']}">;</tspan>
+  </text>
+  <rect x="180" y="294" width="290" height="20" rx="4" fill="{c['base08']}"/>
+  <text x="188" y="308" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base00']}" font-weight="600">Type 'null' is not assignable to 'string'</text>
+</svg>
+'''
+    (assets_dir / "preview-dark.svg").write_text(preview_dark)
+
+    # Code preview (light mode)
+    preview_light = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 340">
+  <rect width="680" height="340" rx="10" fill="{c['base07']}" stroke="{c['base04']}" stroke-width="1"/>
+
+  <!-- Title bar -->
+  <rect width="680" height="36" rx="10" fill="{c['base06']}"/>
+  <rect y="26" width="680" height="10" fill="{c['base06']}"/>
+  <circle cx="20" cy="18" r="6" fill="{c['base08']}"/>
+  <circle cx="40" cy="18" r="6" fill="{c['base0A']}"/>
+  <circle cx="60" cy="18" r="6" fill="{c['base0B']}"/>
+  <text x="340" y="23" text-anchor="middle" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base03']}">user-service.ts</text>
+
+  <!-- Line numbers -->
+  <text x="28" y="68" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">1</text>
+  <text x="28" y="92" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">2</text>
+  <text x="28" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">3</text>
+  <text x="28" y="140" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">4</text>
+  <text x="28" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">5</text>
+  <text x="28" y="188" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">6</text>
+  <text x="28" y="212" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">7</text>
+  <text x="28" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">8</text>
+  <text x="28" y="260" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">9</text>
+  <text x="28" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">10</text>
+  <text x="28" y="308" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base04']}" text-anchor="end">11</text>
+
+  <!-- Line 1: interface User {{ -->
+  <text x="44" y="68" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base10']}">interface</tspan>
+    <tspan fill="{c['base00']}"> </tspan>
+    <tspan fill="{c['base15']}">User</tspan>
+    <tspan fill="{c['base00']}"> {{</tspan>
+  </text>
+
+  <!-- Line 2: id: string; -->
+  <text x="44" y="92" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base00']}">  id: </tspan>
+    <tspan fill="{c['base15']}">string</tspan>
+    <tspan fill="{c['base00']}">;</tspan>
+  </text>
+
+  <!-- Line 3: }} -->
+  <text x="44" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}">}}</text>
+
+  <!-- Line 5: !! marker -->
+  <rect x="40" y="150" width="596" height="22" rx="4" fill="{c['base0B']}"/>
+  <text x="44" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="bold">// !! Critical: rate limiting depends on this cache format</text>
+
+  <!-- Line 6: async function -->
+  <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base10']}">async function</tspan>
+    <tspan fill="{c['base00']}"> </tspan>
+    <tspan fill="{c['base0B']}">getUser</tspan>
+    <tspan fill="{c['base00']}">(id: </tspan>
+    <tspan fill="{c['base15']}">string</tspan>
+    <tspan fill="{c['base00']}">): </tspan>
+    <tspan fill="{c['base15']}">Promise</tspan>
+    <tspan fill="{c['base00']}">&lt;</tspan>
+    <tspan fill="{c['base15']}">User</tspan>
+    <tspan fill="{c['base00']}">&gt; {{</tspan>
+  </text>
+
+  <!-- Line 7: const cached -->
+  <text x="44" y="212" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base00']}">  </tspan>
+    <tspan fill="{c['base10']}">const</tspan>
+    <tspan fill="{c['base00']}"> cached = </tspan>
+    <tspan fill="{c['base10']}">await</tspan>
+    <tspan fill="{c['base00']}"> redis.</tspan>
+    <tspan fill="{c['base0B']}">get</tspan>
+    <tspan fill="{c['base00']}">(</tspan>
+    <tspan fill="{c['base09']}">`user:</tspan>
+    <tspan fill="{c['base00']}">${{id}}</tspan>
+    <tspan fill="{c['base09']}">`</tspan>
+    <tspan fill="{c['base00']}">);</tspan>
+  </text>
+
+  <!-- Line 8: ?? marker -->
+  <rect x="40" y="222" width="380" height="22" rx="4" fill="{c['base0E']}"/>
+  <text x="44" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base07']}" font-weight="bold">  // ?? Should we add retry logic here?</text>
+
+  <!-- Line 9: return -->
+  <text x="44" y="260" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base00']}">  </tspan>
+    <tspan fill="{c['base10']}">return</tspan>
+    <tspan fill="{c['base00']}"> cached;</tspan>
+  </text>
+
+  <!-- Line 10: }} -->
+  <text x="44" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}">}}</text>
+
+  <!-- Line 11: error -->
+  <text x="44" y="308" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="{c['base00']}">user.</tspan>
+    <tspan fill="{c['base00']}">name</tspan>
+    <tspan fill="{c['base00']}"> = </tspan>
+    <tspan fill="{c['base0E']}">null</tspan>
+    <tspan fill="{c['base00']}">;</tspan>
+  </text>
+  <rect x="180" y="294" width="290" height="20" rx="4" fill="{c['base08']}"/>
+  <text x="188" y="308" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base07']}" font-weight="600">Type 'null' is not assignable to 'string'</text>
+</svg>
+'''
+    (assets_dir / "preview-light.svg").write_text(preview_light)
+    print("  ✓ site/assets/preview-dark.svg, preview-light.svg")
+
+
 
 def generate_readme(colors, meta):
     """Generate README.md."""
@@ -833,6 +1230,7 @@ def main():
     print("\nGenerating site:")
     generate_palette_json(colors, meta)
     generate_site(colors, meta)
+    generate_svgs(colors, meta)
     generate_readme(colors, meta)
 
     print("\nGenerating theme registry files:")

@@ -1,16 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
   <!-- Grayscale row -->
-  <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" text-transform="uppercase" letter-spacing="1">Grayscale</text>
+  <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" letter-spacing="1">Grayscale</text>
   <rect x="24" y="48" width="88" height="56" rx="8" fill="#1a1c22"/>
   <rect x="120" y="48" width="88" height="56" rx="8" fill="#282b31"/>
   <rect x="216" y="48" width="88" height="56" rx="8" fill="#3a3d42"/>
   <rect x="312" y="48" width="88" height="56" rx="8" fill="#5a5d62"/>
   <rect x="408" y="48" width="88" height="56" rx="8" fill="#828079"/>
-  <rect x="504" y="48" width="88" height="56" rx="8" fill="#dbd6cc" stroke="#828079" stroke-width="1"/>
-  <rect x="600" y="48" width="88" height="56" rx="8" fill="#eeeae2" stroke="#828079" stroke-width="1"/>
+  <rect x="504" y="48" width="88" height="56" rx="8" fill="#dbd6cc"/>
+  <rect x="600" y="48" width="88" height="56" rx="8" fill="#eeeae2"/>
   <rect x="696" y="48" width="88" height="56" rx="8" fill="#f8f6f2" stroke="#828079" stroke-width="1"/>
 
-  <!-- Grayscale labels -->
   <text x="68" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#f8f6f2" text-anchor="middle">00</text>
   <text x="164" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#f8f6f2" text-anchor="middle">01</text>
   <text x="260" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#f8f6f2" text-anchor="middle">02</text>
@@ -21,7 +20,7 @@
   <text x="740" y="82" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">07</text>
 
   <!-- Loud Accents row -->
-  <text x="24" y="135" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" text-transform="uppercase" letter-spacing="1">Loud Accents — Diagnostics</text>
+  <text x="24" y="135" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" letter-spacing="1">Loud Accents — Diagnostics</text>
   <rect x="24" y="148" width="88" height="56" rx="8" fill="#e7349c"/>
   <rect x="120" y="148" width="88" height="56" rx="8" fill="#f26c33"/>
   <rect x="216" y="148" width="88" height="56" rx="8" fill="#f2a633"/>
@@ -31,7 +30,6 @@
   <rect x="600" y="148" width="88" height="56" rx="8" fill="#9871fe"/>
   <rect x="696" y="148" width="88" height="56" rx="8" fill="#bbff00"/>
 
-  <!-- Loud labels -->
   <text x="68" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">08</text>
   <text x="164" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">09</text>
   <text x="260" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">0A</text>
@@ -42,7 +40,7 @@
   <text x="740" y="182" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">0F</text>
 
   <!-- Quiet Accents row -->
-  <text x="24" y="235" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" text-transform="uppercase" letter-spacing="1">Quiet Accents — Syntax</text>
+  <text x="24" y="235" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#5a5d62" letter-spacing="1">Quiet Accents — Syntax</text>
   <rect x="24" y="248" width="88" height="56" rx="8" fill="#c8518f"/>
   <rect x="120" y="248" width="88" height="56" rx="8" fill="#d68c6f"/>
   <rect x="216" y="248" width="88" height="56" rx="8" fill="#dfb683"/>
@@ -52,7 +50,6 @@
   <rect x="600" y="248" width="88" height="56" rx="8" fill="#8f72e3"/>
   <rect x="696" y="248" width="88" height="56" rx="8" fill="#d2fc91"/>
 
-  <!-- Quiet labels -->
   <text x="68" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">10</text>
   <text x="164" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">11</text>
   <text x="260" y="282" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" text-anchor="middle">12</text>

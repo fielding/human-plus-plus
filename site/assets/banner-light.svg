@@ -1,23 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
   <defs>
-    <!-- Gradient for "Human" - dark for light mode -->
     <linearGradient id="humanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#1a1c22"/>
       <stop offset="100%" style="stop-color:#3a3d42"/>
     </linearGradient>
-    <!-- Gradient for "++" - lime to green -->
     <linearGradient id="plusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#04b372"/>
       <stop offset="100%" style="stop-color:#04b372"/>
     </linearGradient>
   </defs>
-
-  <!-- Logo -->
   <text x="400" y="95" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="72" font-weight="700" letter-spacing="-3">
     <tspan fill="url(#humanGradient)">Human</tspan><tspan fill="url(#plusGradient)">++</tspan>
   </text>
-
-  <!-- Tagline -->
   <text x="400" y="145" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="20" font-weight="300" fill="#5a5d62">
     <tspan font-weight="500" fill="#1a1c22">Code is cheap.</tspan>
     <tspan> Intent is scarce.</tspan>
