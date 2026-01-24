@@ -10,7 +10,7 @@ dist/
 site/data/
 site/index.html
 
-# Keep site/assets/ — logos and images are source files
+# Keep site/assets/ — generated SVGs are committed so README images work on GitHub
 
 # Python
 __pycache__/
