@@ -1,33 +1,10 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="banner-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="banner-light.svg">
-    <img src="banner-dark.svg" alt="Human++ - Code is cheap. Intent is scarce." width="600">
-  </picture>
-</p>
+# Human++
 
-<p align="center">
-  A Base24 color scheme for the post-artisanal coding era.
-</p>
+A Base24 color scheme for the post-artisanal coding era.
 
-<p align="center">
-  <a href="https://fielding.github.io/human-plus-plus/">Website</a> •
-  <a href="#install">Install</a> •
-  <a href="#the-palette">Palette</a> •
-  <a href="#human-intent-markers">Markers</a>
-</p>
-
----
+**Code is cheap. Intent is scarce.**
 
 As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="preview-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="preview-light.svg">
-    <img src="preview-dark.svg" alt="Human++ Theme Preview" width="650">
-  </picture>
-</p>
 
 ## Philosophy
 
@@ -41,19 +18,46 @@ The result: when you see color, it means something.
 
 ## The Palette
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="palette-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="palette-light.svg">
-    <img src="palette-dark.svg" alt="Human++ Palette" width="700">
-  </picture>
-</p>
+Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full Base24 palette.
 
-Human++ Cool Balanced uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
+### Grayscale
 
-- **base00–07** — Cool grayscale from charcoal to warm cream
-- **base08–0F** — Loud accents for diagnostics and signals
-- **base10–17** — Quiet accents for syntax and UI
+| Slot | Hex | Role |
+|------|-----|------|
+| base00 | `#1a1c22` | Background |
+| base01 | `#282b31` | Elevation |
+| base02 | `#3a3d42` | Selection |
+| base03 | `#5a5d62` | Comments (coffee brown) |
+| base04 | `#828079` | UI secondary |
+| base05 | `#dbd6cc` | Main text |
+| base06 | `#eeeae2` | Emphasis |
+| base07 | `#f8f6f2` | Brightest |
+
+### Loud Accents (Diagnostics & Signals)
+
+| Slot | Hex | Role |
+|------|-----|------|
+| base08 | `#e7349c` | Errors, attention |
+| base09 | `#f26c33` | Warnings |
+| base0A | `#f2a633` | Caution |
+| base0B | `#04b372` | Success |
+| base0C | `#1ad0d6` | Info |
+| base0D | `#458ae2` | Links, focus |
+| base0E | `#9871fe` | Special |
+| base0F | `#bbff00` | Human intent marker |
+
+### Quiet Accents (Syntax & UI)
+
+| Slot | Hex | Role |
+|------|-----|------|
+| base10 | `#c8518f` | Keywords |
+| base11 | `#d68c6f` | Secondary |
+| base12 | `#dfb683` | Strings |
+| base13 | `#61b186` | Functions |
+| base14 | `#91cbcd` | Types |
+| base15 | `#5e84b6` | Hints |
+| base16 | `#8f72e3` | Constants |
+| base17 | `#d2fc91` | Quiet lime |
 
 ## Human Intent Markers
 
@@ -65,6 +69,19 @@ Use punctuation markers in comments to flag human judgment:
 | `??` | I'm uncertain | Purple (base0E) |
 | `>>` | See reference | Cyan (base0C) |
 
+```js
+// Regular comment stays calm (base03)
+
+// !! Critical: don't change without talking to Sarah
+if (legacyMode) {
+  // ?? Not sure this handles the edge case
+  return transformLegacy(data);
+}
+
+// >> See utils.ts for the transform logic
+return transform(data);
+```
+
 ### Why punctuation?
 
 - Fast to type
@@ -72,27 +89,59 @@ Use punctuation markers in comments to flag human judgment:
 - Easy to grep: `rg "// !!|// \?\?|// >>"`
 - Easy for editors to highlight
 
-## Install
+## Build
 
 All theme files are generated from `palette.toml`:
 
 ```bash
-git clone https://github.com/fielding/human-plus-plus
-python3 build.py
+make build          # Build all theme files
+make preview        # Preview palette in terminal
+make colortest      # Display terminal ANSI mapping
+make apply          # Apply theme to installed apps
+make apply-dry      # Preview what apply would do
+make analyze        # Analyze palette in OKLCH
 ```
 
-### Supported Apps
+Or apply with tinty: `tinty apply base24-human-plus-plus`
 
-| App | File |
-|-----|------|
-| Ghostty | `ghostty/config` |
-| VS Code / Cursor | `vscode-extension/` |
-| Vim / Neovim | `vim/colors/` |
-| iTerm2 | `iterm/` |
-| Shell | `shell/` |
-| Sketchybar | `sketchybar/colors.sh` |
-| JankyBorders | `borders/bordersrc` |
-| skhd | `skhd/modes.sh` |
+## Repository Structure
+
+```
+palette.toml          # Single source of truth (edit this)
+Makefile              # Build orchestration
+templates/            # HTML templates (no hardcoded hex)
+tools/                # Python generators
+scripts/              # Shell orchestration
+site/assets/          # Logos and images (committed)
+```
+
+**Generated (not committed):**
+```
+dist/                 # Theme outputs (ghostty, vim, vscode, etc.)
+site/index.html       # Landing page (from template)
+site/data/            # Palette JSON for the website
+```
+
+Run `make build` locally, or let CI generate everything on push.
+
+## CI/CD
+
+- **Pull requests**: Build + analyze palette
+- **Push to main**: Deploy site to GitHub Pages
+- **Tags (`v*`)**: Create GitHub Release with dist/ artifacts
+
+Download pre-built theme files from [Releases](https://github.com/fielding/human-plus-plus/releases).
+
+## Preview
+
+Visit [fielding.github.io/human-plus-plus](https://fielding.github.io/human-plus-plus/) for the live site.
+
+To preview locally:
+```bash
+make build
+python3 -m http.server -d site 8000
+# Open http://localhost:8000
+```
 
 ## License
 

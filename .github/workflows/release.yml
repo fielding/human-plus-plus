@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build all outputs
+        run: make build
+
+      - name: Package dist
+        run: |
+          VERSION=${{ github.ref_name }}
+          tar -czf human-plus-plus-${VERSION}-dist.tar.gz dist/
+
+          # Also create a zip for Windows users
+          zip -r human-plus-plus-${VERSION}-dist.zip dist/
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          cat << 'EOF' > release-notes.md
+          ## Human++ ${{ github.ref_name }}
+
+          A Base24 color scheme for the post-artisanal coding era.
+
+          ### Installation
+
+          **With tinty:**
+          ```bash
+          tinty apply base24-human-plus-plus
+          ```
+
+          **Manual:**
+          1. Download and extract the archive
+          2. Copy the relevant config to your application's config directory
+
+          ### Included Configs
+
+          - `ghostty/config` - Ghostty terminal
+          - `vim/colors/humanplusplus.vim` - Vim/Neovim
+          - `vscode/base-cool-balanced-v2.json` - VS Code/Cursor
+          - `iterm/humanplusplus.itermcolors` - iTerm2
+          - `sketchybar/colors.sh` - Sketchybar
+          - `borders/bordersrc` - JankyBorders
+          - `skhd/modes.sh` - skhd mode indicators
+          - `base24/` - Shell theme and tinty registry
+
+          ### Links
+
+          - [Documentation](https://github.com/fielding/human-plus-plus)
+          - [Live Preview](https://fielding.github.io/human-plus-plus/)
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+          files: |
+            human-plus-plus-${{ github.ref_name }}-dist.tar.gz
+            human-plus-plus-${{ github.ref_name }}-dist.zip

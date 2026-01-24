@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build
+        run: make build
+
+      - name: Analyze palette
+        run: make analyze
+        continue-on-error: true  # Don't fail CI on analysis warnings
+
+      - name: Verify no palette drift
+        run: |
+          # Ensure generated files match what build.py produces
+          # This catches cases where someone edited dist/ or site/ by hand
+          make build
+          if ! git diff --quiet site/data/palette.json; then
+            echo "::error::site/data/palette.json is out of sync with palette.toml"
+            git diff site/data/palette.json
+            exit 1
+          fi

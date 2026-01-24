@@ -1,7 +1,31 @@
-# Dependencies
-node_modules/
+# =============================================================================
+# Human++ .gitignore
+#
+# Core principle: palette.toml is the single source of truth.
+# Everything in dist/ and site/data/ is generated — do not commit.
+# =============================================================================
 
-# Build artifacts
+# Generated outputs (built from palette.toml)
+dist/
+site/data/
+site/index.html
+
+# Keep site/assets/ — logos and images are source files
+
+# Build cache
+.palette-cache.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+.venv/
+venv/
+
+# Node.js (for VS Code extension)
+node_modules/
 out/
 *.vsix
 
@@ -18,8 +42,5 @@ out/
 # Test/dev directories
 testbed/
 
-# Build cache
-.palette-cache.json
-
-# Lock files
-# package-lock.json is tracked for reproducible builds
+# Lock files are tracked for reproducible builds
+# package-lock.json
