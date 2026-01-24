@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="banner.svg" alt="Human++ - Code is cheap. Intent is scarce." width="600">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="banner-light.svg">
+    <img src="banner-dark.svg" alt="Human++ - Code is cheap. Intent is scarce." width="600">
+  </picture>
 </p>
 
 <p align="center">
@@ -30,7 +34,11 @@ The result: when you see color, it means something.
 ## The Palette
 
 <p align="center">
-  <img src="palette.svg" alt="Human++ Palette" width="700">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="palette-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="palette-light.svg">
+    <img src="palette-dark.svg" alt="Human++ Palette" width="700">
+  </picture>
 </p>
 
 Human++ Cool Balanced uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
