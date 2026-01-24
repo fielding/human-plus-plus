@@ -52,7 +52,7 @@ derive:
 # Clean generated files (keeps source files)
 clean:
 	@echo "Cleaning generated files..."
-	@rm -rf dist/ site/data/
+	@rm -rf dist/ site/data/ site/index.html
 	@rm -f .palette-cache.json
 	@echo "Done."
 

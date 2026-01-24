@@ -1,0 +1,14 @@
+{
+  "jsonKey": "value",
+  "number": 123,
+  "float": 3.14159,
+  "bool": true,
+  "null": null,
+  "array": [
+    1,
+    "two",
+    {
+      "nested": "HUMAN_HIGHLIGHT"
+    }
+  ]
+}

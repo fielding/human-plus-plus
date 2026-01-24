@@ -1,0 +1,9 @@
+diff --git a/app.py b/app.py
+index 1111111..2222222 100644
+--- a/app.py
++++ b/app.py
+@@ -1,6 +1,7 @@
+ def normalize_name(name: str) -> str:
+-    return name.strip().title()
++    # HUMAN_HIGHLIGHT
++    return name.strip().title()

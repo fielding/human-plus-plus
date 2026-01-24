@@ -1,0 +1,8 @@
+# Human++ YAML sample
+service:
+  name: humanpp
+  enabled: true
+  ports: [80, 443]
+  env:
+    - key: HUMAN_HIGHLIGHT
+      value: "yes"

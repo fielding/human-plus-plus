@@ -39,8 +39,8 @@ out/
 # macOS
 .DS_Store
 
-# Test/dev directories
-testbed/
+# Local test/dev scratchpads (but keep packages/vscode-extension/testbed/ - it has useful demos)
+/testbed/
 
 # Lock files are tracked for reproducible builds
 # package-lock.json

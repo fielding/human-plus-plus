@@ -1,0 +1,7 @@
+# Human++ TOML sample
+title = "Human++"
+enabled = true
+
+[theme]
+base00 = "#1c1917"
+accent = "HUMAN_HIGHLIGHT"

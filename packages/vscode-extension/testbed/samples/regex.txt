@@ -1,0 +1,7 @@
+# Regex playground
+text:
+  user_42 = Fielding
+  user_7  = Alex
+
+regex: /user_(?<id>\d+)\s*=\s*(?<name>.+)/giu
+hint: HUMAN_HIGHLIGHT

@@ -1,0 +1,13 @@
+:root{
+  --bg: #111;
+  --fg: #eee;
+  --accent: oklch(70% 0.18 80);
+}
+.container { padding: 1rem; }
+.btn {
+  border: 1px solid color-mix(in srgb, var(--accent), transparent 40%);
+  background: linear-gradient(45deg, rgba(0,0,0,.1), rgba(255,255,255,.05));
+  transition: transform 120ms ease;
+}
+.btn:hover { transform: translateY(-1px); }
+a[href^="https://"]::after { content: " ↗"; }
