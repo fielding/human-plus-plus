@@ -68,17 +68,20 @@ if [ -d "$HOME/.config/ghostty" ]; then
     echo "     (Restart ghostty or run: ghostty +reload-config)"
 fi
 
-# Vim
-if [ -d "$HOME/.vim/colors" ]; then
-    log "Updating vim colorscheme..."
-    run cp "$DIST_DIR/vim/colors/humanplusplus.vim" "$HOME/.vim/colors/"
-fi
-
-# Neovim
-if [ -d "$HOME/.config/nvim" ]; then
-    log "Updating neovim colorscheme..."
-    run mkdir -p "$HOME/.config/nvim/colors"
-    run cp "$DIST_DIR/vim/colors/humanplusplus.vim" "$HOME/.config/nvim/colors/"
+# Vim/Neovim (via tinty)
+TINTY_VIM="$HOME/.local/share/tinted-theming/tinty/repos/tinted-vim/colors/base24-human-plus-plus.vim"
+if [ -f "$TINTY_VIM" ]; then
+    if [ -d "$HOME/.vim/colors" ]; then
+        log "Updating vim colorscheme..."
+        run cp "$TINTY_VIM" "$HOME/.vim/colors/humanplusplus.vim"
+    fi
+    if [ -d "$HOME/.config/nvim" ]; then
+        log "Updating neovim colorscheme..."
+        run mkdir -p "$HOME/.config/nvim/colors"
+        run cp "$TINTY_VIM" "$HOME/.config/nvim/colors/humanplusplus.vim"
+    fi
+else
+    log "Vim theme not found (run 'make build' with tinty installed)"
 fi
 
 # Cursor - find latest tinted-themes extension version
@@ -88,8 +91,8 @@ if [ -d "$HOME/.cursor/extensions" ]; then
 
     if [ -n "$CURSOR_EXT" ] && [ -d "$CURSOR_EXT/themes/base16" ]; then
         log "Updating Cursor theme ($(basename "$CURSOR_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/base-cool-balanced-v2.json" ]; then
-            run cp "$DIST_DIR/vscode/base-cool-balanced-v2.json" "$CURSOR_EXT/themes/base16/human-plus-plus-cool-balanced-v2.json"
+        if [ -f "$DIST_DIR/vscode/humanpp-cool-balanced.json" ]; then
+            run cp "$DIST_DIR/vscode/humanpp-cool-balanced.json" "$CURSOR_EXT/themes/base16/humanpp-cool-balanced.json"
         fi
     else
         log "Cursor tinted-themes extension not found, skipping..."
@@ -102,8 +105,8 @@ if [ -d "$HOME/.vscode/extensions" ]; then
 
     if [ -n "$VSCODE_EXT" ] && [ -d "$VSCODE_EXT/themes/base16" ]; then
         log "Updating VS Code theme ($(basename "$VSCODE_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/base-cool-balanced-v2.json" ]; then
-            run cp "$DIST_DIR/vscode/base-cool-balanced-v2.json" "$VSCODE_EXT/themes/base16/human-plus-plus-cool-balanced-v2.json"
+        if [ -f "$DIST_DIR/vscode/humanpp-cool-balanced.json" ]; then
+            run cp "$DIST_DIR/vscode/humanpp-cool-balanced.json" "$VSCODE_EXT/themes/base16/humanpp-cool-balanced.json"
         fi
     fi
 fi
