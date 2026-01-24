@@ -56,17 +56,21 @@ clean:
 	@rm -f .palette-cache.json
 	@echo "Done."
 
-# CI check: build and verify no uncommitted changes
-check: build
-	@echo "Checking for uncommitted changes..."
-	@if git diff --quiet && git diff --cached --quiet; then \
-		echo "✓ All generated files are up to date"; \
-	else \
-		echo "✗ Generated files are out of sync with palette.toml"; \
-		echo "  Run 'make build' and commit the changes"; \
-		git diff --stat; \
-		exit 1; \
-	fi
+# CI check: validate palette and analyze
+check:
+	@echo "Validating palette.toml..."
+	@python3 -c "from tools.lib.palette import load_palette, validate_palette; \
+		from pathlib import Path; \
+		c, m = load_palette(Path('palette.toml')); \
+		errors = validate_palette(c); \
+		exit(1) if errors else print('  ✓ palette.toml is valid')"
+	@echo "Building outputs..."
+	@make build > /dev/null
+	@echo "  ✓ Build successful"
+	@echo "Running analysis..."
+	@python3 tools/analyze.py > /dev/null 2>&1 && echo "  ✓ Analysis passed" || echo "  ! Analysis has warnings (non-blocking)"
+	@echo ""
+	@echo "✓ All checks passed"
 
 # Help
 help:

@@ -253,6 +253,35 @@ def generate_palette_json(colors, meta):
     (data_dir / "palette.json").write_text(json.dumps(data, indent=2))
     print("  ✓ site/data/palette.json")
 
+    # Generate meta.json with version info
+    import subprocess
+    from datetime import datetime, timezone
+
+    try:
+        version = subprocess.check_output(
+            ['git', 'describe', '--tags', '--always'],
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+    except Exception:
+        version = 'dev'
+
+    try:
+        commit = subprocess.check_output(
+            ['git', 'rev-parse', '--short', 'HEAD'],
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+    except Exception:
+        commit = 'unknown'
+
+    meta_data = {
+        'name': meta.get('name', 'Human++'),
+        'version': version,
+        'commit': commit,
+        'built': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    }
+    (data_dir / "meta.json").write_text(json.dumps(meta_data, indent=2))
+    print("  ✓ site/data/meta.json")
+
 
 def generate_site(colors, meta):
     """Generate the static site from templates."""
