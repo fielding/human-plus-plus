@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fldnnn/humanpp"
+    "url": "https://github.com/fielding/human-plus-plus"
   },
   "engines": {
     "vscode": "^1.74.0"

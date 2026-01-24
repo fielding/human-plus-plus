@@ -131,6 +131,26 @@ return transform(data);
 
 ## Install
 
+### VS Code / Cursor (Recommended)
+
+The VS Code extension includes the full theme plus **marker highlighting** and **inline diagnostics**:
+
+```bash
+# Build and install from source
+cd packages/vscode-extension
+npm install && npx @vscode/vsce package
+code --install-extension humanpp-1.0.0.vsix
+```
+
+Or download `humanpp-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
+
+**Features:**
+- Color theme with quiet syntax + loud diagnostics
+- Marker highlighting (`!!`, `??`, `>>`) with colored backgrounds
+- Inline diagnostic badges for errors/warnings
+
+### Other Apps
+
 All theme files are generated from `palette.toml`:
 
 ```bash
@@ -140,14 +160,9 @@ make build    # Generate all themes
 make apply    # Apply to installed apps
 ```
 
-Or download pre-built themes from [Releases](https://github.com/fielding/human-plus-plus/releases).
-
-### Supported Apps
-
 | App | Location |
 |-----|----------|
 | Ghostty | `dist/ghostty/config` |
-| VS Code / Cursor | `packages/vscode-extension/` |
 | Vim / Neovim | via tinty |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |

@@ -1,31 +1,29 @@
-# Human++
+# Human++ for VS Code
 
 A Base24 color scheme for the post-artisanal coding era.
 
 **Code is cheap. Intent is scarce.**
 
-As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance.
-
 ## Features
 
-### Color Theme
+### 1. Color Theme
 
 Human++ inverts traditional syntax highlighting priority:
 
-- **Quiet syntax** - everyday code fades into the background
-- **Loud diagnostics** - errors, warnings, and human markers demand attention
+- **Quiet syntax** — everyday code fades into the background
+- **Loud diagnostics** — errors, warnings, and human markers demand attention
 
 The result: when you see color, it means something.
 
-### Human Intent Markers
+### 2. Human Intent Markers
 
 Use punctuation markers in comments to flag human judgment:
 
-| Marker | Meaning |
-|--------|---------|
-| `!!` | Pay attention here |
-| `??` | I'm uncertain |
-| `>>` | See reference |
+| Marker | Meaning | Color |
+|--------|---------|-------|
+| `!!` | Pay attention here | Lime |
+| `??` | I'm uncertain | Purple |
+| `>>` | See reference | Cyan |
 
 ```js
 // Regular comment stays calm
@@ -40,28 +38,50 @@ if (legacyMode) {
 return transform(data);
 ```
 
-Markers are highlighted with a bright lime background, making human intent instantly visible.
+Markers are highlighted with bright backgrounds, making human intent instantly visible.
 
-### Why punctuation?
+### 3. Inline Diagnostics
+
+Errors and warnings appear as inline badges at the end of lines, so you don't need to hover or check the Problems panel.
+
+## Commands
+
+- `Human++: Toggle Marker Highlighting` — Enable/disable all highlighting
+- `Human++: Refresh Marker Decorations` — Manually refresh decorations
+
+## Settings
+
+### Marker Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `humanpp.enable` | `true` | Enable Human++ marker highlighting |
+| `humanpp.debounceMs` | `200` | Debounce delay for rescanning on edit |
+| `humanpp.markers.intervention.enable` | `true` | Enable `!!` marker |
+| `humanpp.markers.uncertainty.enable` | `true` | Enable `??` marker |
+| `humanpp.markers.directive.enable` | `true` | Enable `>>` marker |
+
+### Diagnostic Settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `humanpp.diagnostics.enable` | `true` | Enable inline diagnostic badges |
+| `humanpp.diagnostics.error.enable` | `true` | Show error diagnostics |
+| `humanpp.diagnostics.warning.enable` | `true` | Show warning diagnostics |
+| `humanpp.diagnostics.info.enable` | `true` | Show info diagnostics |
+| `humanpp.diagnostics.hint.enable` | `false` | Show hint diagnostics |
+
+## Why punctuation markers?
 
 - Fast to type
 - Easy to scan
 - Easy to grep: `rg "// !!|// \?\?|// >>"`
-- Easy for editors to highlight
+- Works in any language with comments
 
-## Commands
+## Links
 
-- `Human++: Toggle Marker Highlighting` - Enable/disable marker highlighting
-- `Human++: Refresh Marker Decorations` - Manually refresh decorations
-
-## Settings
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `humanpp.enable` | `true` | Enable marker highlighting |
-| `humanpp.highlightRestOfLine` | `true` | Highlight text after marker |
-| `humanpp.markerColor` | `#bbff00` | Marker background color |
-| `humanpp.markerTextColor` | `#1b1d20` | Marker text color |
+- [Human++ on GitHub](https://github.com/fielding/human-plus-plus)
+- [Website](https://fielding.github.io/human-plus-plus/)
 
 ## License
 

@@ -19,8 +19,19 @@ jobs:
         with:
           python-version: "3.11"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Build all outputs
         run: make build
+
+      - name: Build VS Code extension
+        run: |
+          cd packages/vscode-extension
+          npm install
+          npx @vscode/vsce package --no-git-tag-version
+          mv *.vsix ../../
 
       - name: Package dist
         run: |
@@ -38,7 +49,20 @@ jobs:
 
           A Base24 color scheme for the post-artisanal coding era.
 
-          ### Installation
+          ### VS Code / Cursor
+
+          Download `humanpp-*.vsix` and install:
+
+          ```bash
+          code --install-extension humanpp-1.0.0.vsix
+          ```
+
+          The extension includes:
+          - Color theme (quiet syntax + loud diagnostics)
+          - Human intent marker highlighting (`!!`, `??`, `>>`)
+          - Inline diagnostic badges
+
+          ### Other Apps
 
           **With tinty:**
           ```bash
@@ -52,9 +76,6 @@ jobs:
           ### Included Configs
 
           - `ghostty/config` - Ghostty terminal
-          - `vim/colors/humanplusplus.vim` - Vim/Neovim
-          - `vscode/base-cool-balanced-v2.json` - VS Code/Cursor
-          - `iterm/humanplusplus.itermcolors` - iTerm2
           - `sketchybar/colors.sh` - Sketchybar
           - `borders/bordersrc` - JankyBorders
           - `skhd/modes.sh` - skhd mode indicators
@@ -71,5 +92,6 @@ jobs:
         with:
           body_path: release-notes.md
           files: |
+            humanpp-*.vsix
             human-plus-plus-${{ github.ref_name }}-dist.tar.gz
             human-plus-plus-${{ github.ref_name }}-dist.zip
