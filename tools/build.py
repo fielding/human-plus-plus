@@ -80,7 +80,7 @@ def generate_ghostty(colors, meta):
     """Generate ghostty/config."""
     c = {k: hex_to_components(v) for k, v in colors.items()}
 
-    content = f"""# Human++ Cool Balanced - Base24
+    content = f"""# Human++ - Base24
 # Generated from palette.toml
 
 background = {c['base00']['hex']}
@@ -120,7 +120,7 @@ def generate_sketchybar(colors, meta):
     c = {k: hex_to_components(v) for k, v in colors.items()}
 
     content = f"""#!/bin/bash
-# Human++ Cool Balanced - Base24
+# Human++ - Base24
 # Generated from palette.toml
 
 # Base grayscale (cool)
@@ -170,7 +170,7 @@ def generate_borders(colors, meta):
     c = {k: hex_to_components(v) for k, v in colors.items()}
 
     content = f"""#!/bin/bash
-# Human++ Cool Balanced - borders config
+# Human++ - borders config
 # Generated from palette.toml
 
 borders active_color={c['base08']['argb']} \\
@@ -190,7 +190,7 @@ def generate_skhd(colors, meta):
     c = {k: hex_to_components(v) for k, v in colors.items()}
 
     content = f"""#!/bin/bash
-# Human++ Cool Balanced - skhd mode colors
+# Human++ - skhd mode colors
 # Generated from palette.toml
 
 export SKHD_MODE_DEFAULT={c['base08']['argb']}    # base08 - hot pink
@@ -750,7 +750,7 @@ The result: when you see color, it means something.
   </picture>
 </p>
 
-Human++ Cool Balanced uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
+Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
 
 - **base00–07** — Cool grayscale from charcoal to warm cream
 - **base08–0F** — Loud accents for diagnostics and signals
@@ -928,7 +928,7 @@ fi
 cat << 'HEADER'
 
   ╔═══════════════════════════════════════════════════════════════════╗
-  ║                       Human++ Cool Balanced                       ║
+  ║                       Human++                       ║
   ║           Code is cheap. Intent is scarce.                        ║
   ╚═══════════════════════════════════════════════════════════════════╝
 
@@ -1094,7 +1094,7 @@ def generate_base24_yaml(colors, meta):
 
     lines = [
         'system: "base24"',
-        f'name: "{meta.get("name", "Human++ Cool Balanced")}"',
+        f'name: "{meta.get("name", "Human++")}"',
         f'author: "{meta.get("author", "fielding")}"',
         'variant: "dark"',
         'palette:',
@@ -1127,7 +1127,7 @@ def generate_tinty_themes(colors, meta):
 
     # Build template vars
     vars = {
-        'scheme-name': meta.get('name', 'Human++ Cool Balanced'),
+        'scheme-name': meta.get('name', 'Human++'),
         'scheme-author': meta.get('author', 'fielding'),
         'scheme-slug': 'human-plus-plus',
         'scheme-system': 'base24',
@@ -1196,11 +1196,11 @@ def generate_vscode_theme(colors, meta):
     """Generate VS Code theme from template.
 
     Uses mustache-style placeholders ({{base00}}, {{base08}}, etc.) in
-    templates/vscode/theme.json.tmpl and renders with current palette.
+    templates/vscode/humanpp.json.tmpl and renders with current palette.
     """
     import shutil
 
-    template_path = ROOT / "templates/vscode/theme.json.tmpl"
+    template_path = ROOT / "templates/vscode/humanpp.json.tmpl"
 
     if not template_path.exists():
         print("  ⚠ VS Code template not found, skipping")
@@ -1215,15 +1215,15 @@ def generate_vscode_theme(colors, meta):
 
     # Write to dist/
     (DIST / "vscode").mkdir(parents=True, exist_ok=True)
-    theme_path = DIST / "vscode/humanpp-cool-balanced.json"
+    theme_path = DIST / "vscode/humanpp.json"
     theme_path.write_text(content)
-    print("  ✓ dist/vscode/humanpp-cool-balanced.json")
+    print("  ✓ dist/vscode/humanpp.json")
 
     # Also copy to vscode-extension package
-    ext_theme_path = PACKAGES / "vscode-extension/themes/humanpp-cool-balanced.json"
+    ext_theme_path = PACKAGES / "vscode-extension/themes/humanpp.json"
     if ext_theme_path.parent.exists():
         shutil.copy(theme_path, ext_theme_path)
-        print("  ✓ packages/vscode-extension/themes/humanpp-cool-balanced.json")
+        print("  ✓ packages/vscode-extension/themes/humanpp.json")
 
 
 # =============================================================================

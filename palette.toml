@@ -1,7 +1,7 @@
 [meta]
-name = "Human++ Cool Balanced"
+name = "Human++"
 author = "fielding"
-description = "Cool balanced grayscale with quiet syntax, loud diagnostics - code is cheap, intent is scarce"
+description = "A Base24 color scheme for the post-artisanal coding era - code is cheap, intent is scarce"
 
 [base16]
 # Grayscale: cool backgrounds → warm readable text

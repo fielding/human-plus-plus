@@ -1,5 +1,5 @@
 #!/bin/bash
-# Human++ Cool Balanced - Apply theme to all apps
+# Human++ - Apply theme to all apps
 # GENERATED FROM palette.toml — paths reference dist/ outputs
 set -euo pipefail
 
@@ -35,7 +35,7 @@ run() {
     fi
 }
 
-echo "Applying Human++ Cool Balanced theme..."
+echo "Applying Human++ theme..."
 if $DRY_RUN; then
     echo "(dry-run mode - no changes will be made)"
 fi
@@ -91,8 +91,8 @@ if [ -d "$HOME/.cursor/extensions" ]; then
 
     if [ -n "$CURSOR_EXT" ] && [ -d "$CURSOR_EXT/themes/base16" ]; then
         log "Updating Cursor theme ($(basename "$CURSOR_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/humanpp-cool-balanced.json" ]; then
-            run cp "$DIST_DIR/vscode/humanpp-cool-balanced.json" "$CURSOR_EXT/themes/base16/humanpp-cool-balanced.json"
+        if [ -f "$DIST_DIR/vscode/humanpp.json" ]; then
+            run cp "$DIST_DIR/vscode/humanpp.json" "$CURSOR_EXT/themes/base16/humanpp.json"
         fi
     else
         log "Cursor tinted-themes extension not found, skipping..."
@@ -105,8 +105,8 @@ if [ -d "$HOME/.vscode/extensions" ]; then
 
     if [ -n "$VSCODE_EXT" ] && [ -d "$VSCODE_EXT/themes/base16" ]; then
         log "Updating VS Code theme ($(basename "$VSCODE_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/humanpp-cool-balanced.json" ]; then
-            run cp "$DIST_DIR/vscode/humanpp-cool-balanced.json" "$VSCODE_EXT/themes/base16/humanpp-cool-balanced.json"
+        if [ -f "$DIST_DIR/vscode/humanpp.json" ]; then
+            run cp "$DIST_DIR/vscode/humanpp.json" "$VSCODE_EXT/themes/base16/humanpp.json"
         fi
     fi
 fi

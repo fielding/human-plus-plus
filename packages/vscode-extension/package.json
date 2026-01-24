@@ -31,9 +31,9 @@
   "contributes": {
     "themes": [
       {
-        "label": "Human++ Cool Balanced",
+        "label": "Human++",
         "uiTheme": "vs-dark",
-        "path": "./themes/humanpp-cool-balanced.json"
+        "path": "./themes/humanpp.json"
       }
     ],
     "commands": [

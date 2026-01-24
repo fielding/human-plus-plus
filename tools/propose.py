@@ -434,9 +434,9 @@ def generate_palette_toml(colors, grayscale_props, quiet_props, loud_props):
 
     print()
     print('  [meta]')
-    print('  name = "Human++ Cool Balanced"')
+    print('  name = "Human++"')
     print('  author = "fielding"')
-    print('  description = "Cool balanced grayscale with quiet syntax, loud diagnostics"')
+    print('  description = "A Base24 color scheme for the post-artisanal coding era"')
     print()
     print('  [base16]')
 

@@ -78,7 +78,7 @@ reset="\033[0m"
 
 echo ""
 echo "  ╔═══════════════════════════════════════════════════════════════════════╗"
-echo "  ║                    Human++ Cool Balanced Palette                      ║"
+echo "  ║                          Human++ Palette                              ║"
 echo "  ║                  Code is cheap. Intent is scarce.                     ║"
 echo "  ╚═══════════════════════════════════════════════════════════════════════╝"
 echo ""

@@ -49,7 +49,7 @@ The result: when you see color, it means something.
   </picture>
 </p>
 
-Human++ Cool Balanced uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
+Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
 
 - **base00–07** — Cool grayscale from charcoal to warm cream
 - **base08–0F** — Loud accents for diagnostics and signals
