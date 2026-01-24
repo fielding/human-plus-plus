@@ -21,6 +21,14 @@
 
 As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="preview-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="preview-light.svg">
+    <img src="preview-dark.svg" alt="Human++ Theme Preview" width="650">
+  </picture>
+</p>
+
 ## Philosophy
 
 Human++ inverts the traditional syntax highlighting priority:
@@ -57,19 +65,6 @@ Use punctuation markers in comments to flag human judgment:
 | `??` | I'm uncertain | Purple (base0E) |
 | `>>` | See reference | Cyan (base0C) |
 
-```js
-// Regular comment stays calm (base03)
-
-// !! Critical: don't change without talking to Sarah
-if (legacyMode) {
-  // ?? Not sure this handles the edge case
-  return transformLegacy(data);
-}
-
-// >> See utils.ts for the transform logic
-return transform(data);
-```
-
 ### Why punctuation?
 
 - Fast to type
@@ -82,14 +77,8 @@ return transform(data);
 All theme files are generated from `palette.toml`:
 
 ```bash
-# Clone the repo
 git clone https://github.com/fielding/human-plus-plus
-
-# Build everything
 python3 build.py
-
-# Apply with tinty
-tinty apply base24-human-plus-plus
 ```
 
 ### Supported Apps
@@ -104,15 +93,6 @@ tinty apply base24-human-plus-plus
 | Sketchybar | `sketchybar/colors.sh` |
 | JankyBorders | `borders/bordersrc` |
 | skhd | `skhd/modes.sh` |
-
-## Preview
-
-Visit the [landing page](https://fielding.github.io/human-plus-plus/) or open `swatches.html` locally to see:
-
-- Interactive color swatches
-- Loud vs quiet comparison
-- Human marker examples
-- Live code preview
 
 ## License
 

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 340">
+  <!-- Editor window -->
+  <rect width="680" height="340" rx="10" fill="#f8f6f2" stroke="#dbd6cc" stroke-width="1"/>
+
+  <!-- Title bar -->
+  <rect width="680" height="36" rx="10" fill="#eeeae2"/>
+  <rect y="26" width="680" height="10" fill="#eeeae2"/>
+
+  <!-- Window controls -->
+  <circle cx="20" cy="18" r="6" fill="#e7349c"/>
+  <circle cx="40" cy="18" r="6" fill="#f2a633"/>
+  <circle cx="60" cy="18" r="6" fill="#04b372"/>
+
+  <!-- File name -->
+  <text x="340" y="23" text-anchor="middle" font-family="SF Mono, Consolas, monospace" font-size="12" fill="#5a5d62">user-service.ts</text>
+
+  <!-- Code area background -->
+  <rect y="36" width="680" height="304" fill="#1a1c22"/>
+  <rect y="36" width="680" height="304" rx="0 0 10 10" fill="#1a1c22"/>
+
+  <!-- Line numbers -->
+  <text x="28" y="68" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">1</text>
+  <text x="28" y="92" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">2</text>
+  <text x="28" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">3</text>
+  <text x="28" y="140" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">4</text>
+  <text x="28" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">5</text>
+  <text x="28" y="188" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">6</text>
+  <text x="28" y="212" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">7</text>
+  <text x="28" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">8</text>
+  <text x="28" y="260" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">9</text>
+  <text x="28" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">10</text>
+  <text x="28" y="308" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#5a5d62" text-anchor="end">11</text>
+
+  <!-- Line 1: interface User { -->
+  <text x="44" y="68" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#c8518f">interface</tspan>
+    <tspan fill="#dbd6cc"> </tspan>
+    <tspan fill="#91cbcd">User</tspan>
+    <tspan fill="#dbd6cc"> {</tspan>
+  </text>
+
+  <!-- Line 2: id: string; -->
+  <text x="44" y="92" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#dbd6cc">  id: </tspan>
+    <tspan fill="#91cbcd">string</tspan>
+    <tspan fill="#dbd6cc">;</tspan>
+  </text>
+
+  <!-- Line 3: } -->
+  <text x="44" y="116" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#dbd6cc">}</text>
+
+  <!-- Line 4: empty -->
+
+  <!-- Line 5: !! marker with badge -->
+  <rect x="40" y="150" width="596" height="22" rx="4" fill="#bbff00"/>
+  <text x="44" y="164" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#1a1c22" font-weight="bold">// !! Critical: rate limiting depends on this cache format</text>
+
+  <!-- Line 6: async function -->
+  <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#c8518f">async function</tspan>
+    <tspan fill="#dbd6cc"> </tspan>
+    <tspan fill="#61b186">getUser</tspan>
+    <tspan fill="#dbd6cc">(id: </tspan>
+    <tspan fill="#91cbcd">string</tspan>
+    <tspan fill="#dbd6cc">): </tspan>
+    <tspan fill="#91cbcd">Promise</tspan>
+    <tspan fill="#dbd6cc">&lt;</tspan>
+    <tspan fill="#91cbcd">User</tspan>
+    <tspan fill="#dbd6cc">&gt; {</tspan>
+  </text>
+
+  <!-- Line 7: const cached -->
+  <text x="44" y="212" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#dbd6cc">  </tspan>
+    <tspan fill="#c8518f">const</tspan>
+    <tspan fill="#dbd6cc"> cached = </tspan>
+    <tspan fill="#c8518f">await</tspan>
+    <tspan fill="#dbd6cc"> redis.</tspan>
+    <tspan fill="#61b186">get</tspan>
+    <tspan fill="#dbd6cc">(</tspan>
+    <tspan fill="#dfb683">`user:</tspan>
+    <tspan fill="#dbd6cc">${id}</tspan>
+    <tspan fill="#dfb683">`</tspan>
+    <tspan fill="#dbd6cc">);</tspan>
+  </text>
+
+  <!-- Line 8: ?? marker with badge -->
+  <rect x="40" y="222" width="380" height="22" rx="4" fill="#9871fe"/>
+  <text x="44" y="236" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#f8f6f2" font-weight="bold">  // ?? Should we add retry logic here?</text>
+
+  <!-- Line 9: return -->
+  <text x="44" y="260" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#dbd6cc">  </tspan>
+    <tspan fill="#c8518f">return</tspan>
+    <tspan fill="#dbd6cc"> cached;</tspan>
+  </text>
+
+  <!-- Line 10: } -->
+  <text x="44" y="284" font-family="SF Mono, Consolas, monospace" font-size="13" fill="#dbd6cc">}</text>
+
+  <!-- Line 11: error with diagnostic badge -->
+  <text x="44" y="308" font-family="SF Mono, Consolas, monospace" font-size="13">
+    <tspan fill="#dbd6cc">user.</tspan>
+    <tspan fill="#dbd6cc" text-decoration="underline" style="text-decoration-color:#e7349c;text-decoration-style:wavy">name</tspan>
+    <tspan fill="#dbd6cc"> = </tspan>
+    <tspan fill="#8f72e3">null</tspan>
+    <tspan fill="#dbd6cc">;</tspan>
+  </text>
+  <!-- Error badge -->
+  <rect x="180" y="294" width="290" height="20" rx="4" fill="#e7349c"/>
+  <text x="188" y="308" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#1a1c22" font-weight="600">Type 'null' is not assignable to 'string'</text>
+</svg>
