@@ -738,63 +738,32 @@ def generate_tinty_themes(colors, meta):
         print("  ✓ tinty ghostty theme")
 
 
-def update_vscode_theme(colors, meta):
-    """Update VS Code theme with new colors.
+def generate_vscode_theme(colors, meta):
+    """Generate VS Code theme from template.
 
-    Uses a cache file to track previous palette values and replace them
-    with new values throughout the theme file.
+    Uses mustache-style placeholders ({{base00}}, {{base08}}, etc.) in
+    templates/vscode/theme.json.tmpl and renders with current palette.
     """
-    import json
-    import re
     import shutil
 
-    (DIST / "vscode").mkdir(parents=True, exist_ok=True)
-    theme_path = DIST / "vscode/base-cool-balanced-v2.json"
-    cache_path = ROOT / ".palette-cache.json"
+    template_path = ROOT / "templates/vscode/theme.json.tmpl"
 
-    if not theme_path.exists():
-        print("  ⚠ VS Code theme not found, skipping")
+    if not template_path.exists():
+        print("  ⚠ VS Code template not found, skipping")
         return
 
-    content = theme_path.read_text()
+    content = template_path.read_text()
 
-    # Load previous palette from cache (if exists)
-    old_colors = {}
-    if cache_path.exists():
-        try:
-            old_colors = json.loads(cache_path.read_text())
-        except:
-            pass
+    # Replace all {{baseXX}} placeholders with current palette values
+    for slot, hex_value in colors.items():
+        placeholder = '{{' + slot + '}}'
+        content = content.replace(placeholder, hex_value.lower())
 
-    # Build replacement map: old hex -> new hex
-    replacements = {}
-    for slot, new_hex in colors.items():
-        new_hex_lower = new_hex.lower()
-        # If we have an old value for this slot, map it to the new value
-        if slot in old_colors:
-            old_hex = old_colors[slot].lower()
-            if old_hex != new_hex_lower:
-                replacements[old_hex] = new_hex_lower
-
-    # Apply replacements (case-insensitive)
-    total_replacements = 0
-    for old_hex, new_hex in replacements.items():
-        # Count occurrences
-        pattern = re.compile(re.escape(old_hex), re.IGNORECASE)
-        matches = len(pattern.findall(content))
-        if matches > 0:
-            content = pattern.sub(new_hex, content)
-            total_replacements += matches
-
+    # Write to dist/
+    (DIST / "vscode").mkdir(parents=True, exist_ok=True)
+    theme_path = DIST / "vscode/humanpp-cool-balanced.json"
     theme_path.write_text(content)
-
-    if total_replacements > 0:
-        print(f"  ✓ dist/vscode/base-cool-balanced-v2.json ({total_replacements} color replacements)")
-    else:
-        print("  ✓ dist/vscode/base-cool-balanced-v2.json (no changes needed)")
-
-    # Save current palette to cache for next build
-    cache_path.write_text(json.dumps(colors, indent=2))
+    print("  ✓ dist/vscode/humanpp-cool-balanced.json")
 
     # Also copy to vscode-extension package
     ext_theme_path = PACKAGES / "vscode-extension/themes/humanpp-cool-balanced.json"
@@ -828,8 +797,8 @@ def main():
     generate_base24_yaml(colors, meta)
     generate_tinty_themes(colors, meta)
 
-    print("\nUpdating VS Code theme:")
-    update_vscode_theme(colors, meta)
+    print("\nGenerating VS Code theme:")
+    generate_vscode_theme(colors, meta)
 
     print("\n✓ Build complete!")
     print("\nTo apply: tinty apply base24-human-plus-plus")

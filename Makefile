@@ -53,7 +53,6 @@ derive:
 clean:
 	@echo "Cleaning generated files..."
 	@rm -rf dist/ site/data/ site/index.html
-	@rm -f .palette-cache.json
 	@echo "Done."
 
 # CI check: validate palette and analyze

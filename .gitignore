@@ -12,9 +12,6 @@ site/index.html
 
 # Keep site/assets/ — logos and images are source files
 
-# Build cache
-.palette-cache.json
-
 # Python
 __pycache__/
 *.pyc
