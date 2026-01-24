@@ -302,13 +302,36 @@ def generate_readme(colors, meta):
     """Generate README.md."""
     c = colors
 
-    content = f'''# Human++
+    content = f'''<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/assets/banner-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="site/assets/banner-light.svg">
+    <img src="site/assets/banner-dark.svg" alt="Human++ - Code is cheap. Intent is scarce." width="600">
+  </picture>
+</p>
 
-A Base24 color scheme for the post-artisanal coding era.
+<p align="center">
+  A Base24 color scheme for the post-artisanal coding era.
+</p>
 
-**Code is cheap. Intent is scarce.**
+<p align="center">
+  <a href="https://fielding.github.io/human-plus-plus/">Website</a> •
+  <a href="#install">Install</a> •
+  <a href="#the-palette">Palette</a> •
+  <a href="#human-intent-markers">Markers</a>
+</p>
+
+---
 
 As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/assets/preview-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="site/assets/preview-light.svg">
+    <img src="site/assets/preview-dark.svg" alt="Human++ Theme Preview" width="650">
+  </picture>
+</p>
 
 ## Philosophy
 
@@ -322,7 +345,22 @@ The result: when you see color, it means something.
 
 ## The Palette
 
-Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full Base24 palette.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/assets/palette-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="site/assets/palette-light.svg">
+    <img src="site/assets/palette-dark.svg" alt="Human++ Palette" width="700">
+  </picture>
+</p>
+
+Human++ Cool Balanced uses a cool charcoal grayscale with warm cream text and a full Base24 palette:
+
+- **base00–07** — Cool grayscale from charcoal to warm cream
+- **base08–0F** — Loud accents for diagnostics and signals
+- **base10–17** — Quiet accents for syntax and UI
+
+<details>
+<summary>Full palette reference</summary>
 
 ### Grayscale
 
@@ -331,7 +369,7 @@ Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full B
 | base00 | `{c['base00']}` | Background |
 | base01 | `{c['base01']}` | Elevation |
 | base02 | `{c['base02']}` | Selection |
-| base03 | `{c['base03']}` | Comments (coffee brown) |
+| base03 | `{c['base03']}` | Comments |
 | base04 | `{c['base04']}` | UI secondary |
 | base05 | `{c['base05']}` | Main text |
 | base06 | `{c['base06']}` | Emphasis |
@@ -363,6 +401,8 @@ Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full B
 | base16 | `{c['base16']}` | Constants |
 | base17 | `{c['base17']}` | Quiet lime |
 
+</details>
+
 ## Human Intent Markers
 
 Use punctuation markers in comments to flag human judgment:
@@ -393,58 +433,60 @@ return transform(data);
 - Easy to grep: `rg "// !!|// \\?\\?|// >>"`
 - Easy for editors to highlight
 
-## Build
+## Install
 
 All theme files are generated from `palette.toml`:
+
+```bash
+git clone https://github.com/fielding/human-plus-plus
+cd human-plus-plus
+make build    # Generate all themes
+make apply    # Apply to installed apps
+```
+
+Or download pre-built themes from [Releases](https://github.com/fielding/human-plus-plus/releases).
+
+### Supported Apps
+
+| App | Location |
+|-----|----------|
+| Ghostty | `dist/ghostty/config` |
+| VS Code / Cursor | `packages/vscode-extension/` |
+| Vim / Neovim | via tinty |
+| Sketchybar | `dist/sketchybar/colors.sh` |
+| JankyBorders | `dist/borders/bordersrc` |
+| skhd | `dist/skhd/modes.sh` |
+
+### With tinty
+
+```bash
+tinty apply base24-human-plus-plus
+```
+
+## Development
 
 ```bash
 make build          # Build all theme files
 make preview        # Preview palette in terminal
 make colortest      # Display terminal ANSI mapping
-make apply          # Apply theme to installed apps
 make apply-dry      # Preview what apply would do
 make analyze        # Analyze palette in OKLCH
 ```
 
-Or apply with tinty: `tinty apply base24-human-plus-plus`
-
-## Repository Structure
+### Repository Structure
 
 ```
 palette.toml          # Single source of truth (edit this)
-Makefile              # Build orchestration
-templates/            # HTML templates (no hardcoded hex)
+templates/            # Theme templates
 tools/                # Python generators
 scripts/              # Shell orchestration
-site/assets/          # Logos and images (committed)
+site/assets/          # Logos and images
 ```
 
-**Generated (not committed):**
+**Generated (gitignored):**
 ```
-dist/                 # Theme outputs (ghostty, vim, vscode, etc.)
-site/index.html       # Landing page (from template)
-site/data/            # Palette JSON for the website
-```
-
-Run `make build` locally, or let CI generate everything on push.
-
-## CI/CD
-
-- **Pull requests**: Build + analyze palette
-- **Push to main**: Deploy site to GitHub Pages
-- **Tags (`v*`)**: Create GitHub Release with dist/ artifacts
-
-Download pre-built theme files from [Releases](https://github.com/fielding/human-plus-plus/releases).
-
-## Preview
-
-Visit [fielding.github.io/human-plus-plus](https://fielding.github.io/human-plus-plus/) for the live site.
-
-To preview locally:
-```bash
-make build
-python3 -m http.server -d site 8000
-# Open http://localhost:8000
+dist/                 # Theme outputs
+site/data/            # Palette JSON
 ```
 
 ## License
