@@ -69,29 +69,32 @@
     .hljs-strong { font-weight: bold; }
     .hljs-link { color: var(--base0D); text-decoration: underline; }
     .hljs-addition { color: var(--base0B); background-color: rgba(4, 179, 114, 0.1); }
-    .hljs-deletion { color: var(--base08); background-color: rgba(217, 4, 142, 0.1); }
+    .hljs-deletion { color: var(--base08); background-color: rgba(231, 52, 156, 0.1); }
 
     /* Human++ marker highlighting - matches VS Code extension */
     .hljs-comment.humanpp-attention {
       color: var(--base00);
       background: var(--base0F);
       padding: 2px 6px;
-      border-radius: 3px;
+      border-radius: 4px;
       font-weight: bold;
+      font-style: normal;
     }
     .hljs-comment.humanpp-uncertainty {
       color: var(--base07);
       background: var(--base0E);
       padding: 2px 6px;
-      border-radius: 3px;
+      border-radius: 4px;
       font-weight: bold;
+      font-style: normal;
     }
     .hljs-comment.humanpp-reference {
       color: var(--base00);
       background: var(--base0C);
       padding: 2px 6px;
-      border-radius: 3px;
+      border-radius: 4px;
       font-weight: bold;
+      font-style: normal;
     }
     
 
@@ -209,8 +212,10 @@
       color: var(--base00);
     }
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(187, 255, 0, 0.3);
+      background: var(--base17);
+    }
+    .btn-primary:active {
+      transform: translateY(2px);
     }
 
     .btn-secondary {
@@ -218,7 +223,11 @@
       color: var(--base06);
     }
     .btn-secondary:hover {
-      background: var(--base01);
+      background: var(--base03);
+      color: var(--base07);
+    }
+    .btn-secondary:active {
+      transform: translateY(2px);
     }
 
     /* Philosophy section */
@@ -362,11 +371,37 @@
       padding: 32px;
       text-align: center;
       border: 1px solid var(--base02);
-      transition: border-color 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
 
-    .marker-card:hover {
-      border-color: var(--base04);
+    .marker-card.attention:hover {
+      background: var(--base0F);
+      border-color: var(--base0F);
+    }
+    .marker-card.attention:hover .marker-symbol,
+    .marker-card.attention:hover .marker-name,
+    .marker-card.attention:hover .marker-desc {
+      color: var(--base00);
+    }
+
+    .marker-card.uncertainty:hover {
+      background: var(--base0E);
+      border-color: var(--base0E);
+    }
+    .marker-card.uncertainty:hover .marker-symbol,
+    .marker-card.uncertainty:hover .marker-name,
+    .marker-card.uncertainty:hover .marker-desc {
+      color: var(--base07);
+    }
+
+    .marker-card.reference:hover {
+      background: var(--base0C);
+      border-color: var(--base0C);
+    }
+    .marker-card.reference:hover .marker-symbol,
+    .marker-card.reference:hover .marker-name,
+    .marker-card.reference:hover .marker-desc {
+      color: var(--base00);
     }
 
     .marker-symbol {
@@ -374,17 +409,29 @@
       font-weight: 700;
       font-family: 'SF Mono', 'Fira Code', monospace;
       margin-bottom: 12px;
+      transition: color 0.2s;
     }
+
+    .marker-card.attention .marker-symbol { color: var(--base0F); }
+    .marker-card.uncertainty .marker-symbol { color: var(--base0E); }
+    .marker-card.reference .marker-symbol { color: var(--base0C); }
+
+    /* Hover states need higher specificity to override defaults */
+    .marker-card.attention:hover .marker-symbol { color: var(--base00); }
+    .marker-card.uncertainty:hover .marker-symbol { color: var(--base07); }
+    .marker-card.reference:hover .marker-symbol { color: var(--base00); }
 
     .marker-name {
       font-size: 18px;
       color: var(--base07);
       margin-bottom: 8px;
+      transition: color 0.2s;
     }
 
     .marker-desc {
       font-size: 14px;
       color: var(--base04);
+      transition: color 0.2s;
     }
 
     /* Code preview */
@@ -441,7 +488,7 @@
     .code-tab.active {
       background: var(--base02);
       color: var(--base07);
-      border-color: var(--base0D);
+      border-color: var(--base04);
     }
 
     .code-panels {
@@ -652,15 +699,11 @@
     }
 
     .diagnostic-code .line.has-error {
-      background: rgba(217, 4, 142, 0.1);
-      margin: 0 -24px;
-      padding: 0 24px;
+      /* No line background - just inline badge */
     }
 
     .diagnostic-code .line.has-warning {
-      background: rgba(242, 108, 51, 0.1);
-      margin: 0 -24px;
-      padding: 0 24px;
+      /* No line background - just inline badge */
     }
 
     .diagnostic-code .error-text {
@@ -673,6 +716,32 @@
 
     .diagnostic-code .hint-text {
       opacity: 0.5;
+    }
+
+    .diagnostic-code .error-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--base08);
+      color: var(--base00);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 12px;
+    }
+
+    .diagnostic-code .warning-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--base09);
+      color: var(--base00);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 12px;
     }
 
     .diagnostic-code .diagnostic-msg {
@@ -691,6 +760,46 @@
 
     .diagnostic-code .diagnostic-msg.hint {
       color: var(--base15);
+    }
+
+    /* File explorer error counts - pink numbers like Cursor */
+    .file-item .error-count {
+      margin-left: auto;
+      color: var(--base08);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .file-item .warning-count {
+      color: var(--base09);
+      font-weight: 600;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    /* Human intent marker badge highlighting - matches VS Code extension */
+    .marker-badge-attention {
+      background: var(--base0F);
+      color: var(--base00);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .marker-badge-uncertainty {
+      background: var(--base0E);
+      color: var(--base07);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .marker-badge-reference {
+      background: var(--base0C);
+      color: var(--base00);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
     }
 
     /* Footer */
@@ -807,13 +916,13 @@
 
       <div class="philosophy-grid">
         <div class="philosophy-card">
-          <div class="philosophy-icon" style="background: var(--base02); color: var(--base12);">Q</div>
+          <div class="philosophy-icon" style="background: var(--base02); color: var(--base03);">Q</div>
           <h3>Quiet Syntax</h3>
           <p>Everyday code — keywords, strings, functions — uses muted colors that fade into the background. You've seen this code a thousand times.</p>
         </div>
 
         <div class="philosophy-card">
-          <div class="philosophy-icon" style="background: linear-gradient(135deg, var(--base08), var(--base09)); color: var(--base00);">!</div>
+          <div class="philosophy-icon" style="background: var(--base08); color: var(--base00);">!</div>
           <h3>Loud Diagnostics</h3>
           <p>Errors, warnings, and human markers demand attention with vibrant, saturated colors. When you see color, it means something.</p>
         </div>
@@ -823,176 +932,6 @@
           <h3>Terminal Exception</h3>
           <p>Terminal output is intentional — you typed it. Terminals get loud colors for normal text, quiet for bright. Inverted from the editor.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Diagnostics Demo -->
-  <section class="section" id="diagnostics">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Diagnostics in Action</h2>
-        <p class="section-subtitle">Errors and warnings pop. Syntax stays quiet. Problems are impossible to miss.</p>
-      </div>
-
-      <div class="diagnostics-grid">
-        <div class="file-explorer">
-          <div class="file-explorer-header">Explorer</div>
-          <div class="file-item folder">
-            <span class="icon">▼</span>
-            <span class="name">src</span>
-          </div>
-          <div class="file-item has-error active" style="padding-left: 32px;">
-            <span class="icon">📄</span>
-            <span class="name">user.ts</span>
-            <span class="badge error">2</span>
-          </div>
-          <div class="file-item modified" style="padding-left: 32px;">
-            <span class="icon">📄</span>
-            <span class="name">api.ts</span>
-            <span class="badge modified">M</span>
-          </div>
-          <div class="file-item added" style="padding-left: 32px;">
-            <span class="icon">📄</span>
-            <span class="name">cache.ts</span>
-            <span class="badge" style="background: var(--base0B); color: var(--base00);">A</span>
-          </div>
-          <div class="file-item folder">
-            <span class="icon">▶</span>
-            <span class="name">utils</span>
-          </div>
-          <div class="file-item untracked">
-            <span class="icon">📄</span>
-            <span class="name">temp.ts</span>
-            <span class="badge" style="background: var(--base13); color: var(--base00);">U</span>
-          </div>
-        </div>
-
-        <div class="diagnostic-code">
-          <div class="line">
-            <span class="line-number">1</span>
-            <span class="line-content"><span style="color: var(--base10);">interface</span> <span style="color: var(--base14);">User</span> {</span>
-          </div>
-          <div class="line">
-            <span class="line-number">2</span>
-            <span class="line-content">  <span style="color: var(--base05);">id</span>: <span style="color: var(--base14);">string</span>;</span>
-          </div>
-          <div class="line">
-            <span class="line-number">3</span>
-            <span class="line-content">  <span style="color: var(--base05);">name</span>: <span style="color: var(--base14);">string</span>;</span>
-          </div>
-          <div class="line">
-            <span class="line-number">4</span>
-            <span class="line-content">}</span>
-          </div>
-          <div class="line">
-            <span class="line-number">5</span>
-            <span class="line-content"></span>
-          </div>
-          <div class="line">
-            <span class="line-number">6</span>
-            <span class="line-content"><span style="color: var(--base10);">const</span> <span style="color: var(--base05);">user</span>: <span style="color: var(--base14);">User</span> = <span style="color: var(--base13);">getUser</span>();</span>
-          </div>
-          <div class="line">
-            <span class="line-number">7</span>
-            <span class="line-content"></span>
-          </div>
-          <div class="line has-error">
-            <span class="line-number">8</span>
-            <span class="line-content"><span style="color: var(--base05);">user</span>.<span style="color: var(--base05);">name</span> = <span class="error-text" style="color: var(--base16);">null</span>;</span>
-            <span class="diagnostic-msg error">Type 'null' is not assignable to type 'string'</span>
-          </div>
-          <div class="line">
-            <span class="line-number">9</span>
-            <span class="line-content"></span>
-          </div>
-          <div class="line has-warning">
-            <span class="line-number">10</span>
-            <span class="line-content"><span style="color: var(--base10);">if</span> (<span class="warning-text" style="color: var(--base05);">user</span></span>) {</span>
-            <span class="diagnostic-msg warning">Condition always evaluates to true</span>
-          </div>
-          <div class="line">
-            <span class="line-number">11</span>
-            <span class="line-content">  <span style="color: var(--base13);">console</span>.<span style="color: var(--base13);">log</span>(<span style="color: var(--base05);">user</span>.<span class="hint-text" style="color: var(--base05);">id</span>);</span>
-            <span class="diagnostic-msg hint">'id' is declared but never used</span>
-          </div>
-          <div class="line">
-            <span class="line-number">12</span>
-            <span class="line-content">}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Palette -->
-  <section class="section palette-section" id="palette">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">The Palette</h2>
-        <p class="section-subtitle">Cool Balanced — cool charcoal grays, warm cream text, 16 accent colors.</p>
-      </div>
-
-      <div class="palette-row">
-        <div class="palette-label">Grayscale (base00–07)</div>
-        <div class="swatches" id="grayscale"></div>
-      </div>
-
-      <div class="palette-row">
-        <div class="palette-label">Loud Accents — Diagnostics & Signals (base08–0F)</div>
-        <div class="swatches" id="loud"></div>
-      </div>
-
-      <div class="palette-row">
-        <div class="palette-label">Quiet Accents — Syntax & UI (base10–17)</div>
-        <div class="swatches" id="quiet"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Human Markers -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Human Intent Markers</h2>
-        <p class="section-subtitle">Lightweight punctuation markers that flag human judgment in comments.</p>
-      </div>
-
-      <div class="markers-grid">
-        <div class="marker-card">
-          <div class="marker-symbol" style="color: var(--base0F);">!!</div>
-          <div class="marker-name">Attention</div>
-          <div class="marker-desc">Pay attention here. Human decision that matters.</div>
-        </div>
-
-        <div class="marker-card">
-          <div class="marker-symbol" style="color: var(--base0E);">??</div>
-          <div class="marker-name">Uncertainty</div>
-          <div class="marker-desc">I'm not confident. Please review this.</div>
-        </div>
-
-        <div class="marker-card">
-          <div class="marker-symbol" style="color: var(--base0C);">>></div>
-          <div class="marker-name">Reference</div>
-          <div class="marker-desc">See related code or documentation.</div>
-        </div>
-      </div>
-
-      <div class="code-preview">
-<pre><code class="language-typescript">// Regular comment stays calm (base03)
-
-async function processOrder(order: Order) {
-  // !! Critical: legacy billing depends on this exact format
-  const invoice = formatLegacy(order);
-
-  if (order.total > 10000) {
-    // ?? Not sure this handles international tax correctly
-    await flagForReview(invoice);
-  }
-
-  // >> See billing/tax.ts for the tax calculation logic
-  return finalize(invoice);
-}</code></pre>
       </div>
     </div>
   </section>
@@ -1098,6 +1037,175 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
     </div>
   </section>
 
+  <!-- Diagnostics Demo -->
+  <section class="section" id="diagnostics">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Diagnostics in Action</h2>
+        <p class="section-subtitle">Errors and warnings pop. Syntax stays quiet. Problems are impossible to miss.</p>
+      </div>
+
+      <div class="diagnostics-grid">
+        <div class="file-explorer">
+          <div class="file-explorer-header">Explorer</div>
+          <div class="file-item folder">
+            <span class="icon">▼</span>
+            <span class="name">src</span>
+            <span class="error-count">2</span>
+            <span class="warning-count">1</span>
+          </div>
+          <div class="file-item has-error active" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">user.ts</span>
+            <span class="error-count">2</span>
+          </div>
+          <div class="file-item modified" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">api.ts</span>
+            <span class="warning-count">1</span>
+          </div>
+          <div class="file-item added" style="padding-left: 32px;">
+            <span class="icon">📄</span>
+            <span class="name">cache.ts</span>
+          </div>
+          <div class="file-item folder">
+            <span class="icon">▶</span>
+            <span class="name">utils</span>
+          </div>
+          <div class="file-item untracked">
+            <span class="icon">📄</span>
+            <span class="name">temp.ts</span>
+          </div>
+        </div>
+
+        <div class="diagnostic-code">
+          <div class="line">
+            <span class="line-number">1</span>
+            <span class="line-content"><span style="color: var(--base10);">interface</span> <span style="color: var(--base14);">User</span> {</span>
+          </div>
+          <div class="line">
+            <span class="line-number">2</span>
+            <span class="line-content">  <span style="color: var(--base05);">id</span>: <span style="color: var(--base14);">string</span>;</span>
+          </div>
+          <div class="line">
+            <span class="line-number">3</span>
+            <span class="line-content">  <span style="color: var(--base05);">name</span>: <span style="color: var(--base14);">string</span>;</span>
+          </div>
+          <div class="line">
+            <span class="line-number">4</span>
+            <span class="line-content">}</span>
+          </div>
+          <div class="line">
+            <span class="line-number">5</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line">
+            <span class="line-number">6</span>
+            <span class="line-content"><span style="color: var(--base10);">const</span> <span style="color: var(--base05);">user</span>: <span style="color: var(--base14);">User</span> = <span style="color: var(--base13);">getUser</span>();</span>
+          </div>
+          <div class="line">
+            <span class="line-number">7</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line has-error">
+            <span class="line-number">8</span>
+            <span class="line-content"><span style="color: var(--base05);">user</span>.<span style="color: var(--base05);">name</span> = <span class="error-text" style="color: var(--base16);">null</span>;<span class="error-badge">Type 'null' is not assignable to type 'string'</span></span>
+          </div>
+          <div class="line">
+            <span class="line-number">9</span>
+            <span class="line-content"></span>
+          </div>
+          <div class="line has-warning">
+            <span class="line-number">10</span>
+            <span class="line-content"><span style="color: var(--base10);">if</span> (<span class="warning-text" style="color: var(--base05);">user</span>) {<span class="warning-badge">Condition always true</span></span>
+          </div>
+          <div class="line">
+            <span class="line-number">11</span>
+            <span class="line-content">  <span style="color: var(--base13);">console</span>.<span style="color: var(--base13);">log</span>(<span style="color: var(--base05);">user</span>.<span class="hint-text" style="color: var(--base05);">id</span>);</span>
+          </div>
+          <div class="line">
+            <span class="line-number">12</span>
+            <span class="line-content">}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Human Markers -->
+  <section class="section" id="markers">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Human Intent Markers</h2>
+        <p class="section-subtitle">Lightweight punctuation markers that flag human judgment in comments.</p>
+      </div>
+
+      <div class="markers-grid">
+        <div class="marker-card attention">
+          <div class="marker-symbol">!!</div>
+          <div class="marker-name">Attention</div>
+          <div class="marker-desc">Pay attention here. Human decision that matters.</div>
+        </div>
+
+        <div class="marker-card uncertainty">
+          <div class="marker-symbol">??</div>
+          <div class="marker-name">Uncertainty</div>
+          <div class="marker-desc">I'm not confident. Please review this.</div>
+        </div>
+
+        <div class="marker-card reference">
+          <div class="marker-symbol">>></div>
+          <div class="marker-name">Reference</div>
+          <div class="marker-desc">See related code or documentation.</div>
+        </div>
+      </div>
+
+      <div class="code-preview" style="padding: 0; overflow: hidden;">
+        <div style="padding: 24px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; line-height: 2;">
+          <div style="color: var(--base03);">// Regular comment stays calm (base03)</div>
+          <div>&nbsp;</div>
+          <div><span style="color: var(--base10);">async function</span> <span style="color: var(--base13);">processOrder</span>(<span style="color: var(--base11);">order</span>: <span style="color: var(--base14);">Order</span>) {</div>
+          <div>  <span class="marker-badge-attention">// !! Critical: legacy billing depends on this exact format</span></div>
+          <div>  <span style="color: var(--base10);">const</span> <span style="color: var(--base05);">invoice</span> = <span style="color: var(--base13);">formatLegacy</span>(<span style="color: var(--base05);">order</span>);</div>
+          <div>&nbsp;</div>
+          <div>  <span style="color: var(--base10);">if</span> (<span style="color: var(--base05);">order</span>.<span style="color: var(--base05);">total</span> > <span style="color: var(--base16);">10000</span>) {</div>
+          <div>    <span class="marker-badge-uncertainty">// ?? Not sure this handles international tax correctly</span></div>
+          <div>    <span style="color: var(--base10);">await</span> <span style="color: var(--base13);">flagForReview</span>(<span style="color: var(--base05);">invoice</span>);</div>
+          <div>  }</div>
+          <div>&nbsp;</div>
+          <div>  <span class="marker-badge-reference">// >> See billing/tax.ts for the tax calculation logic</span></div>
+          <div>  <span style="color: var(--base10);">return</span> <span style="color: var(--base13);">finalize</span>(<span style="color: var(--base05);">invoice</span>);</div>
+          <div>}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Palette -->
+  <section class="section palette-section" id="palette">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">The Palette</h2>
+        <p class="section-subtitle">Cool Balanced — cool charcoal grays, warm cream text, 24 colors total.</p>
+      </div>
+
+      <div class="palette-row">
+        <div class="palette-label">Grayscale (base00–07)</div>
+        <div class="swatches" id="grayscale"></div>
+      </div>
+
+      <div class="palette-row">
+        <div class="palette-label">Loud Accents — Diagnostics & Signals (base08–0F)</div>
+        <div class="swatches" id="loud"></div>
+      </div>
+
+      <div class="palette-row">
+        <div class="palette-label">Quiet Accents — Syntax & UI (base10–17)</div>
+        <div class="swatches" id="quiet"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Install -->
   <section class="section" id="install">
     <div class="container">
@@ -1157,7 +1265,7 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>Human++ is MIT licensed. Made by <a href="https://github.com/fielding">fielding</a>.</p>
+      <p>Human++ is MIT licensed. Made by <a href="https://github.com/fielding" style="color: var(--base08);">fielding</a>.</p>
     </div>
   </footer>
 
@@ -1199,7 +1307,7 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
     }
 
     function createSwatch(key, data) {
-      const textColor = isLight(data.hex) ? '#1b1d20' : '#faf5ef';
+      const textColor = isLight(data.hex) ? '#1a1c22' : '#f8f6f2';  // base00 : base07
       const swatch = document.createElement('div');
       swatch.className = 'swatch';
       swatch.style.background = data.hex;

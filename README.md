@@ -27,7 +27,7 @@ Human++ Cool Balanced uses a cool charcoal grayscale with warm text and a full B
 | base00 | `#1a1c22` | Background |
 | base01 | `#282b31` | Elevation |
 | base02 | `#3a3d42` | Selection |
-| base03 | `#5a5d62` | Comments (coffee brown) |
+| base03 | `#5a5d62` | Comments (cool gray) |
 | base04 | `#828079` | UI secondary |
 | base05 | `#dbd6cc` | Main text |
 | base06 | `#eeeae2` | Emphasis |
@@ -112,7 +112,10 @@ tinty apply base24-human-plus-plus
 | `sketchybar/colors.sh` | Sketchybar |
 | `skhd/modes.sh` | skhd mode indicators |
 | `borders/bordersrc` | JankyBorders |
-| `base-cool-balanced-v2.json` | VS Code / Cursor |
+| `vim/colors/` | Vim/Neovim |
+| `iterm/` | iTerm2 |
+| `vscode-extension/` | VS Code / Cursor extension |
+| `index.html` | Landing page |
 | `swatches.html` | Interactive palette preview |
 
 ## Preview

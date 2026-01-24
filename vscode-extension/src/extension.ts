@@ -15,19 +15,19 @@ const MARKERS: Record<MarkerType, MarkerDef> = {
     pattern: '!!',
     configKey: 'markers.intervention.enable',
     background: '#bbff00',      // Lime (base0F) - attention/critical
-    foreground: '#1c1917',      // Dark text on bright background
+    foreground: '#1a1c22',      // Dark text on bright background (base00)
   },
   uncertainty: {
     pattern: '??',
     configKey: 'markers.uncertainty.enable',
-    background: '#8d57ff',      // Purple (base0E) - uncertainty
-    foreground: '#faf5ef',      // Light text on dark background
+    background: '#9871fe',      // Purple (base0E) - uncertainty
+    foreground: '#f8f6f2',      // Light text on dark background (base07)
   },
   directive: {
     pattern: '>>',
     configKey: 'markers.directive.enable',
     background: '#1ad0d6',      // Cyan (base0C) - directive/reference
-    foreground: '#1c1917',      // Dark text on bright background
+    foreground: '#1a1c22',      // Dark text on bright background (base00)
   },
 };
 
@@ -41,20 +41,20 @@ interface DiagnosticStyle {
 
 const DIAGNOSTIC_COLORS: Record<DiagnosticLevel, DiagnosticStyle> = {
   error: {
-    background: '#d9048e',
-    foreground: '#faf5ef',      // Light text on dark background
+    background: '#e7349c',      // Pink (base08)
+    foreground: '#1a1c22',      // Dark text on bright background (base00)
   },
   warning: {
-    background: '#f2a633',      // Yellow (base0A)
-    foreground: '#1c1917',      // Dark text on bright background
+    background: '#f26c33',      // Orange (base09)
+    foreground: '#1a1c22',      // Dark text on bright background (base00)
   },
   info: {
-    background: '#1ad0d6',
-    foreground: '#1c1917',      // Dark text on bright background
+    background: '#1ad0d6',      // Cyan (base0C)
+    foreground: '#1a1c22',      // Dark text on bright background (base00)
   },
   hint: {
-    background: '#8a7b6b',
-    foreground: '#faf5ef',      // Light text on dark background
+    background: '#5e84b6',      // Quiet blue (base15)
+    foreground: '#f8f6f2',      // Light text on dark background (base07)
   },
 };
 
