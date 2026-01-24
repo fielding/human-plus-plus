@@ -509,7 +509,7 @@ def suggest_grayscale(colors: dict[str, str]):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def main():
-    root = Path(__file__).parent
+    root = Path(__file__).parent.parent  # repo root (parent of tools/)
     palette_path = root / "palette.toml"
 
     if not palette_path.exists():
