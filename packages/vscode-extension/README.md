@@ -55,21 +55,21 @@ Errors and warnings appear as inline badges at the end of lines, so you don't ne
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `humanpp.enable` | `true` | Enable Human++ marker highlighting |
-| `humanpp.debounceMs` | `200` | Debounce delay for rescanning on edit |
-| `humanpp.markers.intervention.enable` | `true` | Enable `!!` marker |
-| `humanpp.markers.uncertainty.enable` | `true` | Enable `??` marker |
-| `humanpp.markers.directive.enable` | `true` | Enable `>>` marker |
+| `human-plus-plus.enable` | `true` | Enable Human++ marker highlighting |
+| `human-plus-plus.debounceMs` | `200` | Debounce delay for rescanning on edit |
+| `human-plus-plus.markers.intervention.enable` | `true` | Enable `!!` marker |
+| `human-plus-plus.markers.uncertainty.enable` | `true` | Enable `??` marker |
+| `human-plus-plus.markers.directive.enable` | `true` | Enable `>>` marker |
 
 ### Diagnostic Settings
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `humanpp.diagnostics.enable` | `true` | Enable inline diagnostic badges |
-| `humanpp.diagnostics.error.enable` | `true` | Show error diagnostics |
-| `humanpp.diagnostics.warning.enable` | `true` | Show warning diagnostics |
-| `humanpp.diagnostics.info.enable` | `true` | Show info diagnostics |
-| `humanpp.diagnostics.hint.enable` | `false` | Show hint diagnostics |
+| `human-plus-plus.diagnostics.enable` | `true` | Enable inline diagnostic badges |
+| `human-plus-plus.diagnostics.error.enable` | `true` | Show error diagnostics |
+| `human-plus-plus.diagnostics.warning.enable` | `true` | Show warning diagnostics |
+| `human-plus-plus.diagnostics.info.enable` | `true` | Show info diagnostics |
+| `human-plus-plus.diagnostics.hint.enable` | `false` | Show hint diagnostics |
 
 ## Why punctuation markers?
 

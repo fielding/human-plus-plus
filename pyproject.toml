@@ -27,10 +27,10 @@ Repository = "https://github.com/fielding/human-plus-plus"
 Documentation = "https://fielding.github.io/human-plus-plus/"
 
 [project.scripts]
-humanpp-build = "build:main"
-humanpp-analyze = "analyze:main"
-humanpp-propose = "propose:main"
-humanpp-derive = "derive_base24:main"
+human-plus-plus-build = "build:main"
+human-plus-plus-analyze = "analyze:main"
+human-plus-plus-propose = "propose:main"
+human-plus-plus-derive = "derive_base24:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

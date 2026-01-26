@@ -840,10 +840,10 @@ The VS Code extension includes the full theme plus **marker highlighting** and *
 # Build and install from source
 cd packages/vscode-extension
 npm install && npx @vscode/vsce package
-code --install-extension humanpp-1.0.0.vsix
+code --install-extension human-plus-plus-1.0.0.vsix
 ```
 
-Or download `humanpp-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
+Or download `human-plus-plus-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
 
 **Features:**
 - Color theme with quiet syntax + loud diagnostics
@@ -1196,11 +1196,11 @@ def generate_vscode_theme(colors, meta):
     """Generate VS Code theme from template.
 
     Uses mustache-style placeholders ({{base00}}, {{base08}}, etc.) in
-    templates/vscode/humanpp.json.tmpl and renders with current palette.
+    templates/vscode/human-plus-plus.json.tmpl and renders with current palette.
     """
     import shutil
 
-    template_path = ROOT / "templates/vscode/humanpp.json.tmpl"
+    template_path = ROOT / "templates/vscode/human-plus-plus.json.tmpl"
 
     if not template_path.exists():
         print("  ⚠ VS Code template not found, skipping")
@@ -1215,15 +1215,15 @@ def generate_vscode_theme(colors, meta):
 
     # Write to dist/
     (DIST / "vscode").mkdir(parents=True, exist_ok=True)
-    theme_path = DIST / "vscode/humanpp.json"
+    theme_path = DIST / "vscode/human-plus-plus.json"
     theme_path.write_text(content)
-    print("  ✓ dist/vscode/humanpp.json")
+    print("  ✓ dist/vscode/human-plus-plus.json")
 
     # Also copy to vscode-extension package
-    ext_theme_path = PACKAGES / "vscode-extension/themes/humanpp.json"
+    ext_theme_path = PACKAGES / "vscode-extension/themes/human-plus-plus.json"
     if ext_theme_path.parent.exists():
         shutil.copy(theme_path, ext_theme_path)
-        print("  ✓ packages/vscode-extension/themes/humanpp.json")
+        print("  ✓ packages/vscode-extension/themes/human-plus-plus.json")
 
 
 # =============================================================================

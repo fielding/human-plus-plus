@@ -40,15 +40,15 @@
     .hljs-deletion { color: var(--base08); background-color: color-mix(in srgb, var(--base08) 10%, transparent); }
 
     /* Human++ marker highlighting */
-    .hljs-comment.humanpp-attention {
+    .hljs-comment.human-plus-plus-attention {
       color: var(--base00); background: var(--base0F);
       padding: 2px 6px; border-radius: 3px; font-weight: bold;
     }
-    .hljs-comment.humanpp-uncertainty {
+    .hljs-comment.human-plus-plus-uncertainty {
       color: var(--base07); background: var(--base0E);
       padding: 2px 6px; border-radius: 3px; font-weight: bold;
     }
-    .hljs-comment.humanpp-reference {
+    .hljs-comment.human-plus-plus-reference {
       color: var(--base00); background: var(--base0C);
       padding: 2px 6px; border-radius: 3px; font-weight: bold;
     }
@@ -235,15 +235,18 @@
     .diagnostic-code .line { display: flex; align-items: flex-start; }
     .diagnostic-code .line-number { width: 40px; color: var(--base04); text-align: right; padding-right: 16px; user-select: none; flex-shrink: 0; }
     .diagnostic-code .line-content { flex: 1; white-space: pre; }
-    .diagnostic-code .line.has-error { background: color-mix(in srgb, var(--base08) 10%, transparent); margin: 0 -24px; padding: 0 24px; }
-    .diagnostic-code .line.has-warning { background: color-mix(in srgb, var(--base09) 10%, transparent); margin: 0 -24px; padding: 0 24px; }
+    /* No full-line highlight - extension uses inline badges only */
+    .diagnostic-code .line.has-error { }
+    .diagnostic-code .line.has-warning { }
     .diagnostic-code .error-text { border-bottom: 2px wavy var(--base08); }
     .diagnostic-code .warning-text { border-bottom: 2px wavy var(--base09); }
     .diagnostic-code .hint-text { opacity: 0.5; }
-    .diagnostic-code .diagnostic-msg { color: var(--base04); font-size: 12px; margin-left: 16px; }
-    .diagnostic-code .diagnostic-msg.error { color: var(--base08); }
-    .diagnostic-code .diagnostic-msg.warning { color: var(--base09); }
-    .diagnostic-code .diagnostic-msg.hint { color: var(--base15); }
+    .diagnostic-code .diagnostic-msg {
+      font-size: 11px; margin-left: 16px; padding: 2px 8px; border-radius: 4px; font-weight: 500;
+    }
+    .diagnostic-code .diagnostic-msg.error { background: var(--base08); color: var(--base00); }
+    .diagnostic-code .diagnostic-msg.warning { background: var(--base09); color: var(--base00); }
+    .diagnostic-code .diagnostic-msg.hint { background: var(--base02); color: var(--base15); }
 
     /* Footer */
     .footer { padding: 48px 0; text-align: center; border-top: 1px solid var(--base02); }
@@ -306,12 +309,12 @@
 
       <div class="philosophy-grid">
         <div class="philosophy-card">
-          <div class="philosophy-icon" style="background: var(--base02); color: var(--base12);">Q</div>
+          <div class="philosophy-icon" style="background: var(--base01); color: var(--base03);">Q</div>
           <h3>Quiet Syntax</h3>
           <p>Everyday code — keywords, strings, functions — uses muted colors that fade into the background. You've seen this code a thousand times.</p>
         </div>
         <div class="philosophy-card">
-          <div class="philosophy-icon" style="background: linear-gradient(135deg, var(--base08), var(--base09)); color: var(--base00);">!</div>
+          <div class="philosophy-icon" style="background: var(--base08); color: var(--base00);">!</div>
           <h3>Loud Diagnostics</h3>
           <p>Errors, warnings, and human markers demand attention with vibrant, saturated colors. When you see color, it means something.</p>
         </div>
@@ -537,11 +540,51 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
     </div>
   </section>
 
+  <!-- VS Code / Cursor -->
+  <section class="section" id="vscode">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">VS Code & Cursor</h2>
+        <p class="section-subtitle">Install the extension for the complete Human++ experience.</p>
+      </div>
+
+      <div class="install-code" style="margin-bottom: 32px;">
+<pre><span class="comment"># Install from marketplace</span>
+<span class="prompt">$</span> <span class="command">code --install-extension fielding.human-plus-plus</span>
+
+<span class="comment"># Or search "Human++" in the extensions panel</span></pre>
+      </div>
+
+      <div class="philosophy-grid">
+        <div class="philosophy-card">
+          <div class="philosophy-icon" style="background: var(--base02); color: var(--base05);">🎨</div>
+          <h3>Color Theme</h3>
+          <p>Quiet syntax highlighting with loud diagnostics. The full Human++ palette for your editor.</p>
+        </div>
+        <div class="philosophy-card">
+          <div class="philosophy-icon" style="background: var(--base0F); color: var(--base00);">!!</div>
+          <h3>Intent Markers</h3>
+          <p>Comments with <code>!!</code> <code>??</code> <code>>></code> get highlighted backgrounds so human judgment stands out.</p>
+        </div>
+        <div class="philosophy-card">
+          <div class="philosophy-icon" style="background: var(--base08); color: var(--base00);">⚠</div>
+          <h3>Inline Diagnostics</h3>
+          <p>Errors and warnings appear as inline badges at the end of lines. No hovering required.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 32px;">
+        <a href="https://marketplace.visualstudio.com/items?itemName=fielding.human-plus-plus" class="btn btn-primary" style="margin-right: 12px;">VS Code Marketplace</a>
+        <a href="https://open-vsx.org/extension/fielding/human-plus-plus" class="btn btn-secondary">Open VSX (Cursor)</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Install -->
   <section class="section" id="install">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Get Started</h2>
+        <h2 class="section-title">Other Apps</h2>
         <p class="section-subtitle">Human++ works with tinty and standard Base24 tooling.</p>
       </div>
 
@@ -558,7 +601,6 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
 
       <div class="apps-grid">
         <div class="app-card"><h4>Ghostty</h4><p>ghostty/config</p></div>
-        <div class="app-card"><h4>VS Code</h4><p>vscode/</p></div>
         <div class="app-card"><h4>Vim/Neovim</h4><p>vim/colors/</p></div>
         <div class="app-card"><h4>iTerm2</h4><p>iterm/</p></div>
         <div class="app-card"><h4>Sketchybar</h4><p>sketchybar/</p></div>
@@ -711,11 +753,11 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
       document.querySelectorAll('.hljs-comment').forEach(el => {
         const text = el.textContent;
         if (text.includes('!!')) {
-          el.classList.add('humanpp-attention');
+          el.classList.add('human-plus-plus-attention');
         } else if (text.includes('??')) {
-          el.classList.add('humanpp-uncertainty');
+          el.classList.add('human-plus-plus-uncertainty');
         } else if (text.includes('>>')) {
-          el.classList.add('humanpp-reference');
+          el.classList.add('human-plus-plus-reference');
         }
       });
     }

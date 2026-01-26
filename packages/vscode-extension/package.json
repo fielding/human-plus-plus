@@ -1,9 +1,10 @@
 {
-  "name": "humanpp",
+  "name": "human-plus-plus",
   "displayName": "Human++",
   "description": "A Base24 color scheme for the post-artisanal coding era. Code is cheap. Intent is scarce.",
   "version": "1.0.0",
   "publisher": "fielding",
+  "icon": "icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -33,70 +34,70 @@
       {
         "label": "Human++",
         "uiTheme": "vs-dark",
-        "path": "./themes/humanpp.json"
+        "path": "./themes/human-plus-plus.json"
       }
     ],
     "commands": [
       {
-        "command": "humanpp.toggle",
+        "command": "human-plus-plus.toggle",
         "title": "Human++: Toggle Marker Highlighting"
       },
       {
-        "command": "humanpp.refresh",
+        "command": "human-plus-plus.refresh",
         "title": "Human++: Refresh Marker Decorations"
       }
     ],
     "configuration": {
       "title": "Human++",
       "properties": {
-        "humanpp.enable": {
+        "human-plus-plus.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable Human++ marker highlighting"
         },
-        "humanpp.debounceMs": {
+        "human-plus-plus.debounceMs": {
           "type": "number",
           "default": 200,
           "minimum": 50,
           "maximum": 1000,
           "description": "Debounce delay in milliseconds for rescanning on edit"
         },
-        "humanpp.markers.intervention.enable": {
+        "human-plus-plus.markers.intervention.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable !! (intervention/attention) marker"
         },
-        "humanpp.markers.uncertainty.enable": {
+        "human-plus-plus.markers.uncertainty.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable ?? (uncertainty/verify) marker"
         },
-        "humanpp.markers.directive.enable": {
+        "human-plus-plus.markers.directive.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable >> (directive/decision) marker"
         },
-        "humanpp.diagnostics.enable": {
+        "human-plus-plus.diagnostics.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable inline diagnostic badges (errors, warnings, etc.)"
         },
-        "humanpp.diagnostics.error.enable": {
+        "human-plus-plus.diagnostics.error.enable": {
           "type": "boolean",
           "default": true,
           "description": "Show error diagnostics inline"
         },
-        "humanpp.diagnostics.warning.enable": {
+        "human-plus-plus.diagnostics.warning.enable": {
           "type": "boolean",
           "default": true,
           "description": "Show warning diagnostics inline"
         },
-        "humanpp.diagnostics.info.enable": {
+        "human-plus-plus.diagnostics.info.enable": {
           "type": "boolean",
           "default": true,
           "description": "Show info diagnostics inline"
         },
-        "humanpp.diagnostics.hint.enable": {
+        "human-plus-plus.diagnostics.hint.enable": {
           "type": "boolean",
           "default": false,
           "description": "Show hint diagnostics inline"

@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 PALETTE = ROOT / "palette.toml"
-THEME = ROOT / "packages/vscode-extension/themes/humanpp.json"
+THEME = ROOT / "packages/vscode-extension/themes/human-plus-plus.json"
 TEMPLATE = ROOT / "templates/vscode/theme.json.tmpl"
 
 def parse_palette():

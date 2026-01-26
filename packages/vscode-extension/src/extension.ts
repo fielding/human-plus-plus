@@ -129,7 +129,7 @@ class MarkerDecorationManager {
 
 class MarkerScanner {
   scan(document: vscode.TextDocument): MarkerMatch[] {
-    const config = vscode.workspace.getConfiguration('humanpp');
+    const config = vscode.workspace.getConfiguration('human-plus-plus');
     const matches: MarkerMatch[] = [];
 
     const text = document.getText();
@@ -215,7 +215,7 @@ class DiagnosticDecorationManager {
   }
 
   updateDiagnostics(editor: vscode.TextEditor): void {
-    const config = vscode.workspace.getConfiguration('humanpp');
+    const config = vscode.workspace.getConfiguration('human-plus-plus');
 
     // Clear all decorations first (but don't dispose types)
     for (const decType of this.decorationTypes.values()) {
@@ -319,7 +319,7 @@ class DiagnosticDecorationManager {
 // Main Highlighter
 // ============================================================================
 
-class HumanPPHighlighter {
+class HumanPlusPlusHighlighter {
   private markerDecorationManager: MarkerDecorationManager;
   private diagnosticDecorationManager: DiagnosticDecorationManager;
   private markerScanner: MarkerScanner;
@@ -331,11 +331,11 @@ class HumanPPHighlighter {
     this.markerDecorationManager = new MarkerDecorationManager();
     this.diagnosticDecorationManager = new DiagnosticDecorationManager();
     this.markerScanner = new MarkerScanner();
-    this.enabled = vscode.workspace.getConfiguration('humanpp').get('enable', true);
+    this.enabled = vscode.workspace.getConfiguration('human-plus-plus').get('enable', true);
   }
 
   private getDebounceMs(): number {
-    return vscode.workspace.getConfiguration('humanpp').get('debounceMs', 200);
+    return vscode.workspace.getConfiguration('human-plus-plus').get('debounceMs', 200);
   }
 
   updateMarkerDecorations(editor: vscode.TextEditor | undefined): void {
@@ -418,7 +418,7 @@ class HumanPPHighlighter {
 
   toggle(): void {
     this.enabled = !this.enabled;
-    vscode.workspace.getConfiguration('humanpp').update('enable', this.enabled, true);
+    vscode.workspace.getConfiguration('human-plus-plus').update('enable', this.enabled, true);
 
     const editor = vscode.window.activeTextEditor;
     if (this.enabled) {
@@ -438,7 +438,7 @@ class HumanPPHighlighter {
   }
 
   onConfigurationChanged(): void {
-    this.enabled = vscode.workspace.getConfiguration('humanpp').get('enable', true);
+    this.enabled = vscode.workspace.getConfiguration('human-plus-plus').get('enable', true);
     this.markerDecorationManager.createDecorationTypes();
 
     const editor = vscode.window.activeTextEditor;
@@ -472,19 +472,19 @@ class HumanPPHighlighter {
 // Extension Activation
 // ============================================================================
 
-let highlighter: HumanPPHighlighter | undefined;
+let highlighter: HumanPlusPlusHighlighter | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
-  highlighter = new HumanPPHighlighter(context);
+  highlighter = new HumanPlusPlusHighlighter(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('humanpp.toggle', () => {
+    vscode.commands.registerCommand('human-plus-plus.toggle', () => {
       highlighter?.toggle();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('humanpp.refresh', () => {
+    vscode.commands.registerCommand('human-plus-plus.refresh', () => {
       highlighter?.refresh();
     })
   );
@@ -506,7 +506,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
-      if (event.affectsConfiguration('humanpp')) {
+      if (event.affectsConfiguration('human-plus-plus')) {
         highlighter?.onConfigurationChanged();
       }
     })

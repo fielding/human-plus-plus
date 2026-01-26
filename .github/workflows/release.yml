@@ -14,6 +14,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for changelog generation
 
       - uses: actions/setup-python@v5
         with:
@@ -37,61 +39,94 @@ jobs:
         run: |
           VERSION=${{ github.ref_name }}
           tar -czf human-plus-plus-${VERSION}-dist.tar.gz dist/
-
-          # Also create a zip for Windows users
           zip -r human-plus-plus-${VERSION}-dist.zip dist/
 
-      - name: Generate release notes
-        id: notes
+      - name: Generate changelog
+        id: changelog
         run: |
-          cat << 'EOF' > release-notes.md
-          ## Human++ ${{ github.ref_name }}
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -n "$PREV_TAG" ]; then
+            echo "Changes since $PREV_TAG:"
+            CHANGES=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+          else
+            echo "First release"
+            CHANGES=$(git log --pretty=format:"- %s" --no-merges -20)
+          fi
+
+          # Write changelog to file (handles multiline)
+          echo "$CHANGES" > changelog-items.txt
+
+      - name: Generate release notes
+        run: |
+          VERSION=${{ github.ref_name }}
+          CHANGES=$(cat changelog-items.txt)
+
+          cat << EOF > release-notes.md
+          ## Human++ ${VERSION}
 
           A Base24 color scheme for the post-artisanal coding era.
 
-          ### VS Code / Cursor
+          ### What's Changed
 
-          Download `humanpp-*.vsix` and install:
+          ${CHANGES}
 
-          ```bash
-          code --install-extension humanpp-1.0.0.vsix
-          ```
+          ### Install
 
-          The extension includes:
-          - Color theme (quiet syntax + loud diagnostics)
-          - Human intent marker highlighting (`!!`, `??`, `>>`)
-          - Inline diagnostic badges
+          **VS Code / Cursor:**
 
-          ### Other Apps
+          Search "Human++" in extensions, or install from CLI:
+          \`\`\`bash
+          code --install-extension fielding.human-plus-plus
+          \`\`\`
 
-          **With tinty:**
-          ```bash
+          Or download the \`.vsix\` below and install manually.
+
+          **Other Apps (with tinty):**
+          \`\`\`bash
           tinty apply base24-human-plus-plus
-          ```
+          \`\`\`
 
-          **Manual:**
-          1. Download and extract the archive
-          2. Copy the relevant config to your application's config directory
+          **Manual:** Download and extract the archive, copy configs to your app's config directory.
 
           ### Included Configs
 
-          - `ghostty/config` - Ghostty terminal
-          - `sketchybar/colors.sh` - Sketchybar
-          - `borders/bordersrc` - JankyBorders
-          - `skhd/modes.sh` - skhd mode indicators
-          - `base24/` - Shell theme and tinty registry
+          - \`ghostty/config\` - Ghostty terminal
+          - \`sketchybar/colors.sh\` - Sketchybar
+          - \`borders/bordersrc\` - JankyBorders
+          - \`skhd/modes.sh\` - skhd mode indicators
+          - \`base24/\` - Shell theme and tinty registry
 
           ### Links
 
+          - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fielding.human-plus-plus)
+          - [Open VSX (Cursor)](https://open-vsx.org/extension/fielding/human-plus-plus)
           - [Documentation](https://github.com/fielding/human-plus-plus)
           - [Live Preview](https://fielding.github.io/human-plus-plus/)
           EOF
+
+      - name: Publish to VS Code Marketplace
+        if: ${{ env.VSCE_PAT != '' }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          cd packages/vscode-extension
+          npx @vscode/vsce publish -p $VSCE_PAT
+
+      - name: Publish to Open VSX
+        if: ${{ env.OVSX_PAT != '' }}
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          cd packages/vscode-extension
+          npx ovsx publish -p $OVSX_PAT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           body_path: release-notes.md
           files: |
-            humanpp-*.vsix
+            human-plus-plus-*.vsix
             human-plus-plus-${{ github.ref_name }}-dist.tar.gz
             human-plus-plus-${{ github.ref_name }}-dist.zip

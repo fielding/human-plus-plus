@@ -91,8 +91,8 @@ if [ -d "$HOME/.cursor/extensions" ]; then
 
     if [ -n "$CURSOR_EXT" ] && [ -d "$CURSOR_EXT/themes/base16" ]; then
         log "Updating Cursor theme ($(basename "$CURSOR_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/humanpp.json" ]; then
-            run cp "$DIST_DIR/vscode/humanpp.json" "$CURSOR_EXT/themes/base16/humanpp.json"
+        if [ -f "$DIST_DIR/vscode/human-plus-plus.json" ]; then
+            run cp "$DIST_DIR/vscode/human-plus-plus.json" "$CURSOR_EXT/themes/base16/human-plus-plus.json"
         fi
     else
         log "Cursor tinted-themes extension not found, skipping..."
@@ -105,8 +105,8 @@ if [ -d "$HOME/.vscode/extensions" ]; then
 
     if [ -n "$VSCODE_EXT" ] && [ -d "$VSCODE_EXT/themes/base16" ]; then
         log "Updating VS Code theme ($(basename "$VSCODE_EXT"))..."
-        if [ -f "$DIST_DIR/vscode/humanpp.json" ]; then
-            run cp "$DIST_DIR/vscode/humanpp.json" "$VSCODE_EXT/themes/base16/humanpp.json"
+        if [ -f "$DIST_DIR/vscode/human-plus-plus.json" ]; then
+            run cp "$DIST_DIR/vscode/human-plus-plus.json" "$VSCODE_EXT/themes/base16/human-plus-plus.json"
         fi
     fi
 fi

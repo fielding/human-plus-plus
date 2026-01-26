@@ -139,10 +139,10 @@ The VS Code extension includes the full theme plus **marker highlighting** and *
 # Build and install from source
 cd packages/vscode-extension
 npm install && npx @vscode/vsce package
-code --install-extension humanpp-1.0.0.vsix
+code --install-extension human-plus-plus-1.0.0.vsix
 ```
 
-Or download `humanpp-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
+Or download `human-plus-plus-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
 
 **Features:**
 - Color theme with quiet syntax + loud diagnostics
