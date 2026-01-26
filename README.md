@@ -22,11 +22,7 @@
 As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="site/assets/preview-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="site/assets/preview-light.svg">
-    <img src="site/assets/preview-dark.svg" alt="Human++ Theme Preview" width="650">
-  </picture>
+  <img src="site/assets/preview-dark.svg" alt="Human++ Theme Preview" width="650">
 </p>
 
 ## Philosophy

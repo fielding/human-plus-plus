@@ -206,6 +206,124 @@ export SKHD_MODE_MEET={c['base09']['argb']}       # base09 - orange
     print("  ✓ dist/skhd/modes.sh")
 
 
+def hex_to_ansi256(hex_color):
+    """Convert hex color to ANSI 256 escape code format (38;2;r;g;b for true color)."""
+    hex_color = hex_color.lstrip('#')
+    r = int(hex_color[0:2], 16)
+    g = int(hex_color[2:4], 16)
+    b = int(hex_color[4:6], 16)
+    return f"38;2;{r};{g};{b}"
+
+
+def generate_eza(colors, meta):
+    """Generate eza/colors.sh with EZA_COLORS environment variable.
+
+    Terminal philosophy: output is intentional, use LOUD colors.
+    """
+    c = colors
+
+    # Build EZA_COLORS string using true color (38;2;r;g;b format)
+    # Two-letter codes: https://github.com/eza-community/eza/blob/main/man/eza_colors.5.md
+    # Terminal = high signal, use LOUD palette
+    eza_parts = [
+        # Filetypes - LOUD colors, this is what you're looking at
+        f"di={hex_to_ansi256(c['base0D'])}",        # directories - LOUD blue
+        f"ln={hex_to_ansi256(c['base0C'])}",        # symlinks - LOUD cyan
+        f"ex={hex_to_ansi256(c['base0B'])}",        # executables - LOUD green
+        f"fi={hex_to_ansi256(c['base05'])}",        # regular files - main text
+        f"pi={hex_to_ansi256(c['base0A'])}",        # pipes - LOUD amber
+        f"so={hex_to_ansi256(c['base0E'])}",        # sockets - LOUD purple
+        f"bd={hex_to_ansi256(c['base09'])}",        # block devices - LOUD orange
+        f"cd={hex_to_ansi256(c['base09'])}",        # char devices - LOUD orange
+        f"or={hex_to_ansi256(c['base08'])}",        # orphan symlinks - LOUD pink
+        f"mi={hex_to_ansi256(c['base08'])}",        # missing files - LOUD pink
+        # Permissions - LOUD for important, dim for less important
+        f"ur={hex_to_ansi256(c['base0A'])}",        # user read - LOUD amber
+        f"uw={hex_to_ansi256(c['base08'])}",        # user write - LOUD pink
+        f"ux={hex_to_ansi256(c['base0B'])}",        # user exec - LOUD green
+        f"ue={hex_to_ansi256(c['base0B'])}",        # user exec (other) - LOUD green
+        f"gr={hex_to_ansi256(c['base04'])}",        # group read - secondary
+        f"gw={hex_to_ansi256(c['base09'])}",        # group write - LOUD orange
+        f"gx={hex_to_ansi256(c['base0B'])}",        # group exec - LOUD green
+        f"tr={hex_to_ansi256(c['base03'])}",        # other read - dim
+        f"tw={hex_to_ansi256(c['base08'])}",        # other write - LOUD pink (dangerous!)
+        f"tx={hex_to_ansi256(c['base03'])}",        # other exec - dim
+        # Size - LOUD colors scale with size
+        f"sn={hex_to_ansi256(c['base0B'])}",        # size numbers - LOUD green
+        f"sb={hex_to_ansi256(c['base04'])}",        # size unit - secondary
+        # User/group
+        f"uu={hex_to_ansi256(c['base0C'])}",        # current user - LOUD cyan
+        f"un={hex_to_ansi256(c['base04'])}",        # other user - secondary
+        f"gu={hex_to_ansi256(c['base0C'])}",        # current group - LOUD cyan
+        f"gn={hex_to_ansi256(c['base04'])}",        # other group - secondary
+        # Git - LOUD, git status is important
+        f"ga={hex_to_ansi256(c['base0B'])}",        # git new - LOUD green
+        f"gm={hex_to_ansi256(c['base0A'])}",        # git modified - LOUD amber
+        f"gd={hex_to_ansi256(c['base08'])}",        # git deleted - LOUD pink
+        f"gv={hex_to_ansi256(c['base0C'])}",        # git renamed - LOUD cyan
+        f"gt={hex_to_ansi256(c['base03'])}",        # git ignored - dim
+        # Misc
+        f"da={hex_to_ansi256(c['base0E'])}",        # date - LOUD purple
+        f"hd={hex_to_ansi256(c['base07'])};1",      # header - brightest + bold
+        f"xx={hex_to_ansi256(c['base03'])}",        # punctuation - dim
+    ]
+
+    eza_colors = ":".join(eza_parts)
+
+    content = f'''#!/bin/bash
+# Human++ - eza colors
+# Generated from palette.toml
+# Source this file or add to your shell rc
+
+export EZA_COLORS="{eza_colors}"
+'''
+
+    (DIST / "eza").mkdir(parents=True, exist_ok=True)
+    (DIST / "eza/colors.sh").write_text(content)
+    print("  ✓ dist/eza/colors.sh")
+
+
+def generate_fzf(colors, meta):
+    """Generate fzf/colors.sh with FZF_DEFAULT_OPTS.
+
+    Terminal philosophy: output is intentional, use LOUD colors.
+    """
+    c = colors
+
+    # fzf uses hex colors directly with --color flag
+    # Format: --color=KEY:VALUE where VALUE is #rrggbb
+    # Use LOUD colors - fzf is interactive, high signal
+    fzf_colors = ",".join([
+        f"bg:{c['base00']}",           # background
+        f"bg+:{c['base02']}",          # selected background - more contrast
+        f"fg:{c['base05']}",           # foreground
+        f"fg+:{c['base07']}",          # selected foreground - brightest
+        f"hl:{c['base0F']}",           # highlighted match - LOUD lime (human marker!)
+        f"hl+:{c['base0F']}",          # selected highlighted - LOUD lime
+        f"info:{c['base0C']}",         # info line - LOUD cyan
+        f"marker:{c['base0B']}",       # marker - LOUD green
+        f"prompt:{c['base08']}",       # prompt - LOUD pink
+        f"spinner:{c['base0A']}",      # spinner - LOUD amber
+        f"pointer:{c['base08']}",      # pointer - LOUD pink
+        f"header:{c['base07']}",       # header - brightest
+        f"border:{c['base0D']}",       # border - LOUD blue
+        f"gutter:{c['base00']}",       # gutter
+        f"query:{c['base07']}",        # query text - brightest
+    ])
+
+    content = f'''#!/bin/bash
+# Human++ - fzf colors
+# Generated from palette.toml
+# Source this file or add to your shell rc
+
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color={fzf_colors}"
+'''
+
+    (DIST / "fzf").mkdir(parents=True, exist_ok=True)
+    (DIST / "fzf/colors.sh").write_text(content)
+    print("  ✓ dist/fzf/colors.sh")
+
+
 def generate_palette_json(colors, meta):
     """Generate site/data/palette.json for the website."""
     roles = {
@@ -723,11 +841,7 @@ def generate_readme(colors, meta):
 As models write more code, humans spend more time reviewing, planning, and explaining intent. Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="site/assets/preview-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="site/assets/preview-light.svg">
-    <img src="site/assets/preview-dark.svg" alt="Human++ Theme Preview" width="650">
-  </picture>
+  <img src="site/assets/preview-dark.svg" alt="Human++ Theme Preview" width="650">
 </p>
 
 ## Philosophy
@@ -1240,6 +1354,8 @@ def main():
     generate_sketchybar(colors, meta)
     generate_borders(colors, meta)
     generate_skhd(colors, meta)
+    generate_eza(colors, meta)
+    generate_fzf(colors, meta)
     generate_colortest(colors, meta)
 
     print("\nGenerating site:")
