@@ -5,7 +5,7 @@
       <stop offset="100%" style="stop-color:#3a3d42"/>
     </linearGradient>
     <linearGradient id="plusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#04b372"/>
+      <stop offset="0%" style="stop-color:#bbff00"/>
       <stop offset="100%" style="stop-color:#04b372"/>
     </linearGradient>
   </defs>

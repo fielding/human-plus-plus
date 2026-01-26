@@ -446,6 +446,7 @@ def generate_svgs(colors, meta):
     (assets_dir / "banner-dark.svg").write_text(banner_dark)
 
     # Banner (light mode - transparent bg, inverted text)
+    # Keep the ++ as lime (base0F) - it's the signature color even if contrast isn't perfect
     banner_light = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
   <defs>
     <linearGradient id="humanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -453,7 +454,7 @@ def generate_svgs(colors, meta):
       <stop offset="100%" style="stop-color:{c['base02']}"/>
     </linearGradient>
     <linearGradient id="plusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:{c['base0B']}"/>
+      <stop offset="0%" style="stop-color:{c['base0F']}"/>
       <stop offset="100%" style="stop-color:{c['base0B']}"/>
     </linearGradient>
   </defs>
