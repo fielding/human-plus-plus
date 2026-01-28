@@ -521,12 +521,12 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
           <div class="line"><span class="line-number">3</span><span class="line-content">  <span style="color: var(--base05);">name</span>: <span style="color: var(--base14);">string</span>;</span></div>
           <div class="line"><span class="line-number">4</span><span class="line-content">}</span></div>
           <div class="line"><span class="line-number">5</span><span class="line-content"></span></div>
-          <div class="line"><span class="line-number">6</span><span class="line-content"><span style="color: var(--base10);">const</span> <span style="color: var(--base05);">user</span>: <span style="color: var(--base14);">User</span> = <span style="color: var(--base13);">getUser</span>();</span></div>
+          <div class="line"><span class="line-number">6</span><span class="line-content"><span style="color: var(--base10);">const</span> <span style="color: var(--base05);">user</span>: <span style="color: var(--base14);">User</span> = <span style="color: var(--base15);">getUser</span>();</span></div>
           <div class="line"><span class="line-number">7</span><span class="line-content"></span></div>
-          <div class="line"><span class="line-number">8</span><span class="line-content"><span style="color: var(--base05);">user</span>.<span style="color: var(--base05);">name</span> = <span class="error-text" style="color: var(--base16);">null</span>;<span class="error-badge">Type 'null' is not assignable to type 'string'</span></span></div>
+          <div class="line"><span class="line-number">8</span><span class="line-content"><span style="color: var(--base05);">user</span>.<span style="color: var(--base05);">name</span> = <span class="error-text" style="color: var(--base12);">null</span>;<span class="error-badge">Type 'null' is not assignable to type 'string'</span></span></div>
           <div class="line"><span class="line-number">9</span><span class="line-content"></span></div>
           <div class="line"><span class="line-number">10</span><span class="line-content"><span style="color: var(--base10);">if</span> (<span class="warning-text" style="color: var(--base05);">user</span>) {<span class="warning-badge">Condition always true</span></span></div>
-          <div class="line"><span class="line-number">11</span><span class="line-content">  <span style="color: var(--base13);">console</span>.<span style="color: var(--base13);">log</span>(<span style="color: var(--base05);">user</span>.<span class="hint-text" style="color: var(--base05);">id</span>);</span></div>
+          <div class="line"><span class="line-number">11</span><span class="line-content">  <span style="color: var(--base05);">console</span>.<span style="color: var(--base15);">log</span>(<span style="color: var(--base05);">user</span>.<span class="hint-text" style="color: var(--base05);">id</span>);</span></div>
           <div class="line"><span class="line-number">12</span><span class="line-content">}</span></div>
         </div>
       </div>
@@ -561,19 +561,19 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
 
       <div class="code-preview">
         <div style="padding: 24px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; line-height: 2;">
-          <div style="color: var(--base03);">// Regular comment stays calm (base03)</div>
+          <div style="color: var(--base03); font-style: italic;">// Regular comment stays calm (base03)</div>
           <div>&nbsp;</div>
-          <div><span style="color: var(--base10);">async function</span> <span style="color: var(--base13);">processOrder</span>(<span style="color: var(--base11);">order</span>: <span style="color: var(--base14);">Order</span>) {</div>
+          <div><span style="color: var(--base10);">async function</span> <span style="color: var(--base15);">processOrder</span>(<span style="color: var(--base16); font-style: italic;">order</span>: <span style="color: var(--base14);">Order</span>) {</div>
           <div>  <span class="marker-badge-attention">// !! Critical: legacy billing depends on this exact format</span></div>
-          <div>  <span style="color: var(--base10);">const</span> <span style="color: var(--base05);">invoice</span> = <span style="color: var(--base13);">formatLegacy</span>(<span style="color: var(--base05);">order</span>);</div>
+          <div>  <span style="color: var(--base10);">const</span> <span style="color: var(--base05);">invoice</span> = <span style="color: var(--base15);">formatLegacy</span>(<span style="color: var(--base05);">order</span>);</div>
           <div>&nbsp;</div>
-          <div>  <span style="color: var(--base10);">if</span> (<span style="color: var(--base05);">order</span>.<span style="color: var(--base05);">total</span> &gt; <span style="color: var(--base16);">10000</span>) {</div>
+          <div>  <span style="color: var(--base10);">if</span> (<span style="color: var(--base05);">order</span>.<span style="color: var(--base05);">total</span> &gt; <span style="color: var(--base12);">10000</span>) {</div>
           <div>    <span class="marker-badge-uncertainty">// ?? Not sure this handles international tax correctly</span></div>
-          <div>    <span style="color: var(--base10);">await</span> <span style="color: var(--base13);">flagForReview</span>(<span style="color: var(--base05);">invoice</span>);</div>
+          <div>    <span style="color: var(--base10);">await</span> <span style="color: var(--base15);">flagForReview</span>(<span style="color: var(--base05);">invoice</span>);</div>
           <div>  }</div>
           <div>&nbsp;</div>
           <div>  <span class="marker-badge-reference">// &gt;&gt; See billing/tax.ts for the tax calculation logic</span></div>
-          <div>  <span style="color: var(--base10);">return</span> <span style="color: var(--base13);">finalize</span>(<span style="color: var(--base05);">invoice</span>);</div>
+          <div>  <span style="color: var(--base10);">return</span> <span style="color: var(--base15);">finalize</span>(<span style="color: var(--base05);">invoice</span>);</div>
           <div>}</div>
         </div>
       </div>
