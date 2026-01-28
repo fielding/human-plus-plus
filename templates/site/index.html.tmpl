@@ -509,24 +509,24 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Human Intent Markers</h2>
-        <p class="section-subtitle">Lightweight punctuation markers that flag human judgment in comments.</p>
+        <p class="section-subtitle">Lightweight punctuation markers that flag human judgment in comments. Also recognizes common keywords like TODO, FIXME, and NOTE.</p>
       </div>
 
       <div class="markers-grid">
         <div class="marker-card attention">
           <div class="marker-symbol">!!</div>
           <div class="marker-name">Attention</div>
-          <div class="marker-desc">Pay attention here. Human decision that matters.</div>
+          <div class="marker-desc">Pay attention here. Also: FIXME, BUG, XXX</div>
         </div>
         <div class="marker-card uncertainty">
           <div class="marker-symbol">??</div>
           <div class="marker-name">Uncertainty</div>
-          <div class="marker-desc">I'm not confident. Please review this.</div>
+          <div class="marker-desc">I'm not confident. Also: TODO, HACK</div>
         </div>
         <div class="marker-card reference">
           <div class="marker-symbol">&gt;&gt;</div>
           <div class="marker-name">Reference</div>
-          <div class="marker-desc">See related code or documentation.</div>
+          <div class="marker-desc">See related code or docs. Also: NOTE, NB</div>
         </div>
       </div>
 
@@ -686,8 +686,8 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
             base04: 'UI secondary', base05: 'main text', base06: 'emphasis', base07: 'brightest',
             base08: 'errors', base09: 'warnings', base0A: 'caution', base0B: 'success',
             base0C: 'info', base0D: 'links', base0E: 'special', base0F: 'human !!',
-            base10: 'keywords', base11: 'secondary', base12: 'strings', base13: 'functions',
-            base14: 'types', base15: 'hints', base16: 'constants', base17: 'quiet lime'
+            base10: 'keywords', base11: 'decorators', base12: 'constants', base13: 'CSS classes',
+            base14: 'types', base15: 'functions', base16: 'parameters', base17: 'strings'
           }
         };
         renderSwatches();
@@ -774,14 +774,33 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
   <script>
     hljs.highlightAll();
 
+    // Keyword aliases for markers (case-insensitive)
+    // Priority: intervention > uncertainty > directive
+    const MARKER_KEYWORDS = {
+      attention: ['FIXME', 'BUG', 'XXX'],      // Maps to !! (highest priority)
+      uncertainty: ['TODO', 'HACK'],           // Maps to ??
+      reference: ['NOTE', 'NB'],               // Maps to >> (lowest priority)
+    };
+
     function highlightMarkers() {
       document.querySelectorAll('.hljs-comment').forEach(el => {
-        const text = el.textContent;
+        const text = el.textContent || '';
+        const upperText = text.toUpperCase();
+
+        // Explicit markers always win (check in priority order)
         if (text.includes('!!')) {
           el.classList.add('humanpp-attention');
         } else if (text.includes('??')) {
           el.classList.add('humanpp-uncertainty');
         } else if (text.includes('>>')) {
+          el.classList.add('humanpp-reference');
+        }
+        // Check keyword aliases (in priority order: attention > uncertainty > reference)
+        else if (MARKER_KEYWORDS.attention.some(kw => new RegExp('\\b' + kw + '\\b', 'i').test(text))) {
+          el.classList.add('humanpp-attention');
+        } else if (MARKER_KEYWORDS.uncertainty.some(kw => new RegExp('\\b' + kw + '\\b', 'i').test(text))) {
+          el.classList.add('humanpp-uncertainty');
+        } else if (MARKER_KEYWORDS.reference.some(kw => new RegExp('\\b' + kw + '\\b', 'i').test(text))) {
           el.classList.add('humanpp-reference');
         }
       });

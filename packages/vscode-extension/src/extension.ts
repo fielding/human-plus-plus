@@ -31,6 +31,21 @@ const MARKERS: Record<MarkerType, MarkerDef> = {
   },
 };
 
+// Keyword aliases for markers (case-insensitive matching)
+// Strength order: intervention > uncertainty > directive
+const MARKER_KEYWORDS: Record<MarkerType, string[]> = {
+  intervention: ['FIXME', 'BUG', 'XXX'],        // Maps to !! (highest priority)
+  uncertainty: ['TODO', 'HACK'],                // Maps to ??
+  directive: ['NOTE', 'NB'],                    // Maps to >> (lowest priority)
+};
+
+// Priority order for conflict resolution (lower = stronger)
+const MARKER_PRIORITY: Record<MarkerType, number> = {
+  intervention: 1,
+  uncertainty: 2,
+  directive: 3,
+};
+
 // Diagnostic colors (for inline error/warning badges)
 type DiagnosticLevel = 'error' | 'warning' | 'info' | 'hint';
 
@@ -161,20 +176,31 @@ class MarkerScanner {
         const prefixEnd = commentMatch[0].length;
         const commentText = line.slice(prefixEnd);
 
-        // Check for each marker type
+        // First check for explicit markers (!!, ??, >>) - these always win
+        let foundType: MarkerType | null = null;
+
         for (const [type, def] of enabledMarkers) {
           const markerRegex = new RegExp(`^\\s*(${def.pattern.replace(/\?/g, '\\?')})(?=\\s|$)`);
           if (markerRegex.test(commentText)) {
-            // Find end of actual text (trim trailing whitespace)
-            const trimmedEnd = line.trimEnd().length;
-            matches.push({
-              type,
-              lineNum,
-              startChar: leadingWhitespace,  // Start from the comment symbol
-              endChar: trimmedEnd,
-            });
+            foundType = type;
             break;
           }
+        }
+
+        // If no explicit marker, check for keyword aliases
+        if (!foundType) {
+          foundType = this.findKeywordMatch(commentText, enabledMarkers);
+        }
+
+        if (foundType) {
+          // Find end of actual text (trim trailing whitespace)
+          const trimmedEnd = line.trimEnd().length;
+          matches.push({
+            type: foundType,
+            lineNum,
+            startChar: leadingWhitespace,  // Start from the comment symbol
+            endChar: trimmedEnd,
+          });
         }
 
         break; // Only check first comment pattern per line
@@ -182,6 +208,40 @@ class MarkerScanner {
     }
 
     return matches;
+  }
+
+  /**
+   * Check for keyword aliases in comment text.
+   * Returns the strongest matching marker type, or null if no match.
+   * Keywords are matched case-insensitively with word boundaries.
+   */
+  private findKeywordMatch(
+    commentText: string,
+    enabledMarkers: [MarkerType, MarkerDef][]
+  ): MarkerType | null {
+    let bestMatch: MarkerType | null = null;
+    let bestPriority = Infinity;
+
+    for (const [type] of enabledMarkers) {
+      const keywords = MARKER_KEYWORDS[type];
+      if (!keywords) continue;
+
+      for (const keyword of keywords) {
+        // Match keyword at word boundary, case-insensitive
+        // Supports: // TODO: ..., // [TODO] ..., // TODO(...) ..., etc.
+        const keywordRegex = new RegExp(`\\b${keyword}\\b`, 'i');
+        if (keywordRegex.test(commentText)) {
+          const priority = MARKER_PRIORITY[type];
+          if (priority < bestPriority) {
+            bestMatch = type;
+            bestPriority = priority;
+          }
+          break; // Found this type, check next type for potentially stronger match
+        }
+      }
+    }
+
+    return bestMatch;
   }
 }
 

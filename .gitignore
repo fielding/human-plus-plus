@@ -41,3 +41,8 @@ out/
 
 # Lock files are tracked for reproducible builds
 # package-lock.json
+
+# Tinty symlinks (point to dist/)
+sketchybar
+borders
+skhd

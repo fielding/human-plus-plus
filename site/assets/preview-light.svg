@@ -26,14 +26,14 @@
   <text x="44" y="68" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="#c8518f">interface</tspan>
     <tspan fill="#1a1c22"> </tspan>
-    <tspan fill="#5e84b6">User</tspan>
+    <tspan fill="#1ad0d6">User</tspan>
     <tspan fill="#1a1c22"> {</tspan>
   </text>
 
   <!-- Line 2: id: string; -->
   <text x="44" y="92" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="#1a1c22">  id: </tspan>
-    <tspan fill="#5e84b6">string</tspan>
+    <tspan fill="#1ad0d6">string</tspan>
     <tspan fill="#1a1c22">;</tspan>
   </text>
 
@@ -48,13 +48,15 @@
   <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="#c8518f">async function</tspan>
     <tspan fill="#1a1c22"> </tspan>
-    <tspan fill="#04b372">getUser</tspan>
-    <tspan fill="#1a1c22">(id: </tspan>
-    <tspan fill="#5e84b6">string</tspan>
+    <tspan fill="#458ae2">getUser</tspan>
+    <tspan fill="#1a1c22">(</tspan>
+    <tspan fill="#9871fe" font-style="italic">id</tspan>
+    <tspan fill="#1a1c22">: </tspan>
+    <tspan fill="#1ad0d6">string</tspan>
     <tspan fill="#1a1c22">): </tspan>
-    <tspan fill="#5e84b6">Promise</tspan>
+    <tspan fill="#1ad0d6">Promise</tspan>
     <tspan fill="#1a1c22">&lt;</tspan>
-    <tspan fill="#5e84b6">User</tspan>
+    <tspan fill="#1ad0d6">User</tspan>
     <tspan fill="#1a1c22">&gt; {</tspan>
   </text>
 
@@ -65,11 +67,11 @@
     <tspan fill="#1a1c22"> cached = </tspan>
     <tspan fill="#c8518f">await</tspan>
     <tspan fill="#1a1c22"> redis.</tspan>
-    <tspan fill="#04b372">get</tspan>
+    <tspan fill="#458ae2">get</tspan>
     <tspan fill="#1a1c22">(</tspan>
-    <tspan fill="#f26c33">`user:</tspan>
+    <tspan fill="#04b372">`user:</tspan>
     <tspan fill="#1a1c22">${id}</tspan>
-    <tspan fill="#f26c33">`</tspan>
+    <tspan fill="#04b372">`</tspan>
     <tspan fill="#1a1c22">);</tspan>
   </text>
 
@@ -92,7 +94,7 @@
     <tspan fill="#1a1c22">user.</tspan>
     <tspan fill="#1a1c22">name</tspan>
     <tspan fill="#1a1c22"> = </tspan>
-    <tspan fill="#9871fe">null</tspan>
+    <tspan fill="#f2a633">null</tspan>
     <tspan fill="#1a1c22">;</tspan>
   </text>
   <rect x="180" y="294" width="290" height="20" rx="4" fill="#e7349c"/>

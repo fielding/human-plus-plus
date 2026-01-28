@@ -405,10 +405,17 @@ def generate_site(colors, meta):
     """Generate the static site from templates."""
     SITE.mkdir(parents=True, exist_ok=True)
 
-    # Copy the HTML template (it loads palette.json at runtime)
+    # Process the HTML template, substituting color placeholders
+    # This ensures fallback CSS variables have real values if palette.json fails to load
     template_path = ROOT / "templates" / "site" / "index.html.tmpl"
     if template_path.exists():
         content = template_path.read_text()
+
+        # Substitute color placeholders with actual values
+        for slot, hex_value in colors.items():
+            placeholder = '{{' + slot + '}}'
+            content = content.replace(placeholder, hex_value.lower())
+
         (SITE / "index.html").write_text(content)
         print("  ✓ site/index.html")
     else:
@@ -654,8 +661,10 @@ def generate_svgs(colors, meta):
   <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="{c['base10']}">async function</tspan>
     <tspan fill="{c['base05']}"> </tspan>
-    <tspan fill="{c['base13']}">getUser</tspan>
-    <tspan fill="{c['base05']}">(id: </tspan>
+    <tspan fill="{c['base15']}">getUser</tspan>
+    <tspan fill="{c['base05']}">(</tspan>
+    <tspan fill="{c['base16']}" font-style="italic">id</tspan>
+    <tspan fill="{c['base05']}">: </tspan>
     <tspan fill="{c['base14']}">string</tspan>
     <tspan fill="{c['base05']}">): </tspan>
     <tspan fill="{c['base14']}">Promise</tspan>
@@ -671,11 +680,11 @@ def generate_svgs(colors, meta):
     <tspan fill="{c['base05']}"> cached = </tspan>
     <tspan fill="{c['base10']}">await</tspan>
     <tspan fill="{c['base05']}"> redis.</tspan>
-    <tspan fill="{c['base13']}">get</tspan>
+    <tspan fill="{c['base15']}">get</tspan>
     <tspan fill="{c['base05']}">(</tspan>
-    <tspan fill="{c['base12']}">`user:</tspan>
+    <tspan fill="{c['base17']}">`user:</tspan>
     <tspan fill="{c['base05']}">${{id}}</tspan>
-    <tspan fill="{c['base12']}">`</tspan>
+    <tspan fill="{c['base17']}">`</tspan>
     <tspan fill="{c['base05']}">);</tspan>
   </text>
 
@@ -698,7 +707,7 @@ def generate_svgs(colors, meta):
     <tspan fill="{c['base05']}">user.</tspan>
     <tspan fill="{c['base05']}">name</tspan>
     <tspan fill="{c['base05']}"> = </tspan>
-    <tspan fill="{c['base16']}">null</tspan>
+    <tspan fill="{c['base12']}">null</tspan>
     <tspan fill="{c['base05']}">;</tspan>
   </text>
   <rect x="180" y="294" width="290" height="20" rx="4" fill="{c['base08']}"/>
@@ -736,14 +745,14 @@ def generate_svgs(colors, meta):
   <text x="44" y="68" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="{c['base10']}">interface</tspan>
     <tspan fill="{c['base00']}"> </tspan>
-    <tspan fill="{c['base15']}">User</tspan>
+    <tspan fill="{c['base0C']}">User</tspan>
     <tspan fill="{c['base00']}"> {{</tspan>
   </text>
 
   <!-- Line 2: id: string; -->
   <text x="44" y="92" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="{c['base00']}">  id: </tspan>
-    <tspan fill="{c['base15']}">string</tspan>
+    <tspan fill="{c['base0C']}">string</tspan>
     <tspan fill="{c['base00']}">;</tspan>
   </text>
 
@@ -758,13 +767,15 @@ def generate_svgs(colors, meta):
   <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="{c['base10']}">async function</tspan>
     <tspan fill="{c['base00']}"> </tspan>
-    <tspan fill="{c['base0B']}">getUser</tspan>
-    <tspan fill="{c['base00']}">(id: </tspan>
-    <tspan fill="{c['base15']}">string</tspan>
+    <tspan fill="{c['base0D']}">getUser</tspan>
+    <tspan fill="{c['base00']}">(</tspan>
+    <tspan fill="{c['base0E']}" font-style="italic">id</tspan>
+    <tspan fill="{c['base00']}">: </tspan>
+    <tspan fill="{c['base0C']}">string</tspan>
     <tspan fill="{c['base00']}">): </tspan>
-    <tspan fill="{c['base15']}">Promise</tspan>
+    <tspan fill="{c['base0C']}">Promise</tspan>
     <tspan fill="{c['base00']}">&lt;</tspan>
-    <tspan fill="{c['base15']}">User</tspan>
+    <tspan fill="{c['base0C']}">User</tspan>
     <tspan fill="{c['base00']}">&gt; {{</tspan>
   </text>
 
@@ -775,11 +786,11 @@ def generate_svgs(colors, meta):
     <tspan fill="{c['base00']}"> cached = </tspan>
     <tspan fill="{c['base10']}">await</tspan>
     <tspan fill="{c['base00']}"> redis.</tspan>
-    <tspan fill="{c['base0B']}">get</tspan>
+    <tspan fill="{c['base0D']}">get</tspan>
     <tspan fill="{c['base00']}">(</tspan>
-    <tspan fill="{c['base09']}">`user:</tspan>
+    <tspan fill="{c['base0B']}">`user:</tspan>
     <tspan fill="{c['base00']}">${{id}}</tspan>
-    <tspan fill="{c['base09']}">`</tspan>
+    <tspan fill="{c['base0B']}">`</tspan>
     <tspan fill="{c['base00']}">);</tspan>
   </text>
 
@@ -802,7 +813,7 @@ def generate_svgs(colors, meta):
     <tspan fill="{c['base00']}">user.</tspan>
     <tspan fill="{c['base00']}">name</tspan>
     <tspan fill="{c['base00']}"> = </tspan>
-    <tspan fill="{c['base0E']}">null</tspan>
+    <tspan fill="{c['base0A']}">null</tspan>
     <tspan fill="{c['base00']}">;</tspan>
   </text>
   <rect x="180" y="294" width="290" height="20" rx="4" fill="{c['base08']}"/>
@@ -905,13 +916,13 @@ Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 pa
 | Slot | Hex | Role |
 |------|-----|------|
 | base10 | `{c['base10']}` | Keywords |
-| base11 | `{c['base11']}` | Secondary |
-| base12 | `{c['base12']}` | Strings |
-| base13 | `{c['base13']}` | Functions |
+| base11 | `{c['base11']}` | Decorators |
+| base12 | `{c['base12']}` | Constants |
+| base13 | `{c['base13']}` | CSS classes |
 | base14 | `{c['base14']}` | Types |
-| base15 | `{c['base15']}` | Hints |
-| base16 | `{c['base16']}` | Constants |
-| base17 | `{c['base17']}` | Quiet lime |
+| base15 | `{c['base15']}` | Functions |
+| base16 | `{c['base16']}` | Parameters |
+| base17 | `{c['base17']}` | Strings |
 
 </details>
 
@@ -919,22 +930,22 @@ Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 pa
 
 Use punctuation markers in comments to flag human judgment:
 
-| Marker | Meaning | Color |
-|--------|---------|-------|
-| `!!` | Pay attention here | Lime (base0F) |
-| `??` | I'm uncertain | Purple (base0E) |
-| `>>` | See reference | Cyan (base0C) |
+| Marker | Aliases | Meaning | Color |
+|--------|---------|---------|-------|
+| `!!` | FIXME, BUG, XXX | Pay attention here | Lime (base0F) |
+| `??` | TODO, HACK | I'm uncertain | Purple (base0E) |
+| `>>` | NOTE, NB | See reference | Cyan (base0C) |
 
 ```js
 // Regular comment stays calm (base03)
 
 // !! Critical: don't change without talking to Sarah
 if (legacyMode) {{
-  // ?? Not sure this handles the edge case
+  // TODO: Not sure this handles the edge case
   return transformLegacy(data);
 }}
 
-// >> See utils.ts for the transform logic
+// NOTE: See utils.ts for the transform logic
 return transform(data);
 ```
 
@@ -944,6 +955,7 @@ return transform(data);
 - Easy to scan
 - Easy to grep: `rg "// !!|// \\?\\?|// >>"`
 - Easy for editors to highlight
+- Legacy keywords (TODO, FIXME, NOTE) also work
 
 ## Install
 

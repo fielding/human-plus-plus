@@ -85,13 +85,13 @@ Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 pa
 | Slot | Hex | Role |
 |------|-----|------|
 | base10 | `#c8518f` | Keywords |
-| base11 | `#d68c6f` | Secondary |
-| base12 | `#dfb683` | Strings |
-| base13 | `#61b186` | Functions |
+| base11 | `#d68c6f` | Decorators |
+| base12 | `#dfb683` | Constants |
+| base13 | `#61b186` | CSS classes |
 | base14 | `#91cbcd` | Types |
-| base15 | `#5e84b6` | Hints |
-| base16 | `#8f72e3` | Constants |
-| base17 | `#d2fc91` | Quiet lime |
+| base15 | `#5e84b6` | Functions |
+| base16 | `#8f72e3` | Parameters |
+| base17 | `#d2fc91` | Strings |
 
 </details>
 
@@ -99,22 +99,22 @@ Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 pa
 
 Use punctuation markers in comments to flag human judgment:
 
-| Marker | Meaning | Color |
-|--------|---------|-------|
-| `!!` | Pay attention here | Lime (base0F) |
-| `??` | I'm uncertain | Purple (base0E) |
-| `>>` | See reference | Cyan (base0C) |
+| Marker | Aliases | Meaning | Color |
+|--------|---------|---------|-------|
+| `!!` | FIXME, BUG, XXX | Pay attention here | Lime (base0F) |
+| `??` | TODO, HACK | I'm uncertain | Purple (base0E) |
+| `>>` | NOTE, NB | See reference | Cyan (base0C) |
 
 ```js
 // Regular comment stays calm (base03)
 
 // !! Critical: don't change without talking to Sarah
 if (legacyMode) {
-  // ?? Not sure this handles the edge case
+  // TODO: Not sure this handles the edge case
   return transformLegacy(data);
 }
 
-// >> See utils.ts for the transform logic
+// NOTE: See utils.ts for the transform logic
 return transform(data);
 ```
 
@@ -124,6 +124,7 @@ return transform(data);
 - Easy to scan
 - Easy to grep: `rg "// !!|// \?\?|// >>"`
 - Easy for editors to highlight
+- Legacy keywords (TODO, FIXME, NOTE) also work
 
 ## Install
 

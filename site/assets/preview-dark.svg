@@ -48,8 +48,10 @@
   <text x="44" y="188" font-family="SF Mono, Consolas, monospace" font-size="13">
     <tspan fill="#c8518f">async function</tspan>
     <tspan fill="#dbd6cc"> </tspan>
-    <tspan fill="#61b186">getUser</tspan>
-    <tspan fill="#dbd6cc">(id: </tspan>
+    <tspan fill="#5e84b6">getUser</tspan>
+    <tspan fill="#dbd6cc">(</tspan>
+    <tspan fill="#8f72e3" font-style="italic">id</tspan>
+    <tspan fill="#dbd6cc">: </tspan>
     <tspan fill="#91cbcd">string</tspan>
     <tspan fill="#dbd6cc">): </tspan>
     <tspan fill="#91cbcd">Promise</tspan>
@@ -65,11 +67,11 @@
     <tspan fill="#dbd6cc"> cached = </tspan>
     <tspan fill="#c8518f">await</tspan>
     <tspan fill="#dbd6cc"> redis.</tspan>
-    <tspan fill="#61b186">get</tspan>
+    <tspan fill="#5e84b6">get</tspan>
     <tspan fill="#dbd6cc">(</tspan>
-    <tspan fill="#dfb683">`user:</tspan>
+    <tspan fill="#d2fc91">`user:</tspan>
     <tspan fill="#dbd6cc">${id}</tspan>
-    <tspan fill="#dfb683">`</tspan>
+    <tspan fill="#d2fc91">`</tspan>
     <tspan fill="#dbd6cc">);</tspan>
   </text>
 
@@ -92,7 +94,7 @@
     <tspan fill="#dbd6cc">user.</tspan>
     <tspan fill="#dbd6cc">name</tspan>
     <tspan fill="#dbd6cc"> = </tspan>
-    <tspan fill="#8f72e3">null</tspan>
+    <tspan fill="#dfb683">null</tspan>
     <tspan fill="#dbd6cc">;</tspan>
   </text>
   <rect x="180" y="294" width="290" height="20" rx="4" fill="#e7349c"/>

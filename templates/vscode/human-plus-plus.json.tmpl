@@ -555,6 +555,32 @@
         "welcomePage.tileShadow": "{{base00}}",
         "widget.shadow": "{{base00}}"
     },
+    "semanticHighlighting": false,
+    "semanticTokenColors": {
+        "comment": "{{base03}}",
+        "string": "{{base17}}",
+        "keyword": "{{base10}}",
+        "number": "{{base12}}",
+        "regexp": "{{base17}}",
+        "operator": "{{base04}}",
+        "namespace": "{{base14}}",
+        "type": "{{base14}}",
+        "struct": "{{base14}}",
+        "class": "{{base14}}",
+        "interface": "{{base14}}",
+        "enum": "{{base14}}",
+        "typeParameter": "{{base14}}",
+        "function": "{{base15}}",
+        "method": "{{base15}}",
+        "macro": "{{base15}}",
+        "variable": "{{base07}}",
+        "parameter": {"foreground": "{{base16}}", "fontStyle": "italic"},
+        "property": "{{base07}}",
+        "enumMember": "{{base12}}",
+        "event": "{{base11}}",
+        "decorator": "{{base11}}",
+        "label": "{{base16}}"
+    },
     "tokenColors": [
         {
             "scope": [
@@ -649,7 +675,7 @@
             "scope": "constant",
             "settings": {
                 "name": "Constant",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
@@ -663,7 +689,7 @@
             "scope": "constant.other.caps",
             "settings": {
                 "name": "Constant",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
@@ -683,8 +709,8 @@
         {
             "scope": "constant.other.citation.latex",
             "settings": {
-                "name": "Constant in latex",
-                "foreground": "{{base16}}"
+                "name": "LaTeX citation",
+                "foreground": "{{base17}}"
             }
         },
         {
@@ -726,21 +752,21 @@
             "scope": "constant.numeric",
             "settings": {
                 "name": "Number",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
             "scope": "constant.language",
             "settings": {
                 "name": "Constant",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
             "scope": "constant.character.escape",
             "settings": {
                 "name": "Character escape",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
@@ -772,7 +798,7 @@
             ],
             "settings": {
                 "name": "Functions",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -804,7 +830,7 @@
             "scope": "entity.name",
             "settings": {
                 "name": "Entity name",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -840,7 +866,7 @@
             "scope": "entity.name.function",
             "settings": {
                 "name": "Function name",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -937,7 +963,7 @@
             ],
             "settings": {
                 "name": "Function names / calls",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -965,7 +991,7 @@
             "scope": "entity.name.operator.custom-literal.string",
             "settings": {
                 "name": "custom literal string",
-                "foreground": "{{base12}}"
+                "foreground": "{{base17}}"
             }
         },
         {
@@ -1063,10 +1089,21 @@
         {
             "scope": [
                 "keyword.operator.heading.restructuredtext",
-                "keyword.operator.table.row.restructuredtext keyword.operator.table.data.restructuredtext"
+                "entity.name.section.restructuredtext",
+                "markup.heading.restructuredtext"
             ],
             "settings": {
-                "name": "RestructuredText heading, table markup",
+                "name": "RestructuredText heading",
+                "foreground": "{{base10}}"
+            }
+        },
+        {
+            "scope": [
+                "keyword.operator.table.row.restructuredtext",
+                "keyword.operator.table.data.restructuredtext"
+            ],
+            "settings": {
+                "name": "RestructuredText table markup",
                 "foreground": "{{base04}}"
             }
         },
@@ -1118,28 +1155,67 @@
             "scope": "markup.italic",
             "settings": {
                 "name": "Italic",
-                "fontStyle": "italic"
+                "fontStyle": "italic",
+                "foreground": "{{base15}}"
             }
         },
         {
             "scope": "markup.bold",
             "settings": {
                 "name": "Bold",
-                "fontStyle": "bold"
+                "fontStyle": "bold",
+                "foreground": "{{base15}}"
             }
         },
         {
-            "scope": "markup.heading",
+            "scope": [
+                "markup.heading",
+                "markup.heading.1",
+                "markup.heading.2",
+                "markup.heading.3",
+                "markup.heading.4",
+                "markup.heading.5",
+                "markup.heading.6",
+                "markup.heading.1.markdown",
+                "markup.heading.2.markdown",
+                "markup.heading.3.markdown",
+                "markup.heading.4.markdown",
+                "markup.heading.5.markdown",
+                "markup.heading.6.markdown",
+                "markup.heading.setext.1.markdown",
+                "markup.heading.setext.2.markdown",
+                "entity.name.section.markdown",
+                "heading.1.markdown entity.name.section.markdown",
+                "heading.2.markdown entity.name.section.markdown",
+                "heading.3.markdown entity.name.section.markdown",
+                "heading.4.markdown entity.name.section.markdown",
+                "heading.5.markdown entity.name.section.markdown",
+                "heading.6.markdown entity.name.section.markdown",
+                "markup.heading.markdown",
+                "punctuation.definition.heading.markdown"
+            ],
             "settings": {
                 "name": "Heading",
-                "foreground": "{{base12}}"
+                "foreground": "{{base10}}"
             }
         },
         {
             "scope": "markup.raw",
             "settings": {
                 "name": "Raw",
-                "foreground": "{{base11}}"
+                "foreground": "{{base14}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.inline.raw",
+                "markup.inline.raw.string.markdown",
+                "markup.raw.inline.markdown",
+                "fenced_code.block.language.markdown"
+            ],
+            "settings": {
+                "name": "Inline code",
+                "foreground": "{{base0A}}"
             }
         },
         {
@@ -1150,10 +1226,23 @@
             }
         },
         {
-            "scope": "markup.underline.link",
+            "scope": [
+                "markup.underline.link",
+                "string.other.link.title.markdown"
+            ],
             "settings": {
-                "name": "Link",
-                "foreground": "{{base13}}"
+                "name": "Link title",
+                "foreground": "{{base17}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.underline.link.markdown",
+                "string.other.link.description.markdown"
+            ],
+            "settings": {
+                "name": "Link URL",
+                "foreground": "{{base03}}"
             }
         },
         {
@@ -1207,7 +1296,215 @@
             "scope": "markup.quote",
             "settings": {
                 "name": "Markup quote",
-                "fontStyle": "italic"
+                "fontStyle": "italic",
+                "foreground": "{{base14}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.list",
+                "markup.list.unnumbered",
+                "markup.list.numbered",
+                "punctuation.definition.list.begin"
+            ],
+            "settings": {
+                "name": "List markers",
+                "foreground": "{{base04}}"
+            }
+        },
+        {
+            "scope": [
+                "entity.name.section.asciidoc",
+                "markup.heading.asciidoc",
+                "markup.heading.marker.asciidoc"
+            ],
+            "settings": {
+                "name": "AsciiDoc headings",
+                "foreground": "{{base10}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.bold.asciidoc",
+                "markup.italic.asciidoc"
+            ],
+            "settings": {
+                "name": "AsciiDoc emphasis",
+                "foreground": "{{base15}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.raw.asciidoc",
+                "markup.raw.monospace.asciidoc"
+            ],
+            "settings": {
+                "name": "AsciiDoc inline code",
+                "foreground": "{{base0A}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.link.asciidoc",
+                "string.unquoted.asciidoc"
+            ],
+            "settings": {
+                "name": "AsciiDoc links",
+                "foreground": "{{base17}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.other.anchor.asciidoc",
+                "variable.other.asciidoc"
+            ],
+            "settings": {
+                "name": "AsciiDoc anchors/variables",
+                "foreground": "{{base16}}"
+            }
+        },
+        {
+            "scope": [
+                "entity.name.section.latex",
+                "support.function.section.latex"
+            ],
+            "settings": {
+                "name": "LaTeX sections/headings",
+                "foreground": "{{base10}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.italic.latex",
+                "markup.bold.latex"
+            ],
+            "settings": {
+                "name": "LaTeX emphasis",
+                "foreground": "{{base15}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.raw.verb.latex",
+                "markup.raw.verbatim.latex"
+            ],
+            "settings": {
+                "name": "LaTeX verbatim",
+                "foreground": "{{base0A}}"
+            }
+        },
+        {
+            "scope": [
+                "constant.other.reference.latex",
+                "constant.other.citation.latex"
+            ],
+            "settings": {
+                "name": "LaTeX references",
+                "foreground": "{{base17}}"
+            }
+        },
+        {
+            "scope": [
+                "support.function.latex",
+                "support.class.latex"
+            ],
+            "settings": {
+                "name": "LaTeX functions",
+                "foreground": "{{base15}}"
+            }
+        },
+        {
+            "scope": "constant.character.math.latex",
+            "settings": {
+                "name": "LaTeX math",
+                "foreground": "{{base12}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.heading.orgmode",
+                "entity.name.section.orgmode",
+                "orgmode.heading"
+            ],
+            "settings": {
+                "name": "Org mode headings",
+                "foreground": "{{base10}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.bold.orgmode",
+                "markup.italic.orgmode"
+            ],
+            "settings": {
+                "name": "Org mode emphasis",
+                "foreground": "{{base15}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.raw.orgmode",
+                "markup.inline.code.orgmode"
+            ],
+            "settings": {
+                "name": "Org mode inline code",
+                "foreground": "{{base0A}}"
+            }
+        },
+        {
+            "scope": [
+                "markup.link.orgmode",
+                "string.other.link.orgmode"
+            ],
+            "settings": {
+                "name": "Org mode links",
+                "foreground": "{{base17}}"
+            }
+        },
+        {
+            "scope": [
+                "entity.name.tag.html",
+                "entity.name.tag.xml",
+                "entity.name.tag.localname.xml"
+            ],
+            "settings": {
+                "name": "HTML/XML tags",
+                "foreground": "{{base10}}"
+            }
+        },
+        {
+            "scope": [
+                "entity.other.attribute-name.html",
+                "entity.other.attribute-name.xml",
+                "entity.other.attribute-name.localname.xml"
+            ],
+            "settings": {
+                "name": "HTML/XML attributes",
+                "fontStyle": "italic",
+                "foreground": "{{base14}}"
+            }
+        },
+        {
+            "scope": [
+                "string.quoted.double.html",
+                "string.quoted.single.html",
+                "string.quoted.double.xml",
+                "string.quoted.single.xml"
+            ],
+            "settings": {
+                "name": "HTML/XML attribute values",
+                "foreground": "{{base17}}"
+            }
+        },
+        {
+            "scope": [
+                "comment.block.html",
+                "comment.block.xml"
+            ],
+            "settings": {
+                "name": "HTML/XML comments",
+                "fontStyle": "italic",
+                "foreground": "{{base03}}"
             }
         },
         {
@@ -1231,7 +1528,7 @@
             ],
             "settings": {
                 "name": "Function call (vs)",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -1252,7 +1549,7 @@
             "scope": "meta.instance.constructor",
             "settings": {
                 "name": "Constructor (new MyClass())",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -1658,7 +1955,7 @@
             "scope": "storage.class.restructuredtext.ref",
             "settings": {
                 "name": "refs (Restructured text)",
-                "foreground": "{{base16}}"
+                "foreground": "{{base17}}"
             }
         },
         {
@@ -1707,7 +2004,7 @@
             "scope": "string",
             "settings": {
                 "name": "String",
-                "foreground": "{{base12}}"
+                "foreground": "{{base17}}"
             }
         },
         {
@@ -1741,14 +2038,14 @@
             ],
             "settings": {
                 "name": "link title",
-                "foreground": "{{base10}}"
+                "foreground": "{{base17}}"
             }
         },
         {
             "scope": "string.other.link.description.title",
             "settings": {
                 "name": "link description",
-                "foreground": "{{base14}}"
+                "foreground": "{{base03}}"
             }
         },
         {
@@ -1768,7 +2065,7 @@
             ],
             "settings": {
                 "name": "refs (Restructured text)",
-                "foreground": "{{base13}}"
+                "foreground": "{{base17}}"
             }
         },
         {
@@ -1810,14 +2107,14 @@
             "scope": "support.function",
             "settings": {
                 "name": "function name",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
             "scope": "support.macro",
             "settings": {
                 "name": "support macro",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {
@@ -1912,7 +2209,7 @@
             "settings": {
                 "name": "Function arguments",
                 "fontStyle": "italic",
-                "foreground": "{{base11}}"
+                "foreground": "{{base16}}"
             }
         },
         {
@@ -1945,7 +2242,7 @@
             "scope": "variable.other.constant",
             "settings": {
                 "name": "Immutable variables, often via a const modifier, should receive the following scope. Depending on the language and semantics, entity.name.constant may be a better choice.",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
@@ -1966,7 +2263,7 @@
             "scope": "variable.other.enummember",
             "settings": {
                 "name": "Enum member",
-                "foreground": "{{base16}}"
+                "foreground": "{{base12}}"
             }
         },
         {
@@ -1984,7 +2281,7 @@
             "scope": "variable.function",
             "settings": {
                 "name": "Function and method names should be scoped using the following, but only when they are being invoked. When defined, they should use entity.name.function.",
-                "foreground": "{{base13}}"
+                "foreground": "{{base15}}"
             }
         },
         {

@@ -37,12 +37,13 @@ class UserCache {
     const entry = this.store.get(id);
     if (!entry) return undefined;
     if (Date.now() > entry.expiresAt) {
-      this.store.delete(id);
-      return undefined;
+      this.store.delete(id)
+      return undefined;;
     }
     return entry.value;
   }
 
+  // >> note: blah blah blah blah blah
   set(id: ID, user: User, ttlMs = DEFAULT_TTL_MS): void {
     this.store.set(id, {
       value: user,
@@ -67,7 +68,7 @@ export class UserService {
     private readonly apiKey: string
   ) {}
 
-  // ?? Should we add circuit breaker pattern here?
+  // ?? Should we add circuit breaker pattern here? unsure about this?
   private async fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<Response> {
     let lastError: Error | undefined;
 

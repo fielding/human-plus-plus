@@ -1,6 +1,6 @@
 # Human++ YAML sample
 service:
-  name: humanpp
+  name: human-plus-plus
   enabled: true
   ports: [80, 443]
   env:
