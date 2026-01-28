@@ -265,6 +265,37 @@
     .app-card h4 { font-size: 14px; color: var(--base07); margin-bottom: 4px; }
     .app-card p { font-size: 12px; color: var(--base04); }
 
+    /* Changelog */
+    .changelog { max-width: 700px; margin: 0 auto; }
+    .changelog-version {
+      background: var(--base01); border-radius: 12px; margin-bottom: 16px;
+      border: 1px solid var(--base02); overflow: hidden;
+    }
+    .changelog-version summary {
+      padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between;
+      align-items: center; font-weight: 500; list-style: none;
+    }
+    .changelog-version summary::-webkit-details-marker { display: none; }
+    .changelog-version summary::after {
+      content: '+'; font-size: 18px; color: var(--base04); transition: transform 0.2s;
+    }
+    .changelog-version[open] summary::after { content: '−'; }
+    .version-number { color: var(--base0D); font-family: 'SF Mono', 'Fira Code', monospace; }
+    .version-date { color: var(--base04); font-size: 14px; }
+    .changelog-content {
+      padding: 0 20px 20px; border-top: 1px solid var(--base02);
+    }
+    .changelog-content h4 {
+      color: var(--base07); font-size: 14px; margin: 16px 0 8px; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .changelog-content ul { margin: 0; padding-left: 20px; }
+    .changelog-content li { color: var(--base05); font-size: 14px; line-height: 1.6; margin-bottom: 4px; }
+    .changelog-content code {
+      background: var(--base02); padding: 2px 6px; border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+    }
+
     /* Footer */
     .footer { padding: 48px 0; text-align: center; border-top: 1px solid var(--base02); }
     .footer p { font-size: 14px; color: var(--base04); }
@@ -641,6 +672,58 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
         <div class="app-card"><h4>skhd</h4><p>skhd/</p></div>
         <div class="app-card"><h4>Shell</h4><p>base24/</p></div>
       </div>
+    </div>
+  </section>
+
+  <!-- Changelog -->
+  <section class="section" id="changelog">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Changelog</h2>
+        <p class="section-subtitle">Recent updates. Contributions welcome for language-specific highlighting improvements.</p>
+      </div>
+
+      <div class="changelog">
+        <details class="changelog-version" open>
+          <summary>
+            <span class="version-number">v1.1.0</span>
+            <span class="version-date">2025-01-28</span>
+          </summary>
+          <div class="changelog-content">
+            <h4>Theme Changes</h4>
+            <ul>
+              <li><strong>Revamped color mappings:</strong> Functions → blue, Strings → lime, Parameters → purple (italic), Constants → yellow</li>
+              <li><strong>Markdown improvements:</strong> Headings pink, inline code yellow, blockquotes cyan</li>
+              <li><strong>New markup support:</strong> AsciiDoc, LaTeX, Org mode, reStructuredText, HTML/XML</li>
+            </ul>
+            <h4>Extension Changes</h4>
+            <ul>
+              <li><strong>Keyword aliases:</strong> FIXME/BUG/XXX → <code>!!</code>, TODO/HACK → <code>??</code>, NOTE/NB → <code>>></code></li>
+              <li>Explicit markers always take priority over keywords</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="changelog-version">
+          <summary>
+            <span class="version-number">v1.0.0</span>
+            <span class="version-date">2025-01-27</span>
+          </summary>
+          <div class="changelog-content">
+            <ul>
+              <li>Initial release of Human++ Base24 color scheme</li>
+              <li>Two-tier accent system: loud for diagnostics, quiet for syntax</li>
+              <li>Human intent markers: <code>!!</code>, <code>??</code>, <code>>></code></li>
+              <li>VS Code extension with marker highlighting and inline diagnostics</li>
+              <li>Support for Ghostty, Vim/Neovim, Sketchybar, JankyBorders, skhd</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <p style="text-align: center; margin-top: 24px;">
+        <a href="https://github.com/fielding/human-plus-plus/blob/main/CHANGELOG.md" style="color: var(--base0D);">View full changelog on GitHub →</a>
+      </p>
     </div>
   </section>
 
