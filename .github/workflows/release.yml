@@ -119,22 +119,28 @@ jobs:
           EOF
 
       - name: Publish to VS Code Marketplace
-        if: ${{ secrets.VSCE_PAT != '' }}
         continue-on-error: true
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
-          cd packages/vscode-extension
-          npx @vscode/vsce publish --no-dependencies -p $VSCE_PAT
+          if [ -n "$VSCE_PAT" ]; then
+            cd packages/vscode-extension
+            npx @vscode/vsce publish --no-dependencies -p "$VSCE_PAT"
+          else
+            echo "VSCE_PAT not set, skipping VS Code Marketplace publish"
+          fi
 
       - name: Publish to Open VSX
-        if: ${{ secrets.OVSX_PAT != '' }}
         continue-on-error: true
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
-          cd packages/vscode-extension
-          npx ovsx publish --no-dependencies -p $OVSX_PAT
+          if [ -n "$OVSX_PAT" ]; then
+            cd packages/vscode-extension
+            npx ovsx publish --no-dependencies -p "$OVSX_PAT"
+          else
+            echo "OVSX_PAT not set, skipping Open VSX publish"
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
