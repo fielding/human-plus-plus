@@ -104,25 +104,23 @@ def markdown_to_html(md_content):
     return '\n            '.join(result)
 
 
-def generate_changelog_html(versions, max_versions=5):
-    """Generate HTML for the changelog section."""
-    html_parts = []
+def generate_changelog_html(versions, max_versions=1):
+    """Generate HTML for the changelog section (latest version only)."""
+    if not versions:
+        return ''
 
-    for i, v in enumerate(versions[:max_versions]):
-        open_attr = ' open' if i == 0 else ''
-        content_html = markdown_to_html(v['content'])
+    v = versions[0]  # Only show latest
+    content_html = markdown_to_html(v['content'])
 
-        html_parts.append(f'''        <details class="changelog-version"{open_attr}>
-          <summary>
+    return f'''        <div class="changelog-latest">
+          <div class="changelog-header">
             <span class="version-number">v{v['version']}</span>
             <span class="version-date">{v['date']}</span>
-          </summary>
+          </div>
           <div class="changelog-content">
             {content_html}
           </div>
-        </details>''')
-
-    return '\n\n'.join(html_parts)
+        </div>'''
 
 
 def update_site_template(changelog_html):
@@ -130,10 +128,10 @@ def update_site_template(changelog_html):
     content = SITE_TEMPLATE.read_text()
 
     # Find and replace the changelog section
-    # Look for the div.changelog and replace its contents
-    pattern = r'(<div class="changelog">)(.*?)(</div>\s*<p style="text-align: center)'
+    # Look for the div.changelog and replace its contents (including the changelog-latest div)
+    pattern = r'(<div class="changelog">)\s*<div class="changelog-latest">.*?</div>\s*</div>\s*(</div>\s*<p style="text-align: center)'
 
-    replacement = f'\\1\n{changelog_html}\n      \\3'
+    replacement = f'\\1\n{changelog_html}\n      \\2'
 
     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 

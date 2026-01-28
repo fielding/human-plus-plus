@@ -272,28 +272,21 @@
 
     /* Changelog */
     .changelog { max-width: 700px; margin: 0 auto; }
-    .changelog-version {
-      background: var(--base01); border-radius: 12px; margin-bottom: 16px;
-      border: 1px solid var(--base02); overflow: hidden;
+    .changelog-latest {
+      background: var(--base01); border-radius: 12px; padding: 24px;
+      border: 1px solid var(--base02);
     }
-    .changelog-version summary {
-      padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between;
-      align-items: center; font-weight: 500; list-style: none;
+    .changelog-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--base02);
     }
-    .changelog-version summary::-webkit-details-marker { display: none; }
-    .changelog-version summary::after {
-      content: '+'; font-size: 18px; color: var(--base04); transition: transform 0.2s;
-    }
-    .changelog-version[open] summary::after { content: '−'; }
-    .version-number { color: var(--base0D); font-family: 'SF Mono', 'Fira Code', monospace; }
+    .version-number { color: var(--base0D); font-family: 'SF Mono', 'Fira Code', monospace; font-size: 18px; }
     .version-date { color: var(--base04); font-size: 14px; }
-    .changelog-content {
-      padding: 0 20px 20px; border-top: 1px solid var(--base02);
-    }
     .changelog-content h4 {
       color: var(--base07); font-size: 14px; margin: 16px 0 8px; text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+    .changelog-content h4:first-child { margin-top: 0; }
     .changelog-content ul { margin: 0; padding-left: 20px; }
     .changelog-content li { color: var(--base05); font-size: 14px; line-height: 1.6; margin-bottom: 4px; }
     .changelog-content code {
@@ -684,68 +677,28 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
   <section class="section" id="changelog">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Changelog</h2>
-        <p class="section-subtitle">Recent updates. Contributions welcome for language-specific highlighting improvements.</p>
+        <h2 class="section-title">What's New</h2>
+        <p class="section-subtitle">Latest release. Contributions welcome for language-specific highlighting.</p>
       </div>
 
       <div class="changelog">
-        <details class="changelog-version" open>
-          <summary>
+        <div class="changelog-latest">
+          <div class="changelog-header">
             <span class="version-number">v1.1.0</span>
             <span class="version-date">2025-01-28</span>
-          </summary>
-          <div class="changelog-content">
-            <h4>Theme Changes</h4>
-            <strong>Revamped color-to-token mappings</strong> for better semantic meaning across all supported editors:
-            <strong>Added markup language support</strong> with consistent styling:
-            <ul>
-            <li>AsciiDoc</li>
-            <li>LaTeX</li>
-            <li>Org mode</li>
-            <li>reStructuredText</li>
-            <li>HTML/XML</li>
-            </ul>
-            <h4>Extension Changes (VS Code / Cursor)</h4>
-            <strong>Keyword aliases for markers</strong> - Legacy comment keywords now trigger marker highlighting:
-            <p>Priority: Explicit markers (<code>!!</code>, <code>??</code>, <code>>></code>) always take precedence over keyword aliases.</p>
-            <h4>Documentation</h4>
-            <ul>
-            <li>Updated README with correct color roles</li>
-            <li>Added comprehensive markdown test file</li>
-            <li>Preview images now reflect actual color mappings</li>
-            </ul>
-            <h4>Known Issues</h4>
-            <ul>
-            <li>Some languages may have inconsistent highlighting - contributions welcome!</li>
-            <li>Semantic token highlighting is disabled to prevent conflicts with TextMate scopes</li>
-            </ul>
-            <p>---</p>
           </div>
-        </details>
-
-        <details class="changelog-version">
-          <summary>
-            <span class="version-number">v1.0.0</span>
-            <span class="version-date">2025-01-28</span>
-          </summary>
           <div class="changelog-content">
+            <h4>Theme</h4>
             <ul>
-            <li>2025-01-27</li>
+              <li><strong>New color mappings:</strong> Functions → blue, Strings → lime, Parameters → purple, Constants → yellow</li>
+              <li><strong>Markup support:</strong> AsciiDoc, LaTeX, Org mode, reStructuredText, HTML/XML</li>
             </ul>
-            <h4>Added</h4>
+            <h4>Extension</h4>
             <ul>
-            <li>Initial release of Human++ Base24 color scheme</li>
-            <li>Two-tier accent system: loud (base08-0F) for diagnostics, quiet (base10-17) for syntax</li>
-            <li>Human intent markers: <code>!!</code> (attention), <code>??</code> (uncertainty), <code>>></code> (reference)</li>
-            <li>VS Code extension with:</li>
-            <li>Full color theme</li>
-            <li>Marker highlighting with colored backgrounds</li>
-            <li>Inline diagnostic badges</li>
-            <li>Support for: Ghostty, Vim/Neovim (via tinty), Sketchybar, JankyBorders, skhd</li>
-            <li>Static site with interactive palette viewer</li>
+              <li><strong>Keyword aliases:</strong> <code>FIXME</code>/<code>BUG</code> → <code>!!</code>, <code>TODO</code>/<code>HACK</code> → <code>??</code>, <code>NOTE</code> → <code>>></code></li>
             </ul>
           </div>
-        </details>
+        </div>
       </div>
 
       <p style="text-align: center; margin-top: 24px;">
