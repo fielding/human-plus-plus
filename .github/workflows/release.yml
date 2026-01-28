@@ -25,14 +25,26 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update package.json version
+        run: |
+          cd packages/vscode-extension
+          npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version --allow-same-version
+
       - name: Build all outputs
-        run: make build
+        run: python tools/build.py
+
+      - name: Sync changelog to site
+        run: python tools/sync-changelog.py
 
       - name: Build VS Code extension
         run: |
           cd packages/vscode-extension
           npm install
-          npx @vscode/vsce package --no-git-tag-version
+          npx @vscode/vsce package --no-dependencies
           mv *.vsix ../../
 
       - name: Package dist
@@ -107,20 +119,22 @@ jobs:
           EOF
 
       - name: Publish to VS Code Marketplace
-        if: ${{ env.VSCE_PAT != '' }}
+        if: ${{ secrets.VSCE_PAT != '' }}
+        continue-on-error: true
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: |
           cd packages/vscode-extension
-          npx @vscode/vsce publish -p $VSCE_PAT
+          npx @vscode/vsce publish --no-dependencies -p $VSCE_PAT
 
       - name: Publish to Open VSX
-        if: ${{ env.OVSX_PAT != '' }}
+        if: ${{ secrets.OVSX_PAT != '' }}
+        continue-on-error: true
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
           cd packages/vscode-extension
-          npx ovsx publish -p $OVSX_PAT
+          npx ovsx publish --no-dependencies -p $OVSX_PAT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -130,3 +144,11 @@ jobs:
             human-plus-plus-*.vsix
             human-plus-plus-${{ github.ref_name }}-dist.tar.gz
             human-plus-plus-${{ github.ref_name }}-dist.zip
+
+      - name: Commit updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add templates/site/index.html.tmpl packages/vscode-extension/package.json
+          git diff --staged --quiet || git commit -m "chore: sync changelog and version for ${{ github.ref_name }}"
+          git push origin HEAD:main || echo "Nothing to push"
