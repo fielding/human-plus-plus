@@ -688,15 +688,31 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
             <span class="version-date">2025-01-28</span>
           </div>
           <div class="changelog-content">
-            <h4>Theme</h4>
+            <h4>Theme Changes</h4>
+            <strong>Revamped color-to-token mappings</strong> for better semantic meaning across all supported editors:
+            <strong>Added markup language support</strong> with consistent styling:
             <ul>
-              <li><strong>New color mappings:</strong> Functions → blue, Strings → lime, Parameters → purple, Constants → yellow</li>
-              <li><strong>Markup support:</strong> AsciiDoc, LaTeX, Org mode, reStructuredText, HTML/XML</li>
+            <li>AsciiDoc</li>
+            <li>LaTeX</li>
+            <li>Org mode</li>
+            <li>reStructuredText</li>
+            <li>HTML/XML</li>
             </ul>
-            <h4>Extension</h4>
+            <h4>Extension Changes (VS Code / Cursor)</h4>
+            <strong>Keyword aliases for markers</strong> - Legacy comment keywords now trigger marker highlighting:
+            <p>Priority: Explicit markers (<code>!!</code>, <code>??</code>, <code>>></code>) always take precedence over keyword aliases.</p>
+            <h4>Documentation</h4>
             <ul>
-              <li><strong>Keyword aliases:</strong> <code>FIXME</code>/<code>BUG</code> → <code>!!</code>, <code>TODO</code>/<code>HACK</code> → <code>??</code>, <code>NOTE</code> → <code>>></code></li>
+            <li>Updated README with correct color roles</li>
+            <li>Added comprehensive markdown test file</li>
+            <li>Preview images now reflect actual color mappings</li>
             </ul>
+            <h4>Known Issues</h4>
+            <ul>
+            <li>Some languages may have inconsistent highlighting - contributions welcome!</li>
+            <li>Semantic token highlighting is disabled to prevent conflicts with TextMate scopes</li>
+            </ul>
+            <p>---</p>
           </div>
         </div>
       </div>
