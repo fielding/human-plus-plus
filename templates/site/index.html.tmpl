@@ -271,27 +271,24 @@
     .app-card p { font-size: 12px; color: var(--base04); }
 
     /* Changelog */
-    .changelog { max-width: 700px; margin: 0 auto; }
-    .changelog-latest {
-      background: var(--base01); border-radius: 12px; padding: 24px;
-      border: 1px solid var(--base02);
-    }
     .changelog-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--base02);
+      display: flex; align-items: baseline; gap: 16px; margin-bottom: 20px;
     }
-    .version-number { color: var(--base0D); font-family: 'SF Mono', 'Fira Code', monospace; font-size: 18px; }
+    .version-number { color: var(--base0D); font-family: 'SF Mono', 'Fira Code', monospace; font-size: 20px; }
     .version-date { color: var(--base04); font-size: 14px; }
+    .changelog-content { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
     .changelog-content h4 {
-      color: var(--base07); font-size: 14px; margin: 16px 0 8px; text-transform: uppercase;
+      color: var(--base07); font-size: 14px; margin: 0 0 12px; text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .changelog-content h4:first-child { margin-top: 0; }
     .changelog-content ul { margin: 0; padding-left: 20px; }
-    .changelog-content li { color: var(--base05); font-size: 14px; line-height: 1.6; margin-bottom: 4px; }
+    .changelog-content li { color: var(--base05); font-size: 14px; line-height: 1.6; margin-bottom: 6px; }
     .changelog-content code {
       background: var(--base02); padding: 2px 6px; border-radius: 4px;
       font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+    }
+    @media (max-width: 700px) {
+      .changelog-content { grid-template-columns: 1fr; }
     }
 
     /* Footer */
@@ -681,43 +678,29 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
         <p class="section-subtitle">Latest release. Contributions welcome for language-specific highlighting.</p>
       </div>
 
-      <div class="changelog">
-        <div class="changelog-latest">
-          <div class="changelog-header">
-            <span class="version-number">v1.1.0</span>
-            <span class="version-date">2025-01-28</span>
-          </div>
-          <div class="changelog-content">
-            <h4>Theme Changes</h4>
-            <strong>Revamped color-to-token mappings</strong> for better semantic meaning across all supported editors:
-            <strong>Added markup language support</strong> with consistent styling:
-            <ul>
-            <li>AsciiDoc</li>
-            <li>LaTeX</li>
-            <li>Org mode</li>
-            <li>reStructuredText</li>
-            <li>HTML/XML</li>
-            </ul>
-            <h4>Extension Changes (VS Code / Cursor)</h4>
-            <strong>Keyword aliases for markers</strong> - Legacy comment keywords now trigger marker highlighting:
-            <p>Priority: Explicit markers (<code>!!</code>, <code>??</code>, <code>>></code>) always take precedence over keyword aliases.</p>
-            <h4>Documentation</h4>
-            <ul>
-            <li>Updated README with correct color roles</li>
-            <li>Added comprehensive markdown test file</li>
-            <li>Preview images now reflect actual color mappings</li>
-            </ul>
-            <h4>Known Issues</h4>
-            <ul>
-            <li>Some languages may have inconsistent highlighting - contributions welcome!</li>
-            <li>Semantic token highlighting is disabled to prevent conflicts with TextMate scopes</li>
-            </ul>
-            <p>---</p>
-          </div>
+      <div class="changelog-header">
+        <span class="version-number">v1.1.0</span>
+        <span class="version-date">January 28, 2025</span>
+      </div>
+
+      <div class="changelog-content">
+        <div>
+          <h4>Theme</h4>
+          <ul>
+            <li><strong>New color mappings:</strong> Functions → blue, Strings → lime, Parameters → purple, Constants → yellow</li>
+            <li><strong>Markup support:</strong> AsciiDoc, LaTeX, Org mode, reStructuredText, HTML/XML</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Extension</h4>
+          <ul>
+            <li><strong>Keyword aliases:</strong> <code>FIXME</code>/<code>BUG</code> → <code>!!</code>, <code>TODO</code>/<code>HACK</code> → <code>??</code>, <code>NOTE</code> → <code>>></code></li>
+            <li>Explicit markers always take priority over keywords</li>
+          </ul>
         </div>
       </div>
 
-      <p style="text-align: center; margin-top: 24px;">
+      <p style="margin-top: 32px;">
         <a href="https://github.com/fielding/human-plus-plus/blob/main/CHANGELOG.md" style="color: var(--base0D);">View full changelog on GitHub →</a>
       </p>
     </div>
