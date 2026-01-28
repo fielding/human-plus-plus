@@ -92,8 +92,16 @@
       background: linear-gradient(135deg, var(--base0F) 0%, var(--base0B) 100%);
       -webkit-background-clip: text; background-clip: text;
     }
-    .tagline { font-size: 28px; font-weight: 300; color: var(--base04); margin-bottom: 32px; }
+    .tagline { font-size: 28px; font-weight: 300; color: var(--base04); margin-bottom: 16px; }
     .tagline strong { color: var(--base07); font-weight: 500; }
+    .version-badge {
+      display: inline-block; margin-bottom: 24px;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      color: var(--base0D); text-decoration: none;
+      padding: 6px 12px; border: 1px solid var(--base02); border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .version-badge:hover { background: var(--base02); border-color: var(--base0D); }
     .hero-description { font-size: 18px; max-width: 600px; color: var(--base05); margin-bottom: 48px; }
     .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
 
@@ -331,6 +339,7 @@
       <div class="hero-content">
         <h1 class="logo">Human<span>++</span></h1>
         <p class="tagline"><strong>Code is cheap.</strong> Intent is scarce.</p>
+        <a href="#changelog" class="version-badge">v1.1.0 — What's New</a>
         <p class="hero-description">
           A Base24 color scheme for the post-artisanal coding era. As models write more code, Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
         </p>
