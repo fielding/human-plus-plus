@@ -262,10 +262,10 @@ def generate_eza(colors, meta):
         # Size - quiet, not that important
         f"sn={hex_to_ansi256(c['base17'])}",        # size numbers - quiet lime
         f"sb={hex_to_ansi256(c['base03'])}",        # size unit - dim
-        # User/group - loud for you, quiet for others
-        f"uu={hex_to_ansi256(c['base0C'])}",        # current user - LOUD cyan
+        # User/group - grayscale, it's just metadata
+        f"uu={hex_to_ansi256(c['base04'])}",        # current user - secondary
         f"un={hex_to_ansi256(c['base03'])}",        # other user - dim
-        f"gu={hex_to_ansi256(c['base14'])}",        # current group - quiet cyan
+        f"gu={hex_to_ansi256(c['base03'])}",        # current group - dim
         f"gn={hex_to_ansi256(c['base03'])}",        # other group - dim
         # Git - LOUD, git status is important
         f"ga={hex_to_ansi256(c['base0B'])}",        # git new - LOUD green
