@@ -146,6 +146,25 @@ Or download `human-plus-plus-*.vsix` from [Releases](https://github.com/fielding
 - Marker highlighting (`!!`, `??`, `>>`) with colored backgrounds
 - Inline diagnostic badges for errors/warnings
 
+### Shell Tools (eza, fzf, etc.)
+
+Add one line to your `.zshrc` or `.bashrc`:
+
+```bash
+source ~/path/to/human-plus-plus/dist/shell-init.sh
+```
+
+The loader automatically detects and configures installed tools:
+- **eza** — `EZA_COLORS` for colorful directory listings
+- **fzf** — `FZF_DEFAULT_OPTS` for fuzzy finder colors
+
+Uncomment lines in `shell-init.sh` to enable:
+- **Terminal palette** — Sets ANSI colors on shell startup
+- **sketchybar** — macOS menu bar colors
+- **skhd** — Mode indicator colors
+
+Or source individual configs directly from `dist/`.
+
 ### Other Apps
 
 All theme files are generated from `palette.toml`:

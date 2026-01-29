@@ -215,6 +215,15 @@ def hex_to_ansi256(hex_color):
     return f"38;2;{r};{g};{b}"
 
 
+def hex_to_ansi_bg_fg(bg_hex, fg_hex):
+    """Convert hex colors to ANSI bg+fg format (48;2;r;g;b;38;2;r;g;b)."""
+    bg = bg_hex.lstrip('#')
+    fg = fg_hex.lstrip('#')
+    bg_r, bg_g, bg_b = int(bg[0:2], 16), int(bg[2:4], 16), int(bg[4:6], 16)
+    fg_r, fg_g, fg_b = int(fg[0:2], 16), int(fg[2:4], 16), int(fg[4:6], 16)
+    return f"48;2;{bg_r};{bg_g};{bg_b};38;2;{fg_r};{fg_g};{fg_b}"
+
+
 def generate_eza(colors, meta):
     """Generate eza/colors.sh with EZA_COLORS environment variable.
 
@@ -230,7 +239,7 @@ def generate_eza(colors, meta):
         f"di={hex_to_ansi256(c['base0D'])}",        # directories - LOUD blue
         f"ln={hex_to_ansi256(c['base0C'])}",        # symlinks - LOUD cyan
         f"ex={hex_to_ansi256(c['base0B'])}",        # executables - LOUD green
-        f"fi={hex_to_ansi256(c['base05'])}",        # regular files - main text
+        f"fi={hex_to_ansi256(c['base07'])}",        # regular files - brightest white
         f"pi={hex_to_ansi256(c['base0A'])}",        # pipes - LOUD amber
         f"so={hex_to_ansi256(c['base0E'])}",        # sockets - LOUD purple
         f"bd={hex_to_ansi256(c['base09'])}",        # block devices - LOUD orange
@@ -248,14 +257,16 @@ def generate_eza(colors, meta):
         f"tr={hex_to_ansi256(c['base03'])}",        # other read - dim
         f"tw={hex_to_ansi256(c['base08'])}",        # other write - LOUD pink (dangerous!)
         f"tx={hex_to_ansi256(c['base03'])}",        # other exec - dim
-        # Size - LOUD colors scale with size
-        f"sn={hex_to_ansi256(c['base0B'])}",        # size numbers - LOUD green
-        f"sb={hex_to_ansi256(c['base04'])}",        # size unit - secondary
-        # User/group
+        # Hard links count (the number before file size)
+        f"lc={hex_to_ansi256(c['base16'])}",        # link count - quiet purple
+        # Size - quiet, not that important
+        f"sn={hex_to_ansi256(c['base17'])}",        # size numbers - quiet lime
+        f"sb={hex_to_ansi256(c['base03'])}",        # size unit - dim
+        # User/group - loud for you, quiet for others
         f"uu={hex_to_ansi256(c['base0C'])}",        # current user - LOUD cyan
-        f"un={hex_to_ansi256(c['base04'])}",        # other user - secondary
-        f"gu={hex_to_ansi256(c['base0C'])}",        # current group - LOUD cyan
-        f"gn={hex_to_ansi256(c['base04'])}",        # other group - secondary
+        f"un={hex_to_ansi256(c['base03'])}",        # other user - dim
+        f"gu={hex_to_ansi256(c['base14'])}",        # current group - quiet cyan
+        f"gn={hex_to_ansi256(c['base03'])}",        # other group - dim
         # Git - LOUD, git status is important
         f"ga={hex_to_ansi256(c['base0B'])}",        # git new - LOUD green
         f"gm={hex_to_ansi256(c['base0A'])}",        # git modified - LOUD amber
@@ -263,9 +274,12 @@ def generate_eza(colors, meta):
         f"gv={hex_to_ansi256(c['base0C'])}",        # git renamed - LOUD cyan
         f"gt={hex_to_ansi256(c['base03'])}",        # git ignored - dim
         # Misc
-        f"da={hex_to_ansi256(c['base0E'])}",        # date - LOUD purple
+        f"da={hex_to_ansi256(c['base03'])}",        # date - dim (not important)
         f"hd={hex_to_ansi256(c['base07'])};1",      # header - brightest + bold
         f"xx={hex_to_ansi256(c['base03'])}",        # punctuation - dim
+        # Special files - !! badge style (lime bg, dark text for contrast)
+        f"README*={hex_to_ansi_bg_fg(c['base0F'], c['base00'])}",
+        f"README.md={hex_to_ansi_bg_fg(c['base0F'], c['base00'])}",
     ]
 
     eza_colors = ":".join(eza_parts)
@@ -322,6 +336,58 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color={fzf_colors}"
     (DIST / "fzf").mkdir(parents=True, exist_ok=True)
     (DIST / "fzf/colors.sh").write_text(content)
     print("  ✓ dist/fzf/colors.sh")
+
+
+def generate_shell_init(colors, meta):
+    """Generate shell-init.sh loader that conditionally sources configs.
+
+    Users add one line to their .zshrc/.bashrc:
+        source /path/to/human++/dist/shell-init.sh
+
+    The loader automatically sources configs for installed programs.
+    """
+    content = '''#!/bin/bash
+# Human++ Shell Loader
+# Generated from palette.toml
+#
+# Add this to your .zshrc or .bashrc:
+#   source /path/to/human++/dist/shell-init.sh
+#
+# Or selectively source individual configs from dist/
+
+# Determine the directory where this script lives
+HUMAN_PP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+
+# eza - modern ls replacement
+if command -v eza &>/dev/null; then
+  source "$HUMAN_PP_DIR/eza/colors.sh"
+fi
+
+# fzf - fuzzy finder
+if command -v fzf &>/dev/null; then
+  source "$HUMAN_PP_DIR/fzf/colors.sh"
+fi
+
+# Terminal palette (base24) - only if running interactively
+# Uncomment if you want Human++ to set your terminal colors on shell startup
+# if [[ $- == *i* ]]; then
+#   source "$HUMAN_PP_DIR/base24/base24-human-plus-plus.sh"
+# fi
+
+# sketchybar - macOS menu bar (uncomment if using)
+# if command -v sketchybar &>/dev/null; then
+#   source "$HUMAN_PP_DIR/sketchybar/colors.sh"
+# fi
+
+# skhd mode colors (uncomment if using)
+# if command -v skhd &>/dev/null; then
+#   source "$HUMAN_PP_DIR/skhd/modes.sh"
+# fi
+'''
+
+    (DIST / "shell-init.sh").write_text(content)
+    os.chmod(DIST / "shell-init.sh", 0o755)
+    print("  ✓ dist/shell-init.sh")
 
 
 def generate_palette_json(colors, meta):
@@ -977,6 +1043,25 @@ Or download `human-plus-plus-*.vsix` from [Releases](https://github.com/fielding
 - Marker highlighting (`!!`, `??`, `>>`) with colored backgrounds
 - Inline diagnostic badges for errors/warnings
 
+### Shell Tools (eza, fzf, etc.)
+
+Add one line to your `.zshrc` or `.bashrc`:
+
+```bash
+source ~/path/to/human-plus-plus/dist/shell-init.sh
+```
+
+The loader automatically detects and configures installed tools:
+- **eza** — `EZA_COLORS` for colorful directory listings
+- **fzf** — `FZF_DEFAULT_OPTS` for fuzzy finder colors
+
+Uncomment lines in `shell-init.sh` to enable:
+- **Terminal palette** — Sets ANSI colors on shell startup
+- **sketchybar** — macOS menu bar colors
+- **skhd** — Mode indicator colors
+
+Or source individual configs directly from `dist/`.
+
 ### Other Apps
 
 All theme files are generated from `palette.toml`:
@@ -1369,6 +1454,7 @@ def main():
     generate_skhd(colors, meta)
     generate_eza(colors, meta)
     generate_fzf(colors, meta)
+    generate_shell_init(colors, meta)
     generate_colortest(colors, meta)
 
     print("\nGenerating site:")
