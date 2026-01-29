@@ -2,7 +2,7 @@
   "name": "human-plus-plus",
   "displayName": "Human++",
   "description": "A Base24 color scheme for the post-artisanal coding era. Code is cheap. Intent is scarce.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "fielding",
   "icon": "icon.png",
   "license": "MIT",
@@ -101,6 +101,11 @@
           "type": "boolean",
           "default": false,
           "description": "Show hint diagnostics inline"
+        },
+        "human-plus-plus.markdown.h1Highlight.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight H1 headings in markdown with lime background"
         }
       }
     }

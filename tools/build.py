@@ -308,21 +308,23 @@ def generate_fzf(colors, meta):
     # Format: --color=KEY:VALUE where VALUE is #rrggbb
     # Use LOUD colors - fzf is interactive, high signal
     fzf_colors = ",".join([
-        f"bg:{c['base00']}",           # background
-        f"bg+:{c['base02']}",          # selected background - more contrast
-        f"fg:{c['base05']}",           # foreground
-        f"fg+:{c['base07']}",          # selected foreground - brightest
-        f"hl:{c['base0F']}",           # highlighted match - LOUD lime (human marker!)
-        f"hl+:{c['base0F']}",          # selected highlighted - LOUD lime
-        f"info:{c['base0C']}",         # info line - LOUD cyan
-        f"marker:{c['base0B']}",       # marker - LOUD green
-        f"prompt:{c['base08']}",       # prompt - LOUD pink
-        f"spinner:{c['base0A']}",      # spinner - LOUD amber
-        f"pointer:{c['base08']}",      # pointer - LOUD pink
-        f"header:{c['base07']}",       # header - brightest
-        f"border:{c['base0D']}",       # border - LOUD blue
-        f"gutter:{c['base00']}",       # gutter
-        f"query:{c['base07']}",        # query text - brightest
+        "bg:-1",                         # background - inherit terminal
+        f"bg+:{c['base02']}",            # selected background - more contrast
+        f"fg:{c['base07']}",             # foreground - brightest
+        f"fg+:{c['base07']}",            # selected foreground - brightest
+        f"hl:{c['base0F']}",             # highlighted match - LOUD lime (human marker!)
+        f"hl+:{c['base0F']}",            # selected highlighted - LOUD lime
+        f"info:{c['base0C']}",           # info line - LOUD cyan
+        f"marker:{c['base0B']}",         # marker - LOUD green
+        f"prompt:{c['base08']}",         # prompt - LOUD pink
+        f"spinner:{c['base0A']}",        # spinner - LOUD amber
+        f"pointer:{c['base08']}",        # pointer - LOUD pink
+        f"header:{c['base07']}",         # header - brightest
+        f"border:{c['base0D']}",         # border - LOUD blue
+        "gutter:-1",                     # gutter - inherit terminal
+        f"query:{c['base07']}",          # query text - brightest
+        f"scrollbar:{c['base03']}",      # scrollbar - dim
+        f"separator:{c['base02']}",      # separator line - subtle
     ])
 
     content = f'''#!/bin/bash
@@ -336,6 +338,558 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color={fzf_colors}"
     (DIST / "fzf").mkdir(parents=True, exist_ok=True)
     (DIST / "fzf/colors.sh").write_text(content)
     print("  ✓ dist/fzf/colors.sh")
+
+
+def generate_bat(colors, meta):
+    """Generate bat theme (.tmTheme format) matching VS Code theme.
+
+    Bat uses TextMate themes. After generating, run: bat cache --build
+    """
+    c = colors
+
+    # tmTheme is XML/plist format - mappings match VS Code theme
+    content = f'''<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>Human++</string>
+    <key>author</key>
+    <string>{meta.get('author', 'fielding')}</string>
+    <key>settings</key>
+    <array>
+        <!-- Global settings -->
+        <dict>
+            <key>settings</key>
+            <dict>
+                <key>background</key>
+                <string>{c['base00']}</string>
+                <key>foreground</key>
+                <string>{c['base07']}</string>
+                <key>caret</key>
+                <string>{c['base07']}</string>
+                <key>selection</key>
+                <string>{c['base02']}</string>
+                <key>lineHighlight</key>
+                <string>{c['base01']}</string>
+                <key>gutterForeground</key>
+                <string>{c['base04']}</string>
+            </dict>
+        </dict>
+        <!-- Comments - base03 italic -->
+        <dict>
+            <key>scope</key>
+            <string>comment, punctuation.definition.comment</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base03']}</string>
+                <key>fontStyle</key>
+                <string>italic</string>
+            </dict>
+        </dict>
+        <!-- Strings - base17 quiet lime -->
+        <dict>
+            <key>scope</key>
+            <string>string, string.quoted</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base17']}</string>
+            </dict>
+        </dict>
+        <!-- Keywords - base10 quiet pink -->
+        <dict>
+            <key>scope</key>
+            <string>keyword, keyword.control, keyword.other</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base10']}</string>
+            </dict>
+        </dict>
+        <!-- Storage types - base14 quiet cyan italic -->
+        <dict>
+            <key>scope</key>
+            <string>storage.type, storage.modifier</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base14']}</string>
+                <key>fontStyle</key>
+                <string>italic</string>
+            </dict>
+        </dict>
+        <!-- Storage keywords - base10 quiet pink -->
+        <dict>
+            <key>scope</key>
+            <string>storage, storage.type.function, storage.type.class</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base10']}</string>
+            </dict>
+        </dict>
+        <!-- Functions - base15 quiet blue -->
+        <dict>
+            <key>scope</key>
+            <string>entity.name.function, support.function, meta.function-call</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base15']}</string>
+            </dict>
+        </dict>
+        <!-- Types/Classes - base14 quiet cyan -->
+        <dict>
+            <key>scope</key>
+            <string>entity.name.type, entity.name.class, entity.name.namespace, support.type, support.class</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base14']}</string>
+            </dict>
+        </dict>
+        <!-- Constants/Numbers - base12 quiet yellow -->
+        <dict>
+            <key>scope</key>
+            <string>constant, constant.numeric, constant.language, constant.character</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base12']}</string>
+            </dict>
+        </dict>
+        <!-- Variables - base07 white -->
+        <dict>
+            <key>scope</key>
+            <string>variable, variable.other, variable.language</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base07']}</string>
+            </dict>
+        </dict>
+        <!-- Parameters - base16 quiet purple italic -->
+        <dict>
+            <key>scope</key>
+            <string>variable.parameter</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base16']}</string>
+                <key>fontStyle</key>
+                <string>italic</string>
+            </dict>
+        </dict>
+        <!-- Operators/Punctuation - base04 secondary -->
+        <dict>
+            <key>scope</key>
+            <string>keyword.operator, punctuation</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base04']}</string>
+            </dict>
+        </dict>
+        <!-- Tags (HTML/XML) - base10 quiet pink -->
+        <dict>
+            <key>scope</key>
+            <string>entity.name.tag</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base10']}</string>
+            </dict>
+        </dict>
+        <!-- Attributes - base14 quiet cyan italic -->
+        <dict>
+            <key>scope</key>
+            <string>entity.other.attribute-name</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base14']}</string>
+                <key>fontStyle</key>
+                <string>italic</string>
+            </dict>
+        </dict>
+        <!-- CSS classes - base13 quiet green -->
+        <dict>
+            <key>scope</key>
+            <string>entity.other.attribute-name.class.css</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base13']}</string>
+            </dict>
+        </dict>
+        <!-- CSS ids - base11 quiet orange -->
+        <dict>
+            <key>scope</key>
+            <string>entity.other.attribute-name.id.css</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base11']}</string>
+            </dict>
+        </dict>
+        <!-- Decorators/Interpolation - base11 quiet orange -->
+        <dict>
+            <key>scope</key>
+            <string>meta.decorator, punctuation.section.embedded, meta.interpolation</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base11']}</string>
+            </dict>
+        </dict>
+        <!-- Markdown h1 - LOUD lime badge -->
+        <dict>
+            <key>scope</key>
+            <string>markup.heading.1, markup.heading.1.markdown</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base00']}</string>
+                <key>background</key>
+                <string>{c['base0F']}</string>
+                <key>fontStyle</key>
+                <string>bold</string>
+            </dict>
+        </dict>
+        <!-- Markdown headings 2-6 - base10 quiet pink -->
+        <dict>
+            <key>scope</key>
+            <string>markup.heading, entity.name.section</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base10']}</string>
+            </dict>
+        </dict>
+        <!-- Markdown bold/italic - base15 quiet blue -->
+        <dict>
+            <key>scope</key>
+            <string>markup.bold, markup.italic</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base15']}</string>
+            </dict>
+        </dict>
+        <!-- Markdown code - base09 LOUD orange -->
+        <dict>
+            <key>scope</key>
+            <string>markup.inline.raw, markup.raw</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base09']}</string>
+            </dict>
+        </dict>
+        <!-- Markdown links - base17 quiet lime -->
+        <dict>
+            <key>scope</key>
+            <string>markup.underline.link, string.other.link</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base17']}</string>
+            </dict>
+        </dict>
+        <!-- Diff inserted - base13 quiet green -->
+        <dict>
+            <key>scope</key>
+            <string>markup.inserted</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base13']}</string>
+            </dict>
+        </dict>
+        <!-- Diff deleted - base10 quiet pink -->
+        <dict>
+            <key>scope</key>
+            <string>markup.deleted</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base10']}</string>
+            </dict>
+        </dict>
+        <!-- Invalid - base08 LOUD pink -->
+        <dict>
+            <key>scope</key>
+            <string>invalid</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>{c['base08']}</string>
+                <key>fontStyle</key>
+                <string>italic underline</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
+'''
+
+    (DIST / "bat").mkdir(parents=True, exist_ok=True)
+    (DIST / "bat/Human++.tmTheme").write_text(content)
+    print("  ✓ dist/bat/Human++.tmTheme")
+    print("    → Install: mkdir -p ~/.config/bat/themes && cp dist/bat/Human++.tmTheme ~/.config/bat/themes/ && bat cache --build")
+
+
+def generate_glow(colors, meta):
+    """Generate glow (markdown renderer) style.
+
+    Glow uses glamour JSON styles for markdown rendering.
+    """
+    c = colors
+    import json
+
+    style = {
+        "document": {
+            "color": c['base07'],
+            "margin": 2
+        },
+        "block_quote": {
+            "indent": 2,
+            "color": c['base14'],
+            "italic": True
+        },
+        "paragraph": {},
+        "list": {
+            "level_indent": 2
+        },
+        "heading": {
+            "color": c['base10'],
+            "bold": True
+        },
+        "h1": {
+            "prefix": "# ",
+            "color": c['base00'],
+            "background_color": c['base0F'],
+            "bold": True
+        },
+        "h2": {
+            "prefix": "## ",
+            "color": c['base10'],
+            "bold": True
+        },
+        "h3": {
+            "prefix": "### ",
+            "color": c['base10']
+        },
+        "h4": {
+            "prefix": "#### ",
+            "color": c['base10']
+        },
+        "h5": {
+            "prefix": "##### ",
+            "color": c['base10']
+        },
+        "h6": {
+            "prefix": "###### ",
+            "color": c['base10']
+        },
+        "text": {},
+        "strikethrough": {
+            "crossed_out": True
+        },
+        "emph": {
+            "color": c['base15'],
+            "italic": True
+        },
+        "strong": {
+            "color": c['base15'],
+            "bold": True
+        },
+        "hr": {
+            "color": c['base02'],
+            "format": "--------"
+        },
+        "item": {
+            "block_prefix": "• "
+        },
+        "enumeration": {
+            "block_prefix": ". "
+        },
+        "task": {
+            "ticked": "[✓] ",
+            "unticked": "[ ] "
+        },
+        "link": {
+            "color": c['base17'],
+            "underline": True
+        },
+        "link_text": {
+            "color": c['base0D'],
+            "bold": True
+        },
+        "image": {
+            "color": c['base17'],
+            "underline": True
+        },
+        "image_text": {
+            "color": c['base0E'],
+            "format": "Image: {{.text}}"
+        },
+        "code": {
+            "color": c['base09'],
+            "background_color": c['base01']
+        },
+        "code_block": {
+            "color": c['base07'],
+            "margin": 2,
+            "chroma": {
+                "text": {"color": c['base07']},
+                "error": {"color": c['base08']},
+                "comment": {"color": c['base03'], "italic": True},
+                "comment_preproc": {"color": c['base03']},
+                "keyword": {"color": c['base10']},
+                "keyword_reserved": {"color": c['base10']},
+                "keyword_namespace": {"color": c['base10']},
+                "keyword_type": {"color": c['base14'], "italic": True},
+                "operator": {"color": c['base04']},
+                "punctuation": {"color": c['base04']},
+                "name": {"color": c['base07']},
+                "name_builtin": {"color": c['base15']},
+                "name_tag": {"color": c['base10']},
+                "name_attribute": {"color": c['base14'], "italic": True},
+                "name_class": {"color": c['base14']},
+                "name_constant": {"color": c['base12']},
+                "name_decorator": {"color": c['base11']},
+                "name_exception": {"color": c['base08']},
+                "name_function": {"color": c['base15']},
+                "name_other": {"color": c['base07']},
+                "literal": {"color": c['base12']},
+                "literal_number": {"color": c['base12']},
+                "literal_date": {"color": c['base12']},
+                "literal_string": {"color": c['base17']},
+                "literal_string_escape": {"color": c['base12']},
+                "generic_deleted": {"color": c['base10']},
+                "generic_emph": {"italic": True},
+                "generic_inserted": {"color": c['base13']},
+                "generic_strong": {"bold": True},
+                "generic_subheading": {"color": c['base10']},
+                "background": {"background_color": c['base00']}
+            }
+        },
+        "table": {
+            "center_separator": "┼",
+            "column_separator": "│",
+            "row_separator": "─"
+        },
+        "definition_list": {},
+        "definition_term": {},
+        "definition_description": {},
+        "html_block": {},
+        "html_span": {}
+    }
+
+    (DIST / "glow").mkdir(parents=True, exist_ok=True)
+    (DIST / "glow/human-plus-plus.json").write_text(json.dumps(style, indent=2))
+    print("  ✓ dist/glow/human-plus-plus.json")
+    print("    → Install: glow -s ~/path/to/dist/glow/human-plus-plus.json README.md")
+
+
+def generate_delta(colors, meta):
+    """Generate delta (git pager) configuration.
+
+    Add to ~/.gitconfig or include from there.
+    """
+    c = colors
+
+    content = f'''# Human++ delta configuration
+# Add to ~/.gitconfig under [delta] section, or include this file
+
+[delta]
+    navigate = true
+    dark = true
+    syntax-theme = Human++
+    line-numbers = true
+    side-by-side = false
+
+    # File header
+    file-style = bold {c['base07']}
+    file-decoration-style = none
+    hunk-header-style = file line-number
+    hunk-header-decoration-style = {c['base02']} box
+
+    # Line numbers
+    line-numbers-left-style = {c['base03']}
+    line-numbers-right-style = {c['base03']}
+    line-numbers-minus-style = {c['base08']}
+    line-numbers-plus-style = {c['base0B']}
+    line-numbers-zero-style = {c['base03']}
+
+    # Diff colors
+    minus-style = syntax {c['base08']}20
+    minus-emph-style = syntax {c['base08']}40
+    plus-style = syntax {c['base0B']}20
+    plus-emph-style = syntax {c['base0B']}40
+    whitespace-error-style = {c['base08']} reverse
+
+    # Blame
+    blame-palette = {c['base00']} {c['base01']} {c['base02']}
+'''
+
+    (DIST / "delta").mkdir(parents=True, exist_ok=True)
+    (DIST / "delta/config.gitconfig").write_text(content)
+    print("  ✓ dist/delta/config.gitconfig")
+    print("    → Install: Add [include] path = ~/path/to/dist/delta/config.gitconfig to ~/.gitconfig")
+
+
+def generate_git_colors(colors, meta):
+    """Generate git color configuration.
+
+    These are the colors git uses for status, diff, branch, etc.
+    """
+    c = colors
+
+    content = f'''# Human++ git colors
+# Add to ~/.gitconfig or include this file
+
+[color]
+    ui = auto
+
+[color "branch"]
+    current = bold {c['base0F']}
+    local = {c['base07']}
+    remote = {c['base0B']}
+    upstream = {c['base0C']}
+
+[color "diff"]
+    meta = {c['base0E']}
+    frag = {c['base0C']}
+    context = {c['base04']}
+    old = {c['base08']}
+    new = {c['base0B']}
+    oldMoved = {c['base11']}
+    newMoved = {c['base14']}
+    whitespace = {c['base08']} reverse
+
+[color "status"]
+    added = {c['base0B']}
+    changed = {c['base0A']}
+    untracked = {c['base03']}
+    deleted = {c['base08']}
+    branch = bold {c['base0F']}
+    localBranch = bold {c['base0F']}
+    remoteBranch = {c['base0B']}
+
+[color "decorate"]
+    HEAD = bold {c['base08']}
+    branch = bold {c['base0F']}
+    remoteBranch = {c['base0B']}
+    tag = {c['base0A']}
+'''
+
+    (DIST / "git").mkdir(parents=True, exist_ok=True)
+    (DIST / "git/colors.gitconfig").write_text(content)
+    print("  ✓ dist/git/colors.gitconfig")
 
 
 def generate_shell_init(colors, meta):
@@ -1454,6 +2008,10 @@ def main():
     generate_skhd(colors, meta)
     generate_eza(colors, meta)
     generate_fzf(colors, meta)
+    generate_bat(colors, meta)
+    generate_glow(colors, meta)
+    generate_delta(colors, meta)
+    generate_git_colors(colors, meta)
     generate_shell_init(colors, meta)
     generate_colortest(colors, meta)
 

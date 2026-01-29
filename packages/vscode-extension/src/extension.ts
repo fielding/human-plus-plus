@@ -376,12 +376,95 @@ class DiagnosticDecorationManager {
 }
 
 // ============================================================================
+// Markdown Heading Decoration Manager (h1 background highlighting)
+// ============================================================================
+
+class MarkdownHeadingDecorationManager {
+  private h1DecorationType: vscode.TextEditorDecorationType | undefined;
+
+  constructor() {
+    this.createDecorationTypes();
+  }
+
+  createDecorationTypes(): void {
+    this.dispose();
+
+    this.h1DecorationType = vscode.window.createTextEditorDecorationType({
+      backgroundColor: '#bbff00',      // Lime (base0F)
+      color: '#1a1c22',                // Dark text (base00)
+      fontWeight: 'bold',
+      isWholeLine: true,
+      overviewRulerColor: '#bbff00',
+      overviewRulerLane: vscode.OverviewRulerLane.Right,
+    });
+  }
+
+  updateHeadings(editor: vscode.TextEditor): void {
+    const config = vscode.workspace.getConfiguration('human-plus-plus');
+
+    if (!config.get('markdown.h1Highlight.enable', true)) {
+      if (this.h1DecorationType) {
+        editor.setDecorations(this.h1DecorationType, []);
+      }
+      return;
+    }
+
+    // Only apply to markdown files
+    if (editor.document.languageId !== 'markdown') {
+      if (this.h1DecorationType) {
+        editor.setDecorations(this.h1DecorationType, []);
+      }
+      return;
+    }
+
+    const document = editor.document;
+    const h1Ranges: vscode.Range[] = [];
+
+    // Pattern for ATX h1: starts with single # followed by space
+    const h1Pattern = /^#\s+.+$/;
+
+    for (let lineNum = 0; lineNum < document.lineCount; lineNum++) {
+      const line = document.lineAt(lineNum);
+      const text = line.text;
+
+      if (h1Pattern.test(text)) {
+        h1Ranges.push(line.range);
+      }
+    }
+
+    // Also check for setext h1 (line followed by ===)
+    for (let lineNum = 0; lineNum < document.lineCount - 1; lineNum++) {
+      const nextLine = document.lineAt(lineNum + 1);
+      if (/^=+\s*$/.test(nextLine.text)) {
+        const currentLine = document.lineAt(lineNum);
+        if (currentLine.text.trim().length > 0) {
+          h1Ranges.push(currentLine.range);
+          h1Ranges.push(nextLine.range);
+        }
+      }
+    }
+
+    if (this.h1DecorationType) {
+      editor.setDecorations(this.h1DecorationType, h1Ranges);
+    }
+  }
+
+  dispose(): void {
+    if (this.h1DecorationType) {
+      this.h1DecorationType.dispose();
+      this.h1DecorationType = undefined;
+    }
+  }
+}
+
+// ============================================================================
 // Main Highlighter
 // ============================================================================
 
 class HumanPlusPlusHighlighter {
   private markerDecorationManager: MarkerDecorationManager;
   private diagnosticDecorationManager: DiagnosticDecorationManager;
+  private markdownHeadingDecorationManager: MarkdownHeadingDecorationManager;
   private markerScanner: MarkerScanner;
   private debounceTimer: NodeJS.Timeout | undefined;
   private diagnosticDebounceTimer: NodeJS.Timeout | undefined;
@@ -390,6 +473,7 @@ class HumanPlusPlusHighlighter {
   constructor(private context: vscode.ExtensionContext) {
     this.markerDecorationManager = new MarkerDecorationManager();
     this.diagnosticDecorationManager = new DiagnosticDecorationManager();
+    this.markdownHeadingDecorationManager = new MarkdownHeadingDecorationManager();
     this.markerScanner = new MarkerScanner();
     this.enabled = vscode.workspace.getConfiguration('human-plus-plus').get('enable', true);
   }
@@ -436,9 +520,18 @@ class HumanPlusPlusHighlighter {
     this.diagnosticDecorationManager.updateDiagnostics(editor);
   }
 
+  updateMarkdownHeadingDecorations(editor: vscode.TextEditor | undefined): void {
+    if (!editor || !this.enabled) {
+      return;
+    }
+
+    this.markdownHeadingDecorationManager.updateHeadings(editor);
+  }
+
   updateAllDecorations(editor: vscode.TextEditor | undefined): void {
     this.updateMarkerDecorations(editor);
     this.updateDiagnosticDecorations(editor);
+    this.updateMarkdownHeadingDecorations(editor);
   }
 
   clearDecorations(editor: vscode.TextEditor | undefined): void {
@@ -500,6 +593,7 @@ class HumanPlusPlusHighlighter {
   onConfigurationChanged(): void {
     this.enabled = vscode.workspace.getConfiguration('human-plus-plus').get('enable', true);
     this.markerDecorationManager.createDecorationTypes();
+    this.markdownHeadingDecorationManager.createDecorationTypes();
 
     const editor = vscode.window.activeTextEditor;
     if (this.enabled) {
@@ -525,6 +619,7 @@ class HumanPlusPlusHighlighter {
     }
     this.markerDecorationManager.dispose();
     this.diagnosticDecorationManager.dispose();
+    this.markdownHeadingDecorationManager.dispose();
   }
 }
 
