@@ -851,6 +851,17 @@ def generate_git_colors(colors, meta):
 
     content = f'''# Human++ git colors
 # Add to ~/.gitconfig or include this file
+#
+# SEE ALSO 
+#   https://git-scm.com/docs/git-config#_includes
+#
+# example using includeIf section in your gitconfig:
+# [includeIf "gitdir:~/Projects/"]
+# path = "<GIT_REPO>/dist/git/colors.gitconfig"
+#
+# example using include section in your gitconfig:
+# [include "<GIT_REPO>/dist/git/colors.gitconfig"]
+# path = "<GIT_REPO>/dist/git/colors.gitconfig"
 
 [color]
     ui = auto
