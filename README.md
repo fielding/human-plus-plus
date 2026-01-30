@@ -179,7 +179,7 @@ make apply    # Apply to installed apps
 | App | Location |
 |-----|----------|
 | Ghostty | `dist/ghostty/config` |
-| Vim / Neovim | via tinty |
+| Vim / Neovim | [via tinty][90] |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
@@ -219,3 +219,5 @@ site/data/            # Palette JSON
 ## License
 
 MIT
+
+[90]: https://github.com/tinted-theming/tinted-vim
