@@ -178,7 +178,11 @@ make apply    # Apply to installed apps
 
 | App | Location |
 |-----|----------|
+| [eza][92] | `dist/eza/colors.sh` |
+| fzf | `dist/fzf/colors.sh` |
 | Ghostty | `dist/ghostty/config` |
+| [delta][91] | `dist/delta/config.gitconfig` |
+| git | `dist/git/colors.gitconfig` |
 | Vim / Neovim | via tinty |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
@@ -219,3 +223,6 @@ site/data/            # Palette JSON
 ## License
 
 MIT
+
+[91]: https://github.com/dandavison/delta
+[92]: https://github.com/eza-community/eza
