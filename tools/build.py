@@ -850,7 +850,17 @@ def generate_git_colors(colors, meta):
     c = colors
 
     content = f'''# Human++ git colors
-# Add to ~/.gitconfig or include this file
+#
+# Include this file in your ~/.gitconfig:
+#   https://git-scm.com/docs/git-config#_includes
+#
+# For all repos:
+#   [include]
+#     path = ~/path/to/human-plus-plus/dist/git/colors.gitconfig
+#
+# Or conditionally for specific directories:
+#   [includeIf "gitdir:~/Projects/"]
+#     path = ~/path/to/human-plus-plus/dist/git/colors.gitconfig
 
 [color]
     ui = auto
@@ -1634,6 +1644,37 @@ make apply    # Apply to installed apps
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
+| eza | `dist/eza/colors.sh` |
+| fzf | `dist/fzf/colors.sh` |
+| bat | `dist/bat/Human++.tmTheme` |
+| glow | `dist/glow/human-plus-plus.json` |
+| delta | `dist/delta/config.gitconfig` |
+| git | `dist/git/colors.gitconfig` |
+
+### Git & Delta
+
+For git colors and delta (git pager), add an include to your `~/.gitconfig`:
+
+```gitconfig
+# Include for all repos
+[include]
+  path = ~/path/to/human-plus-plus/dist/git/colors.gitconfig
+
+# Or conditionally for specific directories
+# https://git-scm.com/docs/git-config#_includes
+[includeIf "gitdir:~/Projects/"]
+  path = ~/path/to/human-plus-plus/dist/git/colors.gitconfig
+```
+
+For delta, also set it as your pager:
+
+```gitconfig
+[core]
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only
+```
 
 ### With tinty
 
