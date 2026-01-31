@@ -1639,17 +1639,17 @@ make apply    # Apply to installed apps
 
 | App | Location |
 |-----|----------|
+| [eza][92] | `dist/eza/colors.sh` |
+| [fzf][93] | `dist/fzf/colors.sh` |
 | Ghostty | `dist/ghostty/config` |
+| [delta][91] | `dist/delta/config.gitconfig` |
+| git | `dist/git/colors.gitconfig` |
 | Vim / Neovim | via tinty |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
-| eza | `dist/eza/colors.sh` |
-| fzf | `dist/fzf/colors.sh` |
 | bat | `dist/bat/Human++.tmTheme` |
 | glow | `dist/glow/human-plus-plus.json` |
-| delta | `dist/delta/config.gitconfig` |
-| git | `dist/git/colors.gitconfig` |
 
 ### Git & Delta
 
@@ -1711,6 +1711,10 @@ site/data/            # Palette JSON
 ## License
 
 MIT
+
+[91]: https://github.com/dandavison/delta
+[92]: https://github.com/eza-community/eza
+[93]: https://github.com/junegunn/fzf
 '''
 
     (ROOT / "README.md").write_text(content)
