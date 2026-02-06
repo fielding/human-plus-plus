@@ -187,6 +187,7 @@ make apply    # Apply to installed apps
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
+| [tmux][94] | `dist/tmux/human-plus-plus.conf` |
 | bat | `dist/bat/Human++.tmTheme` |
 | glow | `dist/glow/human-plus-plus.json` |
 
@@ -254,3 +255,4 @@ MIT
 [91]: https://github.com/dandavison/delta
 [92]: https://github.com/eza-community/eza
 [93]: https://github.com/junegunn/fzf
+[94]: https://github.com/tmux/tmux

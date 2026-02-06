@@ -60,6 +60,18 @@ if command -v borders &> /dev/null; then
     fi
 fi
 
+# Tmux
+if command -v tmux &> /dev/null; then
+    TMUX_THEME="$DIST_DIR/tmux/human-plus-plus.conf"
+    if [ -f "$TMUX_THEME" ]; then
+        log "Applying tmux theme..."
+        if ! $DRY_RUN; then
+            tmux source-file "$TMUX_THEME" 2>/dev/null || true
+        fi
+        echo "     Add to tmux.conf: source-file $TMUX_THEME"
+    fi
+fi
+
 # Ghostty
 if [ -d "$HOME/.config/ghostty" ]; then
     log "Updating ghostty theme..."

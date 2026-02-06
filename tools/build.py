@@ -206,6 +206,99 @@ export SKHD_MODE_MEET={c['base09']['argb']}       # base09 - orange
     print("  ✓ dist/skhd/modes.sh")
 
 
+def generate_tmux(colors, meta):
+    """Generate tmux/human-plus-plus.conf theme.
+
+    Produces a tmux conf snippet that can be sourced from tmux.conf:
+        source-file /path/to/human++/dist/tmux/human-plus-plus.conf
+
+    Uses true color hex values (#rrggbb) — requires terminal with RGB support
+    and tmux set -as terminal-features ",*:RGB".
+    """
+    c = colors
+
+    content = f"""# Human++ - tmux theme
+# Generated from palette.toml
+#
+# Source this from your tmux.conf:
+#   source-file /path/to/human++/dist/tmux/human-plus-plus.conf
+
+# Status bar — LOUD cyan text on dark bg
+set -g status-style "bg={c['base00']},fg={c['base0C']}"
+
+# Session name on the left (hot pink accent)
+set -g status-left "#[bg={c['base08']},fg={c['base00']},bold] #S #[default] "
+
+# Window status — inactive (grayscale, recedes behind active)
+setw -g window-status-format "#[bg={c['base01']},fg={c['base04']},noreverse]█▓░ #W "
+# Window status — active (hot pink bg — grabs attention)
+setw -g window-status-current-format "#[bg={c['base08']},fg={c['base00']},noreverse]█▓░ #W "
+
+# Messages
+set -g message-style "bg={c['base0B']},fg={c['base00']}"
+set -g message-command-style "bg={c['base00']},fg={c['base0B']}"
+
+# Copy / choice mode
+setw -g mode-style "bg={c['base0E']},fg={c['base00']}"
+
+# Copy mode search matches
+set -g copy-mode-match-style "bg={c['base0A']},fg={c['base00']}"
+set -g copy-mode-current-match-style "bg={c['base0F']},fg={c['base00']}"
+
+# Pane borders
+set -g pane-border-style "fg={c['base03']}"
+set -g pane-active-border-style "fg={c['base08']}"
+
+# Pane border titles — accent on index, dim title
+set -g pane-border-format " #[fg={c['base0C']}]#{{pane_index}}#[default]:#[fg={c['base04']}] #{{pane_title}} "
+
+# Clock (prefix + t)
+set -g clock-mode-colour "{c['base0F']}"
+
+# Menu (popup) styles
+set -g menu-style "bg={c['base01']},fg={c['base0C']}"
+set -g menu-selected-style "bg={c['base08']},fg={c['base00']}"
+set -g menu-border-style "fg={c['base03']}"
+
+# Popup border
+set -g popup-border-style "fg={c['base03']}"
+
+# Display-panes overlay
+set -g display-panes-colour "{c['base03']}"
+set -g display-panes-active-colour "{c['base08']}"
+"""
+
+    # Shell-sourceable color variables for tmux-status and other scripts
+    colors_sh = f"""#!/bin/bash
+# Human++ - tmux status colors
+# Generated from palette.toml
+# Source this from scripts that output tmux status content
+
+HMPP_BG="{c['base00']}"          # base00 - background
+HMPP_BG_ELEVATION="{c['base01']}" # base01 - elevation
+HMPP_SELECTION="{c['base02']}"   # base02 - selection/panels
+HMPP_DIM="{c['base03']}"         # base03 - comments
+HMPP_SECONDARY="{c['base04']}"   # base04 - UI secondary
+HMPP_FG="{c['base05']}"          # base05 - main text
+HMPP_FG_BRIGHT="{c['base06']}"   # base06 - emphasis
+HMPP_FG_MAX="{c['base07']}"      # base07 - near-white
+HMPP_PINK="{c['base08']}"        # base08 - errors, attention
+HMPP_ORANGE="{c['base09']}"      # base09 - warnings
+HMPP_AMBER="{c['base0A']}"       # base0A - caution
+HMPP_GREEN="{c['base0B']}"       # base0B - success
+HMPP_CYAN="{c['base0C']}"        # base0C - info
+HMPP_BLUE="{c['base0D']}"        # base0D - focus, links
+HMPP_PURPLE="{c['base0E']}"      # base0E - special
+HMPP_LIME="{c['base0F']}"        # base0F - human intent
+"""
+
+    (DIST / "tmux").mkdir(parents=True, exist_ok=True)
+    (DIST / "tmux/human-plus-plus.conf").write_text(content)
+    (DIST / "tmux/colors.sh").write_text(colors_sh)
+    print("  ✓ dist/tmux/human-plus-plus.conf")
+    print("  ✓ dist/tmux/colors.sh")
+
+
 def hex_to_ansi256(hex_color):
     """Convert hex color to ANSI 256 escape code format (38;2;r;g;b for true color)."""
     hex_color = hex_color.lstrip('#')
@@ -1808,6 +1901,7 @@ def main():
     generate_sketchybar(colors, meta)
     generate_borders(colors, meta)
     generate_skhd(colors, meta)
+    generate_tmux(colors, meta)
     generate_eza(colors, meta)
     generate_fzf(colors, meta)
     generate_bat(colors, meta)
