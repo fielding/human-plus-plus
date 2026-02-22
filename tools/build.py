@@ -1115,10 +1115,10 @@ if command -v fzf &>/dev/null; then
   source "$HUMAN_PP_DIR/fzf/colors.sh"
 fi
 
-# fastfetch - system info
+# fastfetch - system info (only symlink if no config exists yet)
 if command -v fastfetch &>/dev/null; then
   mkdir -p "$HOME/.config/fastfetch"
-  if [ ! -e "$HOME/.config/fastfetch/config.jsonc" ] || [ -L "$HOME/.config/fastfetch/config.jsonc" ]; then
+  if [ ! -e "$HOME/.config/fastfetch/config.jsonc" ]; then
     ln -sf "$HUMAN_PP_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
   fi
 fi
