@@ -906,27 +906,27 @@ def generate_delta(colors, meta):
     side-by-side = false
 
     # File header
-    file-style = bold {c['base07']}
+    file-style = bold "{c['base07']}"
     file-decoration-style = none
     hunk-header-style = file line-number
-    hunk-header-decoration-style = {c['base02']} box
+    hunk-header-decoration-style = "{c['base02']}" box
 
     # Line numbers
-    line-numbers-left-style = {c['base03']}
-    line-numbers-right-style = {c['base03']}
-    line-numbers-minus-style = {c['base08']}
-    line-numbers-plus-style = {c['base0B']}
-    line-numbers-zero-style = {c['base03']}
+    line-numbers-left-style = "{c['base03']}"
+    line-numbers-right-style = "{c['base03']}"
+    line-numbers-minus-style = "{c['base08']}"
+    line-numbers-plus-style = "{c['base0B']}"
+    line-numbers-zero-style = "{c['base03']}"
 
     # Diff colors
-    minus-style = syntax {c['base08']}20
-    minus-emph-style = syntax {c['base08']}40
-    plus-style = syntax {c['base0B']}20
-    plus-emph-style = syntax {c['base0B']}40
-    whitespace-error-style = {c['base08']} reverse
+    minus-style = syntax "{c['base08']}20"
+    minus-emph-style = syntax "{c['base08']}40"
+    plus-style = syntax "{c['base0B']}20"
+    plus-emph-style = syntax "{c['base0B']}40"
+    whitespace-error-style = "{c['base08']}" reverse
 
     # Blame
-    blame-palette = {c['base00']} {c['base01']} {c['base02']}
+    blame-palette = "{c['base00']}" "{c['base01']}" "{c['base02']}"
 '''
 
     (DIST / "delta").mkdir(parents=True, exist_ok=True)
@@ -995,6 +995,62 @@ def generate_git_colors(colors, meta):
     print("  ✓ dist/git/colors.gitconfig")
 
 
+def generate_fastfetch(colors, meta):
+    """Generate fastfetch/config.jsonc."""
+    c = colors
+
+    config = {
+        "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+        "logo": {
+            "type": "small",
+            "color": {
+                "1": c['base08'],
+                "2": c['base09'],
+                "3": c['base0A'],
+                "4": c['base0B'],
+                "5": c['base0C'],
+                "6": c['base0D'],
+                "7": c['base0E'],
+                "8": c['base0F'],
+                "9": c['base10'],
+            },
+        },
+        "display": {
+            "color": {
+                "keys": c['base0C'],
+                "title": c['base0F'],
+                "output": c['base05'],
+                "separator": c['base04'],
+            },
+            "separator": " → ",
+            "key": {
+                "width": 10,
+            },
+        },
+        "modules": [
+            "title",
+            "separator",
+            {"type": "os", "key": "OS"},
+            {"type": "host", "key": "Host"},
+            {"type": "kernel", "key": "Kernel"},
+            {"type": "uptime", "key": "Uptime"},
+            {"type": "shell", "key": "Shell"},
+            {"type": "terminal", "key": "Term"},
+            {"type": "cpu", "key": "CPU"},
+            {"type": "gpu", "key": "GPU"},
+            {"type": "memory", "key": "Mem"},
+            {"type": "disk", "key": "Disk"},
+            {"type": "battery", "key": "Bat"},
+            "break",
+            "colors",
+        ],
+    }
+
+    (DIST / "fastfetch").mkdir(parents=True, exist_ok=True)
+    (DIST / "fastfetch/config.jsonc").write_text(json.dumps(config, indent=2))
+    print("  ✓ dist/fastfetch/config.jsonc")
+
+
 def generate_shell_init(colors, meta):
     """Generate shell-init.sh loader that conditionally sources configs.
 
@@ -1003,7 +1059,34 @@ def generate_shell_init(colors, meta):
 
     The loader automatically sources configs for installed programs.
     """
-    content = '''#!/bin/bash
+    c = {k: hex_to_components(v) for k, v in colors.items()}
+
+    # 256-color extended slots 16-23: the 8 base24 colors without ANSI 0-15 slots
+    # Slots 16-20 follow the base16-shell convention; 21 repurposed for base05;
+    # 22-23 are the base24 extension (quiet orange, quiet lime)
+    extended_slots = [
+        (16, 'base09', 'orange'),
+        (17, 'base0F', 'lime'),
+        (18, 'base01', 'elevation'),
+        (19, 'base02', 'selection'),
+        (20, 'base04', 'UI secondary'),
+        (21, 'base05', 'main text'),
+        (22, 'base11', 'quiet orange'),
+        (23, 'base17', 'quiet lime'),
+    ]
+
+    remap_lines = []
+    for slot_num, base_key, label in extended_slots:
+        r = c[base_key]['hex_r']
+        g = c[base_key]['hex_g']
+        b = c[base_key]['hex_b']
+        remap_lines.append(
+            f"  printf '\\e]4;{slot_num};rgb:{r}/{g}/{b}\\e\\\\'   # {base_key} {label}"
+        )
+
+    remap_block = '\n'.join(remap_lines)
+
+    content = f'''#!/bin/bash
 # Human++ Shell Loader
 # Generated from palette.toml
 #
@@ -1013,7 +1096,14 @@ def generate_shell_init(colors, meta):
 # Or selectively source individual configs from dist/
 
 # Determine the directory where this script lives
-HUMAN_PP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+HUMAN_PP_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]:-$0}}")" && pwd)"
+
+# Base24 extended palette (slots 16-23)
+# Maps the 8 base24 colors that lack ANSI 0-15 assignments into 256-color
+# extended slots, so scripts can reference them via \\e[38;5;16-23m
+if [[ $- == *i* ]]; then
+{remap_block}
+fi
 
 # eza - modern ls replacement
 if command -v eza &>/dev/null; then
@@ -1023,6 +1113,14 @@ fi
 # fzf - fuzzy finder
 if command -v fzf &>/dev/null; then
   source "$HUMAN_PP_DIR/fzf/colors.sh"
+fi
+
+# fastfetch - system info
+if command -v fastfetch &>/dev/null; then
+  mkdir -p "$HOME/.config/fastfetch"
+  if [ ! -e "$HOME/.config/fastfetch/config.jsonc" ] || [ -L "$HOME/.config/fastfetch/config.jsonc" ]; then
+    ln -sf "$HUMAN_PP_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+  fi
 fi
 
 # Terminal palette (base24) - only if running interactively
@@ -1908,6 +2006,7 @@ def main():
     generate_glow(colors, meta)
     generate_delta(colors, meta)
     generate_git_colors(colors, meta)
+    generate_fastfetch(colors, meta)
     generate_shell_init(colors, meta)
     generate_colortest(colors, meta)
 

@@ -2,6 +2,51 @@
 
 All notable changes to Human++ will be documented in this file.
 
+## [1.4.0] - 2026-02-22
+
+### Added
+
+- **Fastfetch generator** - `dist/fastfetch/config.jsonc` with palette-matched logo, key, title, and output colors
+- **256-color extended slot remapping** - Shell-init now maps slots 16-23 to the 8 base24 colors that lack ANSI 0-15 assignments (base09, base0F, base01, base02, base04, base05, base11, base17), making all 24 colors addressable via `\e[38;5;16-23m`
+- Fastfetch config auto-symlinked in `shell-init.sh` when fastfetch is installed
+
+### Fixed
+
+- **Delta config quoting** - Hex values in generated `delta/config.gitconfig` now properly quoted to prevent gitconfig `#`-as-comment parsing (fixes `blame-palette must be empty` error)
+
+---
+
+## [1.3.0] - 2026-02-06
+
+### Added
+
+- **Tmux theme generator** - `dist/tmux/human-plus-plus.conf` and `dist/tmux/colors.sh` with full palette support
+- README extracted to template (`templates/README.md.tmpl`) for easier contributions
+
+### Fixed
+
+- Duplicate entries in README apps table
+- Shell tools added to README with git include instructions
+
+---
+
+## [1.2.0] - 2026-01-29
+
+### Added
+
+- **Shell tool themes** - eza, fzf, bat, glow, delta, and git color generators
+- **Shell init loader** (`dist/shell-init.sh`) - Single-line sourcing for all shell tool configs
+- **h1 markdown highlighting** - Lime badge style for top-level headings in bat and glow
+- Badge-style README highlighting in eza
+
+### Changed
+
+- Refined eza colors: quiet metadata, grayscale for user/group
+- Site changelog simplified to full-width 2-column grid
+- Version badge in site hero links to changelog section
+
+---
+
 ## [1.1.0] - 2025-01-28
 
 ### Theme Changes

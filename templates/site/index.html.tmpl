@@ -339,7 +339,7 @@
       <div class="hero-content">
         <h1 class="logo">Human<span>++</span></h1>
         <p class="tagline"><strong>Code is cheap.</strong> Intent is scarce.</p>
-        <a href="#changelog" class="version-badge">v1.1.0 — What's New</a>
+        <a href="#changelog" class="version-badge">v1.4.0 — What's New</a>
         <p class="hero-description">
           A Base24 color scheme for the post-artisanal coding era. As models write more code, Human++ makes human judgment visible at a glance through a two-tier accent system and lightweight annotation markers.
         </p>
@@ -689,23 +689,23 @@ pub fn validate_token(token: &str) -> Result&lt;Claims, AuthError&gt; {
       </div>
 
       <div class="changelog-header">
-        <span class="version-number">v1.1.0</span>
-        <span class="version-date">January 28, 2025</span>
+        <span class="version-number">v1.4.0</span>
+        <span class="version-date">February 22, 2026</span>
       </div>
 
       <div class="changelog-content">
         <div>
-          <h4>Theme</h4>
+          <h4>Added</h4>
           <ul>
-            <li><strong>New color mappings:</strong> Functions → blue, Strings → lime, Parameters → purple, Constants → yellow</li>
-            <li><strong>Markup support:</strong> AsciiDoc, LaTeX, Org mode, reStructuredText, HTML/XML</li>
+            <li><strong>Fastfetch generator</strong> — palette-matched config with logo, key, title, and output colors</li>
+            <li><strong>256-color extended slots</strong> — slots 16-23 mapped to the 8 base24 colors without ANSI assignments, making all 24 colors addressable via escape codes</li>
+            <li>Fastfetch config auto-symlinked in <code>shell-init.sh</code></li>
           </ul>
         </div>
         <div>
-          <h4>Extension</h4>
+          <h4>Fixed</h4>
           <ul>
-            <li><strong>Keyword aliases:</strong> <code>FIXME</code>/<code>BUG</code> → <code>!!</code>, <code>TODO</code>/<code>HACK</code> → <code>??</code>, <code>NOTE</code> → <code>>></code></li>
-            <li>Explicit markers always take priority over keywords</li>
+            <li><strong>Delta config quoting</strong> — hex values now properly quoted in gitconfig format, fixing <code>blame-palette</code> errors</li>
           </ul>
         </div>
       </div>

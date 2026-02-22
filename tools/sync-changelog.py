@@ -131,7 +131,9 @@ def update_site_template(changelog_html):
     # Look for the div.changelog and replace its contents (including the changelog-latest div)
     pattern = r'(<div class="changelog">)\s*<div class="changelog-latest">.*?</div>\s*</div>\s*(</div>\s*<p style="text-align: center)'
 
-    replacement = f'\\1\n{changelog_html}\n      \\2'
+    # Escape backslashes in changelog HTML so re.sub doesn't interpret them
+    safe_html = changelog_html.replace('\\', '\\\\')
+    replacement = f'\\1\n{safe_html}\n      \\2'
 
     new_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
 
