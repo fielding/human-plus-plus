@@ -2,6 +2,35 @@
 
 All notable changes to Human++ will be documented in this file.
 
+## [1.5.0] - 2026-03-05
+
+### Added
+
+- **Comprehensive markdown syntax highlighting** for VS Code, Cursor, and Neovim
+  - Headings (H1-H6): H1 lime badge, H2-H6 loud pink (base08)
+  - Bold: loud blue (base0D), Italic: quiet blue (base15)
+  - Inline code: amber (base0A), Code blocks: quiet cyan (base14)
+  - Blockquotes: quiet cyan italic (base14)
+  - Links: quiet lime (base17), URLs: dimmed (base03)
+  - Table pipes and list bullets: dimmed (base04)
+  - Markup delimiters (`**`, `*`, `` ` ``): dimmed (base04)
+- **Neovim treesitter auto-activation** for markdown files (no manual setup needed)
+- **Neovim heading extmarks** for H1-H6 with reliable priority override
+- **Traditional vim syntax fallback** groups for non-treesitter markdown (plasticboy/vim-markdown, vim-polyglot)
+- **Markdown tab** on the project landing page showcasing syntax highlighting
+- Markdown body text uses base07 (brightest foreground) via window-local highlight
+
+### Changed
+
+- VS Code/Cursor list items now use normal foreground text; only the bullet character is dimmed (base04)
+
+### Fixed
+
+- Neovim `!!` marker no longer falsely triggers mid-line in markdown prose (now requires start-of-line)
+- Neovim markdown inline code was using wrong color (base09 loud orange instead of base0A amber)
+
+---
+
 ## [1.4.0] - 2026-02-22
 
 ### Added

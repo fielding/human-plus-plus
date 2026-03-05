@@ -31,16 +31,25 @@
     .hljs-params { color: var(--base16); font-style: italic; }
     .hljs-attr { color: var(--base14); font-style: italic; }
     .hljs-attribute { color: var(--base14); }
-    .hljs-symbol, .hljs-bullet { color: var(--base11); }
+    .hljs-symbol { color: var(--base11); }
     .hljs-subst { color: var(--base05); }
-    .hljs-section { color: var(--base10); font-weight: bold; }
     .hljs-selector-class { color: var(--base13); }
     .hljs-selector-id { color: var(--base11); }
     .hljs-property { color: var(--base05); }
     .hljs-meta, .hljs-meta .hljs-keyword { color: var(--base11); }
     .hljs-emphasis { font-style: italic; color: var(--base15); }
-    .hljs-strong { font-weight: bold; color: var(--base15); }
+    .hljs-strong { font-weight: bold; color: var(--base0D); }
     .hljs-link { color: var(--base17); text-decoration: underline; }
+    .hljs-section { color: var(--base08); font-weight: bold; }
+    .hljs-bullet { color: var(--base04); }
+    .hljs-code { color: var(--base0A); }
+
+    /* Markdown panel: brighter body text to match editor */
+    #panel-markdown .hljs { color: var(--base07); }
+    #panel-markdown .hljs-section { color: var(--base08); font-weight: bold; }
+    #panel-markdown .hljs-bullet { color: var(--base04); }
+    #panel-markdown .hljs-quote { color: var(--base14); font-style: italic; }
+    #panel-markdown .hljs-code { color: var(--base0A); }
     .hljs-addition { color: var(--base13); background-color: rgba(4, 179, 114, 0.1); }
     .hljs-deletion { color: var(--base10); background-color: rgba(231, 52, 156, 0.1); }
 
@@ -391,6 +400,7 @@
         <button class="code-tab active" data-lang="typescript">TypeScript</button>
         <button class="code-tab" data-lang="python">Python</button>
         <button class="code-tab" data-lang="rust">Rust</button>
+        <button class="code-tab" data-lang="markdown">Markdown</button>
       </div>
 
       <div class="code-panels">
@@ -448,6 +458,35 @@ async def process_pending_orders() -> int:
             processed += 1
 
     return processed</code></pre>
+        </div>
+
+        <div class="code-panel" id="panel-markdown">
+          <pre><code class="language-markdown"># Deployment Checklist
+
+## Pre-deploy
+
+- [ ] Run full test suite
+- [ ] Check memory usage on staging
+  - Compare against baseline metrics
+  - Flag anything over 2x threshold
+
+## Service Dependencies
+
+| Service     | Status  | Owner       |
+|-------------|---------|-------------|
+| Auth API    | **live**  | Platform    |
+| Redis cache | *staged*  | Infra       |
+
+&gt; This runbook assumes you have already completed the
+&gt; staging verification steps in `docs/staging.md`
+
+### Rollback procedure
+
+If **p95 latency** exceeds `200ms` after deploy:
+
+1. Revert to previous image tag
+2. Notify on-call via [PagerDuty](https://pagerduty.com)
+3. Open incident in `#ops-incidents`</code></pre>
         </div>
 
         <div class="code-panel" id="panel-rust">

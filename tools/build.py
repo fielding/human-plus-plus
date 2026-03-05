@@ -1985,6 +1985,298 @@ def generate_vscode_theme(colors, meta):
         print("  ✓ packages/vscode-extension/themes/human-plus-plus.json")
 
 
+def generate_neovim(colors, meta):
+    """Generate Neovim colorscheme (Lua) from palette.
+
+    Produces a complete colorscheme file that can be loaded with
+    :colorscheme humanplusplus. Also defines custom highlight groups
+    used by the Human++ runtime plugin (markers, diagnostics, h1).
+    """
+    c = colors
+
+    content = f'''-- Human++ Neovim Colorscheme
+-- Generated from palette.toml — DO NOT EDIT
+-- Rebuild: make build
+
+vim.cmd.highlight('clear')
+vim.g.colors_name = 'humanplusplus'
+vim.o.termguicolors = true
+
+local hi = function(group, opts)
+  vim.api.nvim_set_hl(0, group, opts)
+end
+
+-- ============================================================================
+-- Editor UI
+-- ============================================================================
+hi('Normal',       {{ fg = '{c["base05"]}', bg = '{c["base00"]}' }})
+hi('NormalFloat',  {{ fg = '{c["base05"]}', bg = '{c["base01"]}' }})
+hi('FloatBorder',  {{ fg = '{c["base03"]}', bg = '{c["base01"]}' }})
+hi('FloatTitle',   {{ fg = '{c["base07"]}', bg = '{c["base01"]}', bold = true }})
+hi('Cursor',       {{ fg = '{c["base00"]}', bg = '{c["base07"]}' }})
+hi('CursorLine',   {{ bg = '{c["base01"]}' }})
+hi('CursorLineNr', {{ fg = '{c["base07"]}', bg = '{c["base01"]}', bold = true }})
+hi('LineNr',       {{ fg = '{c["base03"]}' }})
+hi('Visual',       {{ bg = '{c["base02"]}' }})
+hi('VisualNOS',    {{ bg = '{c["base02"]}' }})
+hi('Search',       {{ fg = '{c["base00"]}', bg = '{c["base0A"]}' }})
+hi('IncSearch',    {{ fg = '{c["base00"]}', bg = '{c["base09"]}' }})
+hi('CurSearch',    {{ fg = '{c["base00"]}', bg = '{c["base09"]}' }})
+hi('Substitute',   {{ fg = '{c["base00"]}', bg = '{c["base09"]}' }})
+hi('StatusLine',   {{ fg = '{c["base07"]}', bg = '{c["base01"]}' }})
+hi('StatusLineNC', {{ fg = '{c["base04"]}', bg = '{c["base01"]}' }})
+hi('TabLine',      {{ fg = '{c["base04"]}', bg = '{c["base01"]}' }})
+hi('TabLineFill',  {{ bg = '{c["base00"]}' }})
+hi('TabLineSel',   {{ fg = '{c["base07"]}', bg = '{c["base00"]}' }})
+hi('WinSeparator', {{ fg = '{c["base02"]}' }})
+hi('Pmenu',        {{ fg = '{c["base05"]}', bg = '{c["base01"]}' }})
+hi('PmenuSel',     {{ fg = '{c["base07"]}', bg = '{c["base02"]}' }})
+hi('PmenuSbar',    {{ bg = '{c["base02"]}' }})
+hi('PmenuThumb',   {{ bg = '{c["base04"]}' }})
+hi('Folded',       {{ fg = '{c["base04"]}', bg = '{c["base01"]}' }})
+hi('FoldColumn',   {{ fg = '{c["base03"]}', bg = '{c["base00"]}' }})
+hi('SignColumn',   {{ fg = '{c["base03"]}', bg = '{c["base00"]}' }})
+hi('ColorColumn',  {{ bg = '{c["base01"]}' }})
+hi('MatchParen',   {{ fg = '{c["base07"]}', bg = '{c["base02"]}', bold = true }})
+hi('Directory',    {{ fg = '{c["base0D"]}' }})
+hi('Title',        {{ fg = '{c["base07"]}', bold = true }})
+hi('ErrorMsg',     {{ fg = '{c["base08"]}' }})
+hi('WarningMsg',   {{ fg = '{c["base09"]}' }})
+hi('MoreMsg',      {{ fg = '{c["base0B"]}' }})
+hi('Question',     {{ fg = '{c["base0B"]}' }})
+hi('ModeMsg',      {{ fg = '{c["base07"]}', bold = true }})
+hi('NonText',      {{ fg = '{c["base02"]}' }})
+hi('SpecialKey',   {{ fg = '{c["base02"]}' }})
+hi('Whitespace',   {{ fg = '{c["base02"]}' }})
+hi('Conceal',      {{ fg = '{c["base04"]}' }})
+hi('SpellBad',     {{ undercurl = true, sp = '{c["base08"]}' }})
+hi('SpellCap',     {{ undercurl = true, sp = '{c["base09"]}' }})
+hi('SpellLocal',   {{ undercurl = true, sp = '{c["base0C"]}' }})
+hi('SpellRare',    {{ undercurl = true, sp = '{c["base0E"]}' }})
+hi('WildMenu',     {{ fg = '{c["base00"]}', bg = '{c["base0A"]}' }})
+
+-- ============================================================================
+-- Diff
+-- ============================================================================
+hi('DiffAdd',    {{ bg = '#0e2919' }})
+hi('DiffChange', {{ bg = '#2b2311' }})
+hi('DiffDelete', {{ fg = '{c["base08"]}', bg = '#2e1525' }})
+hi('DiffText',   {{ bg = '#3d3118' }})
+hi('Added',      {{ fg = '{c["base13"]}' }})
+hi('Changed',    {{ fg = '{c["base0A"]}' }})
+hi('Removed',    {{ fg = '{c["base10"]}' }})
+
+-- ============================================================================
+-- Syntax (quiet accents for code, loud reserved for signals)
+-- ============================================================================
+hi('Comment',     {{ fg = '{c["base03"]}', italic = true }})
+hi('String',      {{ fg = '{c["base17"]}' }})
+hi('Character',   {{ fg = '{c["base17"]}' }})
+hi('Number',      {{ fg = '{c["base12"]}' }})
+hi('Float',       {{ fg = '{c["base12"]}' }})
+hi('Boolean',     {{ fg = '{c["base12"]}' }})
+hi('Constant',    {{ fg = '{c["base12"]}' }})
+hi('Identifier',  {{ fg = '{c["base07"]}' }})
+hi('Function',    {{ fg = '{c["base15"]}' }})
+hi('Statement',   {{ fg = '{c["base10"]}' }})
+hi('Keyword',     {{ fg = '{c["base10"]}' }})
+hi('Conditional', {{ fg = '{c["base10"]}' }})
+hi('Repeat',      {{ fg = '{c["base10"]}' }})
+hi('Operator',    {{ fg = '{c["base04"]}' }})
+hi('Exception',   {{ fg = '{c["base10"]}' }})
+hi('PreProc',     {{ fg = '{c["base10"]}' }})
+hi('Include',     {{ fg = '{c["base10"]}' }})
+hi('Define',      {{ fg = '{c["base10"]}' }})
+hi('Macro',       {{ fg = '{c["base11"]}' }})
+hi('Type',        {{ fg = '{c["base14"]}' }})
+hi('StorageClass',{{ fg = '{c["base14"]}', italic = true }})
+hi('Structure',   {{ fg = '{c["base14"]}' }})
+hi('Typedef',     {{ fg = '{c["base14"]}' }})
+hi('Special',     {{ fg = '{c["base11"]}' }})
+hi('SpecialChar', {{ fg = '{c["base12"]}' }})
+hi('Tag',         {{ fg = '{c["base10"]}' }})
+hi('Delimiter',   {{ fg = '{c["base04"]}' }})
+hi('Debug',       {{ fg = '{c["base08"]}' }})
+hi('Underlined',  {{ fg = '{c["base0D"]}', underline = true }})
+hi('Error',       {{ fg = '{c["base08"]}' }})
+hi('Todo',        {{ fg = '{c["base0F"]}', bg = '{c["base00"]}', bold = true }})
+
+-- ============================================================================
+-- Treesitter highlight groups (Neovim 0.9+)
+-- ============================================================================
+hi('@comment',               {{ link = 'Comment' }})
+hi('@string',                {{ link = 'String' }})
+hi('@string.escape',         {{ fg = '{c["base12"]}' }})
+hi('@character',             {{ link = 'Character' }})
+hi('@number',                {{ link = 'Number' }})
+hi('@float',                 {{ link = 'Float' }})
+hi('@boolean',               {{ link = 'Boolean' }})
+hi('@constant',              {{ link = 'Constant' }})
+hi('@constant.builtin',      {{ fg = '{c["base12"]}' }})
+hi('@variable',              {{ fg = '{c["base07"]}' }})
+hi('@variable.parameter',    {{ fg = '{c["base16"]}', italic = true }})
+hi('@variable.builtin',      {{ fg = '{c["base07"]}' }})
+hi('@variable.member',       {{ fg = '{c["base07"]}' }})
+hi('@function',              {{ link = 'Function' }})
+hi('@function.call',         {{ fg = '{c["base15"]}' }})
+hi('@function.builtin',      {{ fg = '{c["base15"]}' }})
+hi('@function.method',       {{ fg = '{c["base15"]}' }})
+hi('@function.method.call',  {{ fg = '{c["base15"]}' }})
+hi('@keyword',               {{ link = 'Keyword' }})
+hi('@keyword.function',      {{ fg = '{c["base10"]}' }})
+hi('@keyword.return',        {{ fg = '{c["base10"]}' }})
+hi('@keyword.operator',      {{ fg = '{c["base04"]}' }})
+hi('@keyword.import',        {{ fg = '{c["base10"]}' }})
+hi('@keyword.storage',       {{ fg = '{c["base14"]}', italic = true }})
+hi('@type',                  {{ link = 'Type' }})
+hi('@type.builtin',          {{ fg = '{c["base14"]}' }})
+hi('@type.definition',       {{ fg = '{c["base14"]}' }})
+hi('@constructor',           {{ fg = '{c["base14"]}' }})
+hi('@operator',              {{ link = 'Operator' }})
+hi('@punctuation',           {{ fg = '{c["base04"]}' }})
+hi('@punctuation.bracket',   {{ fg = '{c["base04"]}' }})
+hi('@punctuation.delimiter', {{ fg = '{c["base04"]}' }})
+hi('@punctuation.special',   {{ fg = '{c["base11"]}' }})
+hi('@tag',                   {{ fg = '{c["base10"]}' }})
+hi('@tag.attribute',         {{ fg = '{c["base14"]}', italic = true }})
+hi('@tag.delimiter',         {{ fg = '{c["base04"]}' }})
+hi('@attribute',             {{ fg = '{c["base11"]}' }})
+hi('@property',              {{ fg = '{c["base07"]}' }})
+hi('@label',                 {{ fg = '{c["base16"]}' }})
+hi('@module',                {{ fg = '{c["base14"]}' }})
+
+-- Markup (markdown)
+hi('@markup',                {{ fg = '{c["base07"]}' }})
+hi('HppMarkdownNormal',     {{ fg = '{c["base07"]}', bg = '{c["base00"]}' }})
+hi('@conceal.markdown_inline', {{ fg = '{c["base04"]}' }})
+hi('@conceal.markdown',        {{ fg = '{c["base04"]}' }})
+hi('@markup.heading',        {{ fg = '{c["base07"]}', bold = true }})
+hi('@markup.heading.1',      {{ fg = '{c["base00"]}', bg = '{c["base0F"]}', bold = true }})
+hi('@markup.heading.2',      {{ fg = '{c["base08"]}', bold = true }})
+hi('@markup.heading.3',      {{ fg = '{c["base08"]}' }})
+hi('@markup.heading.4',      {{ fg = '{c["base08"]}' }})
+hi('@markup.heading.5',      {{ fg = '{c["base08"]}' }})
+hi('@markup.heading.6',      {{ fg = '{c["base08"]}' }})
+hi('@markup.strong',         {{ fg = '{c["base0D"]}', bold = true }})
+hi('@markup.italic',         {{ fg = '{c["base15"]}', italic = true }})
+hi('@markup.raw',            {{ fg = '{c["base0A"]}' }})
+hi('@markup.raw.block',      {{ fg = '{c["base14"]}' }})
+hi('@markup.link',           {{ fg = '{c["base17"]}' }})
+hi('@markup.link.url',       {{ fg = '{c["base03"]}', underline = true }})
+hi('@markup.list',           {{ fg = '{c["base04"]}' }})
+hi('@markup.quote',          {{ fg = '{c["base14"]}', italic = true }})
+hi('@markup.strikethrough',  {{ strikethrough = true }})
+hi('@punctuation.special.markdown', {{ fg = '{c["base04"]}' }})
+
+-- Traditional vim markdown syntax groups (fallback for non-treesitter)
+hi('markdownH1',                  {{ fg = '{c["base00"]}', bg = '{c["base0F"]}', bold = true }})
+hi('markdownH2',                  {{ fg = '{c["base08"]}', bold = true }})
+hi('markdownH3',                  {{ fg = '{c["base08"]}' }})
+hi('markdownH4',                  {{ fg = '{c["base08"]}' }})
+hi('markdownH5',                  {{ fg = '{c["base08"]}' }})
+hi('markdownH6',                  {{ fg = '{c["base08"]}' }})
+hi('markdownHeadingDelimiter',    {{ fg = '{c["base08"]}' }})
+hi('markdownBold',                {{ fg = '{c["base0D"]}', bold = true }})
+hi('markdownItalic',              {{ fg = '{c["base15"]}', italic = true }})
+hi('markdownBoldItalic',          {{ fg = '{c["base0D"]}', bold = true, italic = true }})
+hi('markdownCode',                {{ fg = '{c["base0A"]}' }})
+hi('markdownCodeBlock',           {{ fg = '{c["base14"]}' }})
+hi('markdownCodeDelimiter',       {{ fg = '{c["base04"]}' }})
+hi('markdownLinkText',            {{ fg = '{c["base17"]}' }})
+hi('markdownUrl',                 {{ fg = '{c["base03"]}', underline = true }})
+hi('markdownListMarker',          {{ fg = '{c["base04"]}' }})
+hi('markdownOrderedListMarker',   {{ fg = '{c["base04"]}' }})
+hi('markdownBlockquote',          {{ fg = '{c["base14"]}', italic = true }})
+hi('markdownRule',                {{ fg = '{c["base04"]}' }})
+hi('markdownStrikethrough',       {{ strikethrough = true }})
+hi('htmlH1',                      {{ fg = '{c["base00"]}', bg = '{c["base0F"]}', bold = true }})
+hi('htmlH2',                      {{ fg = '{c["base08"]}', bold = true }})
+hi('htmlH3',                      {{ fg = '{c["base08"]}' }})
+hi('htmlH4',                      {{ fg = '{c["base08"]}' }})
+hi('htmlH5',                      {{ fg = '{c["base08"]}' }})
+hi('htmlH6',                      {{ fg = '{c["base08"]}' }})
+hi('htmlBold',                    {{ fg = '{c["base0D"]}', bold = true }})
+hi('htmlItalic',                  {{ fg = '{c["base15"]}', italic = true }})
+hi('mkdHeading',                  {{ fg = '{c["base08"]}' }})
+hi('mkdCode',                     {{ fg = '{c["base0A"]}' }})
+hi('mkdCodeDelimiter',            {{ fg = '{c["base04"]}' }})
+hi('mkdCodeStart',                {{ fg = '{c["base04"]}' }})
+hi('mkdCodeEnd',                  {{ fg = '{c["base04"]}' }})
+hi('mkdLink',                     {{ fg = '{c["base17"]}' }})
+hi('mkdURL',                      {{ fg = '{c["base03"]}', underline = true }})
+hi('mkdBlockquote',               {{ fg = '{c["base14"]}', italic = true }})
+hi('mkdListItem',                 {{ fg = '{c["base04"]}' }})
+hi('mkdRule',                     {{ fg = '{c["base04"]}' }})
+
+hi('@diff.plus',             {{ fg = '{c["base13"]}' }})
+hi('@diff.minus',            {{ fg = '{c["base10"]}' }})
+hi('@diff.delta',            {{ fg = '{c["base0A"]}' }})
+
+-- ============================================================================
+-- LSP Diagnostics
+-- ============================================================================
+hi('DiagnosticError',            {{ fg = '{c["base08"]}' }})
+hi('DiagnosticWarn',             {{ fg = '{c["base09"]}' }})
+hi('DiagnosticInfo',             {{ fg = '{c["base0C"]}' }})
+hi('DiagnosticHint',             {{ fg = '{c["base15"]}' }})
+hi('DiagnosticUnderlineError',   {{ undercurl = true, sp = '{c["base08"]}' }})
+hi('DiagnosticUnderlineWarn',    {{ undercurl = true, sp = '{c["base09"]}' }})
+hi('DiagnosticUnderlineInfo',    {{ undercurl = true, sp = '{c["base0C"]}' }})
+hi('DiagnosticUnderlineHint',    {{ undercurl = true, sp = '{c["base15"]}' }})
+hi('DiagnosticVirtualTextError', {{ fg = '{c["base08"]}', bg = '{c["base01"]}' }})
+hi('DiagnosticVirtualTextWarn',  {{ fg = '{c["base09"]}', bg = '{c["base01"]}' }})
+hi('DiagnosticVirtualTextInfo',  {{ fg = '{c["base0C"]}', bg = '{c["base01"]}' }})
+hi('DiagnosticVirtualTextHint',  {{ fg = '{c["base15"]}', bg = '{c["base01"]}' }})
+hi('DiagnosticSignError',        {{ fg = '{c["base08"]}' }})
+hi('DiagnosticSignWarn',         {{ fg = '{c["base09"]}' }})
+hi('DiagnosticSignInfo',         {{ fg = '{c["base0C"]}' }})
+hi('DiagnosticSignHint',         {{ fg = '{c["base15"]}' }})
+
+-- ============================================================================
+-- Git signs (gitsigns.nvim etc.)
+-- ============================================================================
+hi('GitSignsAdd',    {{ fg = '{c["base0B"]}' }})
+hi('GitSignsChange', {{ fg = '{c["base0A"]}' }})
+hi('GitSignsDelete', {{ fg = '{c["base08"]}' }})
+
+-- ============================================================================
+-- Telescope
+-- ============================================================================
+hi('TelescopeNormal',       {{ fg = '{c["base05"]}', bg = '{c["base00"]}' }})
+hi('TelescopeBorder',       {{ fg = '{c["base03"]}', bg = '{c["base00"]}' }})
+hi('TelescopePromptNormal', {{ fg = '{c["base07"]}', bg = '{c["base01"]}' }})
+hi('TelescopePromptBorder', {{ fg = '{c["base01"]}', bg = '{c["base01"]}' }})
+hi('TelescopePromptTitle',  {{ fg = '{c["base00"]}', bg = '{c["base0D"]}' }})
+hi('TelescopePreviewTitle', {{ fg = '{c["base00"]}', bg = '{c["base0B"]}' }})
+hi('TelescopeResultsTitle', {{ fg = '{c["base00"]}', bg = '{c["base0C"]}' }})
+hi('TelescopeSelection',    {{ bg = '{c["base01"]}' }})
+hi('TelescopeMatching',     {{ fg = '{c["base0A"]}', bold = true }})
+
+-- ============================================================================
+-- Human++ custom groups (used by the runtime plugin)
+-- ============================================================================
+hi('HppMarkerIntervention', {{ fg = '{c["base00"]}', bg = '{c["base0F"]}', bold = true }})
+hi('HppMarkerUncertainty',  {{ fg = '{c["base07"]}', bg = '{c["base0E"]}', bold = true }})
+hi('HppMarkerDirective',    {{ fg = '{c["base00"]}', bg = '{c["base0C"]}', bold = true }})
+hi('HppDiagError',          {{ fg = '{c["base00"]}', bg = '{c["base08"]}' }})
+hi('HppDiagWarn',           {{ fg = '{c["base00"]}', bg = '{c["base09"]}' }})
+hi('HppDiagInfo',           {{ fg = '{c["base00"]}', bg = '{c["base0C"]}' }})
+hi('HppDiagHint',           {{ fg = '{c["base07"]}', bg = '{c["base15"]}' }})
+hi('HppMarkdownH1',         {{ fg = '{c["base00"]}', bg = '{c["base0F"]}', bold = true }})
+hi('HppMarkdownH2',         {{ fg = '{c["base08"]}', bold = true }})
+hi('HppMarkdownH3',         {{ fg = '{c["base08"]}' }})
+hi('HppMarkdownH4',         {{ fg = '{c["base08"]}' }})
+hi('HppMarkdownH5',         {{ fg = '{c["base08"]}' }})
+hi('HppMarkdownH6',         {{ fg = '{c["base08"]}' }})
+'''
+
+    # Write to packages/neovim-plugin/colors/
+    nvim_dir = PACKAGES / "neovim-plugin/colors"
+    nvim_dir.mkdir(parents=True, exist_ok=True)
+    (nvim_dir / "humanplusplus.lua").write_text(content)
+    print("  ✓ packages/neovim-plugin/colors/humanplusplus.lua")
+
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -2022,6 +2314,9 @@ def main():
 
     print("\nGenerating VS Code theme:")
     generate_vscode_theme(colors, meta)
+
+    print("\nGenerating Neovim plugin:")
+    generate_neovim(colors, meta)
 
     print("\n✓ Build complete!")
     print("\nTo apply: tinty apply base24-human-plus-plus")

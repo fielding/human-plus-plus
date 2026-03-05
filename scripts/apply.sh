@@ -80,20 +80,12 @@ if [ -d "$HOME/.config/ghostty" ]; then
     echo "     (Restart ghostty or run: ghostty +reload-config)"
 fi
 
-# Vim/Neovim (via tinty)
-TINTY_VIM="$HOME/.local/share/tinted-theming/tinty/repos/tinted-vim/colors/base24-human-plus-plus.vim"
-if [ -f "$TINTY_VIM" ]; then
-    if [ -d "$HOME/.vim/colors" ]; then
-        log "Updating vim colorscheme..."
-        run cp "$TINTY_VIM" "$HOME/.vim/colors/humanplusplus.vim"
-    fi
-    if [ -d "$HOME/.config/nvim" ]; then
-        log "Updating neovim colorscheme..."
-        run mkdir -p "$HOME/.config/nvim/colors"
-        run cp "$TINTY_VIM" "$HOME/.config/nvim/colors/humanplusplus.vim"
-    fi
-else
-    log "Vim theme not found (run 'make build' with tinty installed)"
+# Neovim (generated plugin)
+NVIM_PLUGIN="$ROOT_DIR/packages/neovim-plugin"
+if [ -d "$NVIM_PLUGIN" ]; then
+    log "Neovim plugin available at: $NVIM_PLUGIN"
+    echo "     Install via plugin manager or add to runtimepath:"
+    echo "     vim.opt.rtp:prepend('$ROOT_DIR/packages/neovim-plugin')"
 fi
 
 # Cursor - find latest tinted-themes extension version

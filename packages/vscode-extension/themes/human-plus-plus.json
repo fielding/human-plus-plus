@@ -1311,14 +1311,9 @@
             }
         },
         {
-            "scope": [
-                "markup.list",
-                "markup.list.unnumbered",
-                "markup.list.numbered",
-                "punctuation.definition.list.begin"
-            ],
+            "scope": "punctuation.definition.list.begin",
             "settings": {
-                "name": "List markers",
+                "name": "List bullet / number",
                 "foreground": "#828079"
             }
         },
