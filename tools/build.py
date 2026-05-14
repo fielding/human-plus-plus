@@ -1644,6 +1644,64 @@ def generate_svgs(colors, meta):
     (assets_dir / "preview-light.svg").write_text(preview_light)
     print("  ✓ site/assets/preview-dark.svg, preview-light.svg")
 
+    # Comment marker alias preview for issue triage / README clarity.
+    marker_preview = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-labelledby="title desc">
+  <title id="title">Human++ comment marker preview</title>
+  <desc id="desc">Preview of Human++ comment marker badges for explicit punctuation and legacy keyword aliases.</desc>
+  <rect width="760" height="310" rx="12" fill="{c['base00']}"/>
+
+  <rect width="760" height="36" rx="12" fill="{c['base01']}"/>
+  <rect y="26" width="760" height="10" fill="{c['base01']}"/>
+  <circle cx="20" cy="18" r="6" fill="{c['base08']}"/>
+  <circle cx="40" cy="18" r="6" fill="{c['base0A']}"/>
+  <circle cx="60" cy="18" r="6" fill="{c['base0B']}"/>
+  <text x="380" y="23" text-anchor="middle" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base04']}">marker-aliases.ts</text>
+
+  <text x="28" y="67" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">1</text>
+  <text x="28" y="95" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">2</text>
+  <text x="28" y="123" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">3</text>
+  <text x="28" y="151" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">4</text>
+  <text x="28" y="179" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">5</text>
+  <text x="28" y="207" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">6</text>
+  <text x="28" y="235" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">7</text>
+  <text x="28" y="263" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}" text-anchor="end">8</text>
+
+  <text x="44" y="67" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base03']}">// Regular comment stays calm and low-contrast</text>
+
+  <rect x="40" y="78" width="590" height="22" rx="4" fill="{c['base0F']}"/>
+  <text x="48" y="95" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="700">// FIXME: payment retry can double-submit</text>
+  <text x="650" y="95" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0F']}" font-weight="700">!!</text>
+
+  <rect x="40" y="106" width="590" height="22" rx="4" fill="{c['base0F']}"/>
+  <text x="48" y="123" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="700">// BUG: cache invalidation skips deleted users</text>
+  <text x="650" y="123" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0F']}" font-weight="700">!!</text>
+
+  <rect x="40" y="134" width="590" height="22" rx="4" fill="{c['base0E']}"/>
+  <text x="48" y="151" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base07']}" font-weight="700">// TODO: choose a better empty-state copy</text>
+  <text x="650" y="151" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0E']}" font-weight="700">??</text>
+
+  <rect x="40" y="162" width="590" height="22" rx="4" fill="{c['base0E']}"/>
+  <text x="48" y="179" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base07']}" font-weight="700">// HACK: keep legacy slug routing alive for now</text>
+  <text x="650" y="179" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0E']}" font-weight="700">??</text>
+
+  <rect x="40" y="190" width="590" height="22" rx="4" fill="{c['base0C']}"/>
+  <text x="48" y="207" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="700">// NOTE: this mirrors the server-side validator</text>
+  <text x="650" y="207" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0C']}" font-weight="700">&gt;&gt;</text>
+
+  <rect x="40" y="218" width="590" height="22" rx="4" fill="{c['base0C']}"/>
+  <text x="48" y="235" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="700">// NB: redirects intentionally preserve the query string</text>
+  <text x="650" y="235" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0C']}" font-weight="700">&gt;&gt;</text>
+
+  <rect x="40" y="246" width="590" height="22" rx="4" fill="{c['base0F']}"/>
+  <text x="48" y="263" font-family="SF Mono, Consolas, monospace" font-size="13" fill="{c['base00']}" font-weight="700">// !! Explicit punctuation always works too</text>
+  <text x="650" y="263" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base0F']}" font-weight="700">!!</text>
+
+  <text x="44" y="290" font-family="SF Mono, Consolas, monospace" font-size="12" fill="{c['base04']}">Aliases are case-insensitive; strongest marker wins when multiple keywords appear.</text>
+</svg>
+'''
+    (assets_dir / "comment-marker-preview.svg").write_text(marker_preview)
+    print("  ✓ site/assets/comment-marker-preview.svg")
+
 
 
 def generate_readme(colors, meta):
