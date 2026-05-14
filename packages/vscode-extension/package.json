@@ -113,6 +113,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
+    "test": "npm run compile && node test/marker-scan-core.test.js",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
