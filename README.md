@@ -183,12 +183,12 @@ make apply    # Apply to installed apps
 | Ghostty | `dist/ghostty/config` |
 | [delta][91] | `dist/delta/config.gitconfig` |
 | git | `dist/git/colors.gitconfig` |
-| Vim / Neovim | via tinty |
+| Vim / Neovim | via [tinty][90] |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
 | [tmux][94] | `dist/tmux/human-plus-plus.conf` |
-| bat | `dist/bat/Human++.tmTheme` |
+| [bat][95] | `dist/bat/Human++.tmTheme` |
 | glow | `dist/glow/human-plus-plus.json` |
 
 ### Git & Delta
@@ -252,7 +252,9 @@ site/data/            # Palette JSON
 
 MIT
 
+[90]: https://github.com/tinted-theming/tinty
 [91]: https://github.com/dandavison/delta
 [92]: https://github.com/eza-community/eza
 [93]: https://github.com/junegunn/fzf
 [94]: https://github.com/tmux/tmux
+[95]: https://github.com/sharkdp/bat
