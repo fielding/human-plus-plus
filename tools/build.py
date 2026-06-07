@@ -1951,6 +1951,42 @@ def generate_tinty_themes(colors, meta):
         print("  ✓ tinty ghostty theme")
 
 
+def generate_zed_theme(colors, meta):
+    """Generate Zed theme from template.
+
+    Uses mustache-style placeholders ({{base00}}, {{base08}}, etc.) in
+    templates/zed/human-plus-plus.json.tmpl and renders with current palette.
+    Colors in Zed use 8-digit RGBA hex; the template appends alpha suffixes
+    directly (e.g. {{base00}}ff for fully opaque, {{base08}}1a for 10% alpha).
+    """
+    import shutil
+
+    template_path = ROOT / "templates/zed/human-plus-plus.json.tmpl"
+
+    if not template_path.exists():
+        print("  ⚠ Zed template not found, skipping")
+        return
+
+    content = template_path.read_text()
+
+    # Replace all {{baseXX}} placeholders with current palette values
+    for slot, hex_value in colors.items():
+        placeholder = '{{' + slot + '}}'
+        content = content.replace(placeholder, hex_value.lower())
+
+    # Write to dist/
+    (DIST / "zed").mkdir(parents=True, exist_ok=True)
+    theme_path = DIST / "zed/human-plus-plus.json"
+    theme_path.write_text(content)
+    print("  ✓ dist/zed/human-plus-plus.json")
+
+    # Also copy to zed-extension package
+    ext_theme_path = PACKAGES / "zed-extension/themes/human-plus-plus.json"
+    if ext_theme_path.parent.exists():
+        shutil.copy(theme_path, ext_theme_path)
+        print("  ✓ packages/zed-extension/themes/human-plus-plus.json")
+
+
 def generate_vscode_theme(colors, meta):
     """Generate VS Code theme from template.
 
@@ -2314,6 +2350,9 @@ def main():
 
     print("\nGenerating VS Code theme:")
     generate_vscode_theme(colors, meta)
+
+    print("\nGenerating Zed theme:")
+    generate_zed_theme(colors, meta)
 
     print("\nGenerating Neovim plugin:")
     generate_neovim(colors, meta)

@@ -1,0 +1,7 @@
+id = "human-plus-plus"
+name = "Human++"
+schema_version = 1
+version = "1.5.0"
+authors = ["Fielding Johnston"]
+description = "A Base24 dark theme for the post-artisanal coding era. Code is cheap. Intent is scarce."
+repository = "https://github.com/fielding/human-plus-plus"
