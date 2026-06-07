@@ -2313,6 +2313,314 @@ hi('HppMarkdownH6',         {{ fg = '{c["base08"]}' }})
     print("  ✓ packages/neovim-plugin/colors/humanplusplus.lua")
 
 
+def generate_vim(colors, meta):
+    """Generate vanilla-vim colorscheme (vimscript) from palette.
+
+    Mirrors the neovim plugin's highlight set but as vimscript, so users
+    running plain `vim` (no lua) get the same look. Also generates a
+    matching lightline theme.
+    """
+    c = colors
+
+    # palette block — only piece interpolated from palette.toml.
+    # The rest of the file references s:baseXX vim-level variables.
+    palette_block = '\n'.join([
+        f"let s:base00 = '{c['base00']}'",
+        f"let s:base01 = '{c['base01']}'",
+        f"let s:base02 = '{c['base02']}'",
+        f"let s:base03 = '{c['base03']}'",
+        f"let s:base04 = '{c['base04']}'",
+        f"let s:base05 = '{c['base05']}'",
+        f"let s:base06 = '{c['base06']}'",
+        f"let s:base07 = '{c['base07']}'",
+        f"let s:base08 = '{c['base08']}'",
+        f"let s:base09 = '{c['base09']}'",
+        f"let s:base0A = '{c['base0A']}'",
+        f"let s:base0B = '{c['base0B']}'",
+        f"let s:base0C = '{c['base0C']}'",
+        f"let s:base0D = '{c['base0D']}'",
+        f"let s:base0E = '{c['base0E']}'",
+        f"let s:base0F = '{c['base0F']}'",
+        f"let s:base10 = '{c['base10']}'",
+        f"let s:base11 = '{c['base11']}'",
+        f"let s:base12 = '{c['base12']}'",
+        f"let s:base13 = '{c['base13']}'",
+        f"let s:base14 = '{c['base14']}'",
+        f"let s:base15 = '{c['base15']}'",
+        f"let s:base16 = '{c['base16']}'",
+        f"let s:base17 = '{c['base17']}'",
+    ])
+
+    colorscheme = f'''" Human++ vim colorscheme
+" Generated from palette.toml — DO NOT EDIT
+" Rebuild: make build
+
+hi clear
+if exists('syntax_on')
+  syntax reset
+endif
+let g:colors_name = 'humanplusplus'
+set background=dark
+
+if has('termguicolors') && !&termguicolors
+  set termguicolors
+endif
+
+" palette ---------------------------------------------------------------------
+{palette_block}
+
+" helper ----------------------------------------------------------------------
+function! s:hi(group, fg, bg, ...) abort
+  let l:cmd = 'hi ' . a:group
+  if a:fg !=# ''
+    let l:cmd .= ' guifg=' . a:fg
+  endif
+  if a:bg !=# ''
+    let l:cmd .= ' guibg=' . a:bg
+  endif
+  if a:0 && !empty(a:1)
+    let l:cmd .= ' gui=' . a:1 . ' cterm=' . a:1
+  else
+    let l:cmd .= ' gui=NONE cterm=NONE'
+  endif
+  execute l:cmd
+endfunction
+
+" editor UI -------------------------------------------------------------------
+call s:hi('Normal',       s:base05, s:base00, '')
+call s:hi('NormalNC',     s:base05, s:base00, '')
+call s:hi('NormalFloat',  s:base05, s:base01, '')
+call s:hi('FloatBorder',  s:base03, s:base01, '')
+call s:hi('FloatTitle',   s:base07, s:base01, 'bold')
+call s:hi('Cursor',       s:base00, s:base07, '')
+call s:hi('CursorLine',   '',       s:base01, '')
+call s:hi('CursorColumn', '',       s:base01, '')
+call s:hi('CursorLineNr', s:base07, s:base01, 'bold')
+call s:hi('LineNr',       s:base03, '',       '')
+call s:hi('Visual',       '',       s:base02, '')
+call s:hi('VisualNOS',    '',       s:base02, '')
+call s:hi('Search',       s:base00, s:base0A, '')
+call s:hi('IncSearch',    s:base00, s:base09, '')
+call s:hi('CurSearch',    s:base00, s:base09, '')
+call s:hi('Substitute',   s:base00, s:base09, '')
+call s:hi('StatusLine',   s:base07, s:base01, '')
+call s:hi('StatusLineNC', s:base04, s:base01, '')
+call s:hi('TabLine',      s:base04, s:base01, '')
+call s:hi('TabLineFill',  '',       s:base00, '')
+call s:hi('TabLineSel',   s:base07, s:base00, '')
+call s:hi('VertSplit',    s:base02, '',       '')
+call s:hi('WinSeparator', s:base02, '',       '')
+call s:hi('Pmenu',        s:base05, s:base01, '')
+call s:hi('PmenuSel',     s:base07, s:base02, '')
+call s:hi('PmenuSbar',    '',       s:base02, '')
+call s:hi('PmenuThumb',   '',       s:base04, '')
+call s:hi('Folded',       s:base04, s:base01, '')
+call s:hi('FoldColumn',   s:base03, s:base00, '')
+call s:hi('SignColumn',   s:base03, s:base00, '')
+call s:hi('ColorColumn',  '',       s:base01, '')
+call s:hi('MatchParen',   s:base07, s:base02, 'bold')
+call s:hi('Directory',    s:base0D, '',       '')
+call s:hi('Title',        s:base07, '',       'bold')
+call s:hi('ErrorMsg',     s:base08, '',       '')
+call s:hi('WarningMsg',   s:base09, '',       '')
+call s:hi('MoreMsg',      s:base0B, '',       '')
+call s:hi('Question',     s:base0B, '',       '')
+call s:hi('ModeMsg',      s:base07, '',       'bold')
+call s:hi('NonText',      s:base02, '',       '')
+call s:hi('EndOfBuffer',  s:base02, s:base00, '')
+call s:hi('SpecialKey',   s:base02, '',       '')
+call s:hi('Whitespace',   s:base02, '',       '')
+call s:hi('Conceal',      s:base04, '',       '')
+call s:hi('WildMenu',     s:base00, s:base0A, '')
+exe 'hi SpellBad   gui=undercurl cterm=undercurl guisp=' . s:base08
+exe 'hi SpellCap   gui=undercurl cterm=undercurl guisp=' . s:base09
+exe 'hi SpellLocal gui=undercurl cterm=undercurl guisp=' . s:base0C
+exe 'hi SpellRare  gui=undercurl cterm=undercurl guisp=' . s:base0E
+
+" diff ------------------------------------------------------------------------
+call s:hi('DiffAdd',    '',       '#0e2919', '')
+call s:hi('DiffChange', '',       '#2b2311', '')
+call s:hi('DiffDelete', s:base08, '#2e1525', '')
+call s:hi('DiffText',   '',       '#3d3118', '')
+call s:hi('Added',      s:base13, '',        '')
+call s:hi('Changed',    s:base0A, '',        '')
+call s:hi('Removed',    s:base10, '',        '')
+
+" syntax (quiet accents for code, loud reserved for signals) -----------------
+call s:hi('Comment',      s:base03, '', 'italic')
+call s:hi('String',       s:base17, '', '')
+call s:hi('Character',    s:base17, '', '')
+call s:hi('Number',       s:base12, '', '')
+call s:hi('Float',        s:base12, '', '')
+call s:hi('Boolean',      s:base12, '', '')
+call s:hi('Constant',     s:base12, '', '')
+call s:hi('Identifier',   s:base07, '', '')
+call s:hi('Function',     s:base15, '', '')
+call s:hi('Statement',    s:base10, '', '')
+call s:hi('Keyword',      s:base10, '', '')
+call s:hi('Conditional',  s:base10, '', '')
+call s:hi('Repeat',       s:base10, '', '')
+call s:hi('Operator',     s:base04, '', '')
+call s:hi('Exception',    s:base10, '', '')
+call s:hi('PreProc',      s:base10, '', '')
+call s:hi('Include',      s:base10, '', '')
+call s:hi('Define',       s:base10, '', '')
+call s:hi('Macro',        s:base11, '', '')
+call s:hi('Type',         s:base14, '', '')
+call s:hi('StorageClass', s:base14, '', 'italic')
+call s:hi('Structure',    s:base14, '', '')
+call s:hi('Typedef',      s:base14, '', '')
+call s:hi('Special',      s:base11, '', '')
+call s:hi('SpecialChar',  s:base12, '', '')
+call s:hi('Tag',          s:base10, '', '')
+call s:hi('Delimiter',    s:base04, '', '')
+call s:hi('Debug',        s:base08, '', '')
+call s:hi('Underlined',   s:base0D, '', 'underline')
+call s:hi('Error',        s:base08, '', '')
+call s:hi('Todo',         s:base0F, s:base00, 'bold')
+
+" markdown (vim native syntax) ------------------------------------------------
+call s:hi('markdownH1',                s:base00, s:base0F, 'bold')
+call s:hi('markdownH2',                s:base08, '',       'bold')
+call s:hi('markdownH3',                s:base08, '',       '')
+call s:hi('markdownH4',                s:base08, '',       '')
+call s:hi('markdownH5',                s:base08, '',       '')
+call s:hi('markdownH6',                s:base08, '',       '')
+call s:hi('markdownHeadingDelimiter',  s:base08, '',       '')
+call s:hi('markdownBold',              s:base0D, '',       'bold')
+call s:hi('markdownItalic',            s:base15, '',       'italic')
+call s:hi('markdownBoldItalic',        s:base0D, '',       'bold,italic')
+call s:hi('markdownCode',              s:base0A, '',       '')
+call s:hi('markdownCodeBlock',         s:base14, '',       '')
+call s:hi('markdownCodeDelimiter',     s:base04, '',       '')
+call s:hi('markdownLinkText',          s:base17, '',       '')
+call s:hi('markdownUrl',               s:base03, '',       'underline')
+call s:hi('markdownListMarker',        s:base04, '',       '')
+call s:hi('markdownOrderedListMarker', s:base04, '',       '')
+call s:hi('markdownBlockquote',        s:base14, '',       'italic')
+call s:hi('markdownRule',              s:base04, '',       '')
+call s:hi('htmlH1',                    s:base00, s:base0F, 'bold')
+call s:hi('htmlH2',                    s:base08, '',       'bold')
+call s:hi('htmlBold',                  s:base0D, '',       'bold')
+call s:hi('htmlItalic',                s:base15, '',       'italic')
+
+" ALE -------------------------------------------------------------------------
+call s:hi('ALEErrorSign',   s:base08, s:base00, '')
+call s:hi('ALEWarningSign', s:base09, s:base00, '')
+call s:hi('ALEInfoSign',    s:base0C, s:base00, '')
+call s:hi('ALEError',       '',       '',       'undercurl')
+call s:hi('ALEWarning',     '',       '',       'undercurl')
+
+" gitgutter -------------------------------------------------------------------
+call s:hi('GitGutterAdd',          s:base0B, s:base00, '')
+call s:hi('GitGutterChange',       s:base0A, s:base00, '')
+call s:hi('GitGutterDelete',       s:base08, s:base00, '')
+call s:hi('GitGutterChangeDelete', s:base09, s:base00, '')
+
+" indent-guides ---------------------------------------------------------------
+call s:hi('IndentGuidesOdd',  '', s:base00, '')
+call s:hi('IndentGuidesEven', '', s:base01, '')
+
+" startify --------------------------------------------------------------------
+call s:hi('StartifyHeader',  s:base0F, '', 'bold')
+call s:hi('StartifyFile',    s:base05, '', '')
+call s:hi('StartifyPath',    s:base04, '', '')
+call s:hi('StartifySlash',   s:base03, '', '')
+call s:hi('StartifyBracket', s:base03, '', '')
+call s:hi('StartifyNumber',  s:base0A, '', 'bold')
+call s:hi('StartifySection', s:base0C, '', 'bold')
+call s:hi('StartifySpecial', s:base04, '', '')
+call s:hi('StartifyFooter',  s:base03, '', 'italic')
+
+" terminal colors -------------------------------------------------------------
+if has('nvim')
+  let g:terminal_color_0  = s:base00
+  let g:terminal_color_1  = s:base08
+  let g:terminal_color_2  = s:base0B
+  let g:terminal_color_3  = s:base0A
+  let g:terminal_color_4  = s:base0D
+  let g:terminal_color_5  = s:base0E
+  let g:terminal_color_6  = s:base0C
+  let g:terminal_color_7  = s:base06
+  let g:terminal_color_8  = s:base03
+  let g:terminal_color_9  = s:base10
+  let g:terminal_color_10 = s:base13
+  let g:terminal_color_11 = s:base12
+  let g:terminal_color_12 = s:base15
+  let g:terminal_color_13 = s:base16
+  let g:terminal_color_14 = s:base14
+  let g:terminal_color_15 = s:base07
+endif
+'''
+
+    lightline = f'''" Lightline theme — Human++ Base24
+" Generated from palette.toml — DO NOT EDIT
+" Rebuild: make build
+"
+" Mode color mapping:
+"   normal=blue, insert=green, visual=purple, replace=red, tabsel=lime
+
+let s:base00  = [ '{c['base00']}', 0  ]
+let s:base01  = [ '{c['base01']}', 8  ]
+let s:base02  = [ '{c['base02']}', 8  ]
+let s:base03  = [ '{c['base03']}', 8  ]
+let s:base04  = [ '{c['base04']}', 7  ]
+let s:base05  = [ '{c['base05']}', 15 ]
+let s:base06  = [ '{c['base06']}', 15 ]
+let s:base07  = [ '{c['base07']}', 15 ]
+
+let s:red     = [ '{c['base08']}', 1  ]
+let s:orange  = [ '{c['base09']}', 9  ]
+let s:amber   = [ '{c['base0A']}', 3  ]
+let s:green   = [ '{c['base0B']}', 2  ]
+let s:cyan    = [ '{c['base0C']}', 6  ]
+let s:blue    = [ '{c['base0D']}', 4  ]
+let s:purple  = [ '{c['base0E']}', 5  ]
+let s:lime    = [ '{c['base0F']}', 10 ]
+
+let s:p = {{'normal': {{}}, 'inactive': {{}}, 'insert': {{}}, 'replace': {{}}, 'visual': {{}}, 'tabline': {{}}}}
+
+let s:p.normal.left    = [ [ s:base00, s:blue   ], [ s:base06, s:base02 ] ]
+let s:p.normal.right   = [ [ s:base00, s:base04 ], [ s:base05, s:base02 ] ]
+let s:p.normal.middle  = [ [ s:base04, s:base01 ] ]
+let s:p.normal.error   = [ [ s:base07, s:red    ] ]
+let s:p.normal.warning = [ [ s:base00, s:amber  ] ]
+
+let s:p.insert.left    = [ [ s:base00, s:green  ], [ s:base06, s:base02 ] ]
+let s:p.insert.right   = copy(s:p.normal.right)
+let s:p.insert.middle  = copy(s:p.normal.middle)
+
+let s:p.replace.left   = [ [ s:base00, s:red    ], [ s:base06, s:base02 ] ]
+let s:p.replace.right  = copy(s:p.normal.right)
+let s:p.replace.middle = copy(s:p.normal.middle)
+
+let s:p.visual.left    = [ [ s:base00, s:purple ], [ s:base06, s:base02 ] ]
+let s:p.visual.right   = copy(s:p.normal.right)
+let s:p.visual.middle  = copy(s:p.normal.middle)
+
+let s:p.inactive.left   = [ [ s:base04, s:base01 ], [ s:base03, s:base01 ] ]
+let s:p.inactive.right  = [ [ s:base04, s:base01 ], [ s:base03, s:base01 ] ]
+let s:p.inactive.middle = [ [ s:base03, s:base01 ] ]
+
+let s:p.tabline.left    = [ [ s:base05, s:base02 ] ]
+let s:p.tabline.tabsel  = [ [ s:base00, s:lime   ] ]
+let s:p.tabline.middle  = [ [ s:base03, s:base00 ] ]
+let s:p.tabline.right   = [ [ s:base05, s:base02 ] ]
+
+let g:lightline#colorscheme#humanplusplus#palette = lightline#colorscheme#flatten(s:p)
+'''
+
+    colors_dir = PACKAGES / "vim-plugin/colors"
+    colors_dir.mkdir(parents=True, exist_ok=True)
+    (colors_dir / "humanplusplus.vim").write_text(colorscheme)
+    print("  ✓ packages/vim-plugin/colors/humanplusplus.vim")
+
+    lightline_dir = PACKAGES / "vim-plugin/autoload/lightline/colorscheme"
+    lightline_dir.mkdir(parents=True, exist_ok=True)
+    (lightline_dir / "humanplusplus.vim").write_text(lightline)
+    print("  ✓ packages/vim-plugin/autoload/lightline/colorscheme/humanplusplus.vim")
+
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -2356,6 +2664,9 @@ def main():
 
     print("\nGenerating Neovim plugin:")
     generate_neovim(colors, meta)
+
+    print("\nGenerating Vim plugin:")
+    generate_vim(colors, meta)
 
     print("\n✓ Build complete!")
     print("\nTo apply: tinty apply base24-human-plus-plus")
