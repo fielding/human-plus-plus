@@ -46,3 +46,6 @@ out/
 sketchybar
 borders
 skhd
+
+# Local handoff docs (working context, not repo history)
+.handoff/
