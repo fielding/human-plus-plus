@@ -2,6 +2,15 @@
 
 All notable changes to Human++ will be documented in this file.
 
+## [1.6.0] - 2026-04-26
+
+### Added
+
+- **Zed theme extension package** with `extension.toml`, MIT license, and packaged Human++ theme JSON ready for submission to the Zed extensions registry.
+- **Zed theme generator** that emits both `dist/zed/human-plus-plus.json` and the packaged extension theme from the shared Base24 palette.
+
+---
+
 ## [1.5.0] - 2026-03-05
 
 ### Added
