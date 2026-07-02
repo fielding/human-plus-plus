@@ -87,7 +87,7 @@ Human++ uses a cool charcoal grayscale with warm cream text and a full Base24 pa
 | base10 | `{{base10}}` | Keywords |
 | base11 | `{{base11}}` | Decorators |
 | base12 | `{{base12}}` | Constants |
-| base13 | `{{base13}}` | CSS classes |
+| base13 | `{{base13}}` | Diff added, CSS classes |
 | base14 | `{{base14}}` | Types |
 | base15 | `{{base15}}` | Functions |
 | base16 | `{{base16}}` | Parameters |
@@ -110,11 +110,11 @@ Use punctuation markers in comments to flag human judgment:
 
 // !! Critical: don't change without talking to Sarah
 if (legacyMode) {
-  // TODO: Not sure this handles the edge case
+  // ?? Not sure this handles the edge case
   return transformLegacy(data);
 }
 
-// NOTE: See utils.ts for the transform logic
+// >> See utils.ts for the transform logic
 return transform(data);
 ```
 
@@ -130,21 +130,50 @@ return transform(data);
 
 ### VS Code / Cursor (Recommended)
 
-The VS Code extension includes the full theme plus **marker highlighting** and **inline diagnostics**:
+The extension includes the full theme plus **marker highlighting** and **inline diagnostics**:
 
 ```bash
-# Build and install from source
-cd packages/vscode-extension
-npm install && npx @vscode/vsce package
-code --install-extension human-plus-plus-1.0.0.vsix
+code --install-extension fielding.human-plus-plus
 ```
 
-Or download `human-plus-plus-*.vsix` from [Releases](https://github.com/fielding/human-plus-plus/releases).
+Or search "Human++" in the Extensions panel. Published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fielding.human-plus-plus) and [Open VSX](https://open-vsx.org/extension/fielding/human-plus-plus) (Cursor, VSCodium). A `.vsix` is also attached to each [Release](https://github.com/fielding/human-plus-plus/releases).
 
 **Features:**
 - Color theme with quiet syntax + loud diagnostics
 - Marker highlighting (`!!`, `??`, `>>`) with colored backgrounds
 - Inline diagnostic badges for errors/warnings
+
+### Neovim
+
+The first-party plugin lives in `packages/neovim-plugin` (colorscheme + marker highlighting + inline diagnostics, Neovim 0.9+). With [lazy.nvim](https://github.com/folke/lazy.nvim):
+
+```lua
+{
+  "fielding/human-plus-plus",
+  lazy = false,
+  priority = 1000,
+  config = function(plugin)
+    vim.opt.rtp:prepend(plugin.dir .. "/packages/neovim-plugin")
+    vim.cmd.colorscheme("humanplusplus")
+    require("human-plus-plus").setup()
+  end,
+}
+```
+
+`colorscheme humanplusplus` gives you the theme; `setup()` turns on markers and inline diagnostics. Options mirror the VS Code extension settings.
+
+### Vim
+
+A vanilla colorscheme (plus a lightline theme) lives in `packages/vim-plugin`. Add it to your runtimepath, then:
+
+```vim
+colorscheme humanplusplus
+let g:lightline = { 'colorscheme': 'humanplusplus' }
+```
+
+### Zed
+
+The theme lives in `packages/zed-extension`. Until it lands in the Zed extension registry, install it as a dev extension: run `zed: install dev extension` from the command palette and point it at that directory.
 
 ### Shell Tools (eza, fzf, etc.)
 
@@ -183,7 +212,8 @@ make apply    # Apply to installed apps
 | Ghostty | `dist/ghostty/config` |
 | [delta][91] | `dist/delta/config.gitconfig` |
 | git | `dist/git/colors.gitconfig` |
-| Vim / Neovim | via [tinty][90] |
+| Vim / Neovim | `packages/vim-plugin`, `packages/neovim-plugin` (or via [tinty][90]) |
+| Zed | `packages/zed-extension` |
 | Sketchybar | `dist/sketchybar/colors.sh` |
 | JankyBorders | `dist/borders/bordersrc` |
 | skhd | `dist/skhd/modes.sh` |
