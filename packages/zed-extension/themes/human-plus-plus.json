@@ -245,7 +245,7 @@
                         "font_weight": null
                     },
                     "hint": {
-                        "color": "#5e84b6ff",
+                        "color": "#828079ff",
                         "font_style": null,
                         "font_weight": null
                     },
@@ -285,7 +285,7 @@
                         "font_weight": null
                     },
                     "predictive": {
-                        "color": "#5e84b6ff",
+                        "color": "#5a5d62ff",
                         "font_style": "italic",
                         "font_weight": null
                     },
