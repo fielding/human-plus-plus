@@ -2,6 +2,20 @@
 
 All notable changes to Human++ will be documented in this file.
 
+## [1.6.0] - 2026-08-08
+
+### Added
+
+- **Zed theme** - generated from `templates/zed/human-plus-plus.json.tmpl`, with a packaged Zed extension (`packages/zed-extension/`) submitted to the Zed extension registry
+- **Vim plugin** - vanilla-vim colorscheme (`packages/vim-plugin/colors/humanplusplus.vim`) plus a lightline colorscheme generator
+
+### Fixed
+
+- Zed inlay hints (type hints) were full-strength quiet blue (base15), identical to functions and constructors - now dimmed neutral (base04), matching the VS Code `editorInlayHint` mapping
+- Zed edit-prediction ghost text now uses comment gray (base03 italic), matching VS Code `editorGhostText`
+
+---
+
 ## [1.5.0] - 2026-03-05
 
 ### Added
