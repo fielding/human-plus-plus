@@ -105,6 +105,12 @@ Use punctuation markers in comments to flag human judgment:
 | `??` | TODO, HACK | I'm uncertain | Purple (base0E) |
 | `>>` | NOTE, NB | See reference | Cyan (base0C) |
 
+The VS Code/Cursor extension highlights the whole comment line as a rounded badge. Legacy keywords use the same colors as their punctuation marker, so `FIXME`/`BUG`/`XXX` look like `!!`, `TODO`/`HACK` look like `??`, and `NOTE`/`NB` look like `>>`.
+
+<p align="center">
+  <img src="site/assets/comment-marker-preview.svg" alt="Human++ comment marker preview showing FIXME, TODO, HACK, NOTE, NB, and explicit punctuation badges" width="650">
+</p>
+
 ```js
 // Regular comment stays calm (base03)
 
