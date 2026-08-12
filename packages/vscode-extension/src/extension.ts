@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
+import { MarkerMatch, MarkerType, scanMarkerLines } from './markerScanCore';
 
 // Marker types and their colors
-type MarkerType = 'intervention' | 'uncertainty' | 'directive';
 
 interface MarkerDef {
   pattern: string;
@@ -31,21 +31,6 @@ const MARKERS: Record<MarkerType, MarkerDef> = {
   },
 };
 
-// Keyword aliases for markers (case-insensitive matching)
-// Strength order: intervention > uncertainty > directive
-const MARKER_KEYWORDS: Record<MarkerType, string[]> = {
-  intervention: ['FIXME', 'BUG', 'XXX'],        // Maps to !! (highest priority)
-  uncertainty: ['TODO', 'HACK'],                // Maps to ??
-  directive: ['NOTE', 'NB'],                    // Maps to >> (lowest priority)
-};
-
-// Priority order for conflict resolution (lower = stronger)
-const MARKER_PRIORITY: Record<MarkerType, number> = {
-  intervention: 1,
-  uncertainty: 2,
-  directive: 3,
-};
-
 // Diagnostic colors (for inline error/warning badges)
 type DiagnosticLevel = 'error' | 'warning' | 'info' | 'hint';
 
@@ -72,27 +57,6 @@ const DIAGNOSTIC_COLORS: Record<DiagnosticLevel, DiagnosticStyle> = {
     foreground: '#f8f6f2',      // Light text on dark background (base07)
   },
 };
-
-// Common comment prefix patterns
-const COMMENT_PATTERNS: RegExp[] = [
-  /^(\s*)(\/\/\/)/,        // /// doc comments
-  /^(\s*)(\/\/)/,          // // C-style
-  /^(\s*)(#)/,             // # Python/Shell/Ruby
-  /^(\s*)(--)/,            // -- SQL/Lua/Haskell
-  /^(\s*)(;)/,             // ; Lisp/Assembly
-  /^(\s*)(\/\*+)/,         // /* block
-  /^(\s*)(\*)/,            // * block continuation
-  /^(\s*)(<!--)/,          // <!-- HTML/XML
-  /^(\s*)(%)/,             // % LaTeX/Prolog
-  /^(\s*)(rem\s)/i,        // REM Basic/Batch
-];
-
-interface MarkerMatch {
-  type: MarkerType;
-  lineNum: number;
-  startChar: number;      // Start of comment (including leading whitespace for padding)
-  endChar: number;        // End of line text
-}
 
 // ============================================================================
 // Marker Decoration Manager (left-aligned comment badges)
@@ -145,103 +109,12 @@ class MarkerDecorationManager {
 class MarkerScanner {
   scan(document: vscode.TextDocument): MarkerMatch[] {
     const config = vscode.workspace.getConfiguration('human-plus-plus');
-    const matches: MarkerMatch[] = [];
 
-    const text = document.getText();
-    const lines = text.split('\n');
-
-    // Build list of enabled markers
-    const enabledMarkers: [MarkerType, MarkerDef][] = [];
-    for (const [type, def] of Object.entries(MARKERS) as [MarkerType, MarkerDef][]) {
-      if (config.get(def.configKey, true)) {
-        enabledMarkers.push([type, def]);
-      }
-    }
-
-    if (enabledMarkers.length === 0) {
-      return matches;
-    }
-
-    for (let lineNum = 0; lineNum < lines.length; lineNum++) {
-      const line = lines[lineNum];
-
-      // Try to match a comment pattern
-      for (const commentPattern of COMMENT_PATTERNS) {
-        const commentMatch = commentPattern.exec(line);
-        if (!commentMatch) {
-          continue;
-        }
-
-        const leadingWhitespace = commentMatch[1].length;
-        const prefixEnd = commentMatch[0].length;
-        const commentText = line.slice(prefixEnd);
-
-        // First check for explicit markers (!!, ??, >>) - these always win
-        let foundType: MarkerType | null = null;
-
-        for (const [type, def] of enabledMarkers) {
-          const markerRegex = new RegExp(`^\\s*(${def.pattern.replace(/\?/g, '\\?')})(?=\\s|$)`);
-          if (markerRegex.test(commentText)) {
-            foundType = type;
-            break;
-          }
-        }
-
-        // If no explicit marker, check for keyword aliases
-        if (!foundType) {
-          foundType = this.findKeywordMatch(commentText, enabledMarkers);
-        }
-
-        if (foundType) {
-          // Find end of actual text (trim trailing whitespace)
-          const trimmedEnd = line.trimEnd().length;
-          matches.push({
-            type: foundType,
-            lineNum,
-            startChar: leadingWhitespace,  // Start from the comment symbol
-            endChar: trimmedEnd,
-          });
-        }
-
-        break; // Only check first comment pattern per line
-      }
-    }
-
-    return matches;
-  }
-
-  /**
-   * Check for keyword aliases in comment text.
-   * Returns the strongest matching marker type, or null if no match.
-   * Keywords are matched case-insensitively with word boundaries.
-   */
-  private findKeywordMatch(
-    commentText: string,
-    enabledMarkers: [MarkerType, MarkerDef][]
-  ): MarkerType | null {
-    let bestMatch: MarkerType | null = null;
-    let bestPriority = Infinity;
-
-    for (const [type] of enabledMarkers) {
-      const keywords = MARKER_KEYWORDS[type];
-      if (!keywords) continue;
-
-      for (const keyword of keywords) {
-        // Match keyword at word boundary, case-insensitive
-        // Supports: // TODO: ..., // [TODO] ..., // TODO(...) ..., etc.
-        const keywordRegex = new RegExp(`\\b${keyword}\\b`, 'i');
-        if (keywordRegex.test(commentText)) {
-          const priority = MARKER_PRIORITY[type];
-          if (priority < bestPriority) {
-            bestMatch = type;
-            bestPriority = priority;
-          }
-          break; // Found this type, check next type for potentially stronger match
-        }
-      }
-    }
-
-    return bestMatch;
+    return scanMarkerLines(document.getText(), {
+      intervention: config.get(MARKERS.intervention.configKey, true),
+      uncertainty: config.get(MARKERS.uncertainty.configKey, true),
+      directive: config.get(MARKERS.directive.configKey, true),
+    });
   }
 }
 
