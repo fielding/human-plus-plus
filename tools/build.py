@@ -1051,6 +1051,115 @@ def generate_fastfetch(colors, meta):
     print("  ✓ dist/fastfetch/config.jsonc")
 
 
+def blend(fg_hex, bg_hex, alpha):
+    """Composite fg over bg at the given opacity, returning #rrggbb."""
+    fg = [int(fg_hex[i:i + 2], 16) for i in (1, 3, 5)]
+    bg = [int(bg_hex[i:i + 2], 16) for i in (1, 3, 5)]
+    return '#' + ''.join(f"{round(f * alpha + b * (1 - alpha)):02x}" for f, b in zip(fg, bg))
+
+
+def generate_omp(colors, meta):
+    """Generate oh my pi (omp) coding-agent theme.
+
+    Hex rather than 256-color indices: ANSI 0-15 has no slots for the base01/02
+    elevations, orange, lime or base04, so an index-only theme would flatten
+    every background block and only look right on a Human++ terminal.
+    omp downsamples hex to 256 colors itself when truecolor is unavailable.
+    """
+    c = colors
+
+    theme = {
+        "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/theme-schema.json",
+        "name": "human-plus-plus",
+        # Exposed as vars so hand-tweaking the installed file stays readable
+        "vars": dict(sorted(c.items())),
+        "colors": {
+            "accent": "base0D",
+            "border": "base03",
+            "borderAccent": "base0D",
+            "borderMuted": "base02",
+            "success": "base0B",
+            "error": "base08",
+            "warning": "base09",
+            "muted": "base04",
+            "dim": "base03",
+            "text": "base05",
+            "thinkingText": "base04",
+
+            "selectedBg": "base02",
+            "userMessageBg": "base01",
+            # Human voice is the brightest text on screen; the agent's is base05
+            "userMessageText": "base07",
+            "customMessageBg": "base01",
+            "customMessageText": "base05",
+            "customMessageLabel": "base0E",
+            "toolPendingBg": blend(c['base0D'], c['base00'], 0.08),
+            "toolSuccessBg": blend(c['base0B'], c['base00'], 0.08),
+            "toolErrorBg": blend(c['base08'], c['base00'], 0.10),
+            "toolTitle": "base06",
+            "toolOutput": "base04",
+
+            "mdHeading": "base08",
+            "mdLink": "base17",
+            "mdLinkUrl": "base03",
+            "mdCode": "base0A",
+            "mdCodeBlock": "base14",
+            "mdCodeBlockBorder": "base03",
+            "mdQuote": "base14",
+            "mdQuoteBorder": "base03",
+            "mdHr": "base03",
+            "mdListBullet": "base04",
+
+            "toolDiffAdded": "base0B",
+            "toolDiffRemoved": "base08",
+            "toolDiffContext": "base04",
+
+            "syntaxComment": "base03",
+            "syntaxKeyword": "base10",
+            "syntaxFunction": "base15",
+            "syntaxVariable": "base05",
+            "syntaxString": "base17",
+            "syntaxNumber": "base12",
+            "syntaxType": "base14",
+            "syntaxOperator": "base04",
+            "syntaxPunctuation": "base04",
+
+            "thinkingOff": "base02",
+            "thinkingMinimal": "base03",
+            "thinkingLow": "base15",
+            "thinkingMedium": "base0D",
+            "thinkingHigh": "base0E",
+            "thinkingXhigh": "base08",
+            "bashMode": "base0C",
+            "pythonMode": "base0A",
+
+            "statusLineBg": "base01",
+            "statusLineSep": "base03",
+            "statusLineModel": "base0E",
+            "statusLinePath": "base0D",
+            "statusLineGitClean": "base0B",
+            "statusLineGitDirty": "base0A",
+            "statusLineContext": "base14",
+            "statusLineSpend": "base0C",
+            "statusLineStaged": "base0B",
+            "statusLineDirty": "base0A",
+            "statusLineUntracked": "base08",
+            "statusLineOutput": "base05",
+            "statusLineCost": "base09",
+            "statusLineSubagents": "base0D",
+        },
+        "export": {
+            "pageBg": "base00",
+            "cardBg": "base01",
+            "infoBg": "base02",
+        },
+    }
+
+    (DIST / "omp").mkdir(parents=True, exist_ok=True)
+    (DIST / "omp/human-plus-plus.json").write_text(json.dumps(theme, indent=2) + "\n")
+    print("  ✓ dist/omp/human-plus-plus.json")
+
+
 def generate_shell_init(colors, meta):
     """Generate shell-init.sh loader that conditionally sources configs.
 
@@ -1120,6 +1229,16 @@ if command -v fastfetch &>/dev/null; then
   mkdir -p "$HOME/.config/fastfetch"
   if [ ! -e "$HOME/.config/fastfetch/config.jsonc" ]; then
     ln -sf "$HUMAN_PP_DIR/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+  fi
+fi
+
+# oh my pi - make the theme selectable (Settings → Appearance); symlinked so
+# rebuilds live-reload in a running omp
+if command -v omp &>/dev/null; then
+  OMP_THEMES="${{PI_CODING_AGENT_DIR:-$HOME/.omp/agent}}/themes"
+  mkdir -p "$OMP_THEMES"
+  if [ ! -e "$OMP_THEMES/human-plus-plus.json" ]; then
+    ln -sf "$HUMAN_PP_DIR/omp/human-plus-plus.json" "$OMP_THEMES/human-plus-plus.json"
   fi
 fi
 
@@ -2643,6 +2762,7 @@ def main():
     generate_delta(colors, meta)
     generate_git_colors(colors, meta)
     generate_fastfetch(colors, meta)
+    generate_omp(colors, meta)
     generate_shell_init(colors, meta)
     generate_colortest(colors, meta)
 

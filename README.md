@@ -190,6 +190,7 @@ make apply    # Apply to installed apps
 | [tmux][94] | `dist/tmux/human-plus-plus.conf` |
 | [bat][95] | `dist/bat/Human++.tmTheme` |
 | glow | `dist/glow/human-plus-plus.json` |
+| [oh my pi][96] | `dist/omp/human-plus-plus.json` → `~/.omp/agent/themes/`, then Settings → Appearance |
 
 ### Git & Delta
 
@@ -258,3 +259,4 @@ MIT
 [93]: https://github.com/junegunn/fzf
 [94]: https://github.com/tmux/tmux
 [95]: https://github.com/sharkdp/bat
+[96]: https://github.com/can1357/oh-my-pi

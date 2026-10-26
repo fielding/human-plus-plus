@@ -2,6 +2,15 @@
 
 All notable changes to Human++ will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **oh my pi theme** - `dist/omp/human-plus-plus.json` for the omp coding agent: Zed-matched syntax colors, markdown mappings shared with VS Code/Neovim, base01/base02 elevations, and tinted tool pending/success/error blocks
+- oh my pi theme auto-symlinked into `~/.omp/agent/themes/` by `shell-init.sh` when omp is installed
+
+---
+
 ## [1.6.0] - 2026-08-08
 
 ### Added
