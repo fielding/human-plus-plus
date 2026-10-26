@@ -1568,7 +1568,6 @@ def generate_svgs(colors, meta):
       <stop offset="100%" style="stop-color:{c['base0B']}"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="200" fill="{c['base00']}"/>
   <text x="400" y="95" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="72" font-weight="700" letter-spacing="-3">
     <tspan fill="url(#humanGradient)">Human</tspan><tspan fill="url(#plusGradient)">++</tspan>
   </text>
@@ -1607,8 +1606,6 @@ def generate_svgs(colors, meta):
 
     # Palette visualization (dark mode)
     palette_dark = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
-  <rect width="800" height="320" fill="{c['base00']}"/>
-
   <!-- Grayscale row -->
   <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="{c['base04']}" letter-spacing="1">Grayscale</text>
   <rect x="24" y="48" width="88" height="56" rx="8" fill="{c['base00']}" stroke="{c['base02']}" stroke-width="1"/>

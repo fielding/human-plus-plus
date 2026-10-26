@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
-  <rect width="800" height="320" fill="#1a1c22"/>
-
   <!-- Grayscale row -->
   <text x="24" y="35" font-family="SF Mono, Consolas, monospace" font-size="11" fill="#828079" letter-spacing="1">Grayscale</text>
   <rect x="24" y="48" width="88" height="56" rx="8" fill="#1a1c22" stroke="#3a3d42" stroke-width="1"/>

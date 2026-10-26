@@ -9,7 +9,6 @@
       <stop offset="100%" style="stop-color:#04b372"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="200" fill="#1a1c22"/>
   <text x="400" y="95" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" font-size="72" font-weight="700" letter-spacing="-3">
     <tspan fill="url(#humanGradient)">Human</tspan><tspan fill="url(#plusGradient)">++</tspan>
   </text>
