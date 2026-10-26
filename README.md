@@ -191,6 +191,9 @@ make apply    # Apply to installed apps
 | [bat][95] | `dist/bat/Human++.tmTheme` |
 | glow | `dist/glow/human-plus-plus.json` |
 | [oh my pi][96] | `dist/omp/human-plus-plus.json` → `~/.omp/agent/themes/`, then Settings → Appearance |
+| [Claude Code][97] | `dist/claude/human-plus-plus.json` → `~/.claude/themes/`, then `/theme` |
+| [Codex][98] | `dist/codex/human-plus-plus.tmTheme` → `~/.codex/themes/`, then `/theme` |
+| [herdr][99] | paste `dist/herdr/theme.toml` into `~/.config/herdr/config.toml` |
 
 ### Git & Delta
 
@@ -260,3 +263,6 @@ MIT
 [94]: https://github.com/tmux/tmux
 [95]: https://github.com/sharkdp/bat
 [96]: https://github.com/can1357/oh-my-pi
+[97]: https://github.com/anthropics/claude-code
+[98]: https://github.com/openai/codex
+[99]: https://herdr.dev

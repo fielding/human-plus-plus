@@ -433,15 +433,21 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color={fzf_colors}"
     print("  ✓ dist/fzf/colors.sh")
 
 
-def generate_bat(colors, meta):
-    """Generate bat theme (.tmTheme format) matching VS Code theme.
+def render_tmtheme(colors, meta, diff_backgrounds=None):
+    """Render the Human++ TextMate theme shared by bat and Codex.
 
-    Bat uses TextMate themes. After generating, run: bat cache --build
+    diff_backgrounds: optional (inserted, deleted) hex pair added as
+    markup.inserted/deleted backgrounds. bat leaves these off so diff files
+    stay foreground-only; Codex paints its diff line fills from them.
     """
     c = colors
+    inserted_bg, deleted_bg = (
+        (f"\n                <key>background</key>\n                <string>{bg}</string>" for bg in diff_backgrounds)
+        if diff_backgrounds else ("", "")
+    )
 
     # tmTheme is XML/plist format - mappings match VS Code theme
-    content = f'''<?xml version="1.0" encoding="UTF-8"?>
+    return f'''<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -698,7 +704,7 @@ def generate_bat(colors, meta):
             <key>settings</key>
             <dict>
                 <key>foreground</key>
-                <string>{c['base13']}</string>
+                <string>{c['base13']}</string>{inserted_bg}
             </dict>
         </dict>
         <!-- Diff deleted - base10 quiet pink -->
@@ -708,7 +714,7 @@ def generate_bat(colors, meta):
             <key>settings</key>
             <dict>
                 <key>foreground</key>
-                <string>{c['base10']}</string>
+                <string>{c['base10']}</string>{deleted_bg}
             </dict>
         </dict>
         <!-- Invalid - base08 LOUD pink -->
@@ -727,6 +733,14 @@ def generate_bat(colors, meta):
 </dict>
 </plist>
 '''
+
+
+def generate_bat(colors, meta):
+    """Generate bat theme (.tmTheme format) matching VS Code theme.
+
+    Bat uses TextMate themes. After generating, run: bat cache --build
+    """
+    content = render_tmtheme(colors, meta)
 
     (DIST / "bat").mkdir(parents=True, exist_ok=True)
     (DIST / "bat/Human++.tmTheme").write_text(content)
@@ -1160,6 +1174,163 @@ def generate_omp(colors, meta):
     print("  ✓ dist/omp/human-plus-plus.json")
 
 
+def generate_codex(colors, meta):
+    """Generate Codex CLI syntax theme ($CODEX_HOME/themes/<name>.tmTheme).
+
+    Codex only themes via TextMate scopes: code highlighting, status line
+    segments, and diff line fills (markup.inserted/deleted backgrounds).
+    """
+    c = colors
+    content = render_tmtheme(colors, meta, diff_backgrounds=(
+        blend(c['base0B'], c['base00'], 0.15),
+        blend(c['base08'], c['base00'], 0.15),
+    ))
+
+    (DIST / "codex").mkdir(parents=True, exist_ok=True)
+    (DIST / "codex/human-plus-plus.tmTheme").write_text(content)
+    print("  ✓ dist/codex/human-plus-plus.tmTheme")
+
+
+def generate_claude_code(colors, meta):
+    """Generate Claude Code custom theme (~/.claude/themes/<slug>.json).
+
+    Claude Code drops override keys its base theme lacks, so every token of
+    the built-in "dark" theme is set here to keep the result independent of
+    the terminal palette.
+    """
+    c = colors
+
+    # Claude Code animates some tokens toward a lighter "shimmer" variant
+    def shimmer(key):
+        return blend(c['base07'], c[key], 0.35)
+
+    accents = {
+        "red": "base08", "orange": "base09", "yellow": "base0A", "green": "base0B",
+        "blue": "base0D", "indigo": "base16", "violet": "base0E",
+    }
+
+    overrides = {
+        "autoAccept": c['base0E'],
+        "autoAcceptShimmer": shimmer('base0E'),
+        "skill": c['base0E'],
+        "bashBorder": c['base0C'],
+        "claude": c['base09'],
+        "claudeShimmer": shimmer('base09'),
+        "claudeBlue_FOR_SYSTEM_SPINNER": c['base0D'],
+        "claudeBlueShimmer_FOR_SYSTEM_SPINNER": shimmer('base0D'),
+        "permission": c['base0D'],
+        "permissionShimmer": shimmer('base0D'),
+        "planMode": c['base14'],
+        "ide": c['base15'],
+        "promptBorder": c['base03'],
+        "promptBorderShimmer": c['base04'],
+        "text": c['base05'],
+        "inverseText": c['base00'],
+        "inactive": c['base04'],
+        "inactiveShimmer": c['base05'],
+        "subtle": c['base03'],
+        "suggestion": c['base15'],
+        # "#" memory entries are the human telling the agent what matters
+        "remember": c['base0F'],
+        "background": c['base0C'],
+        "success": c['base0B'],
+        "error": c['base08'],
+        "warning": c['base09'],
+        "warningShimmer": shimmer('base09'),
+        "merged": c['base0E'],
+        "diffAdded": blend(c['base0B'], c['base00'], 0.22),
+        "diffRemoved": blend(c['base08'], c['base00'], 0.22),
+        "diffAddedDimmed": blend(c['base0B'], c['base00'], 0.10),
+        "diffRemovedDimmed": blend(c['base08'], c['base00'], 0.10),
+        "diffAddedWord": blend(c['base0B'], c['base00'], 0.50),
+        "diffRemovedWord": blend(c['base08'], c['base00'], 0.50),
+        "red_FOR_SUBAGENTS_ONLY": c['base08'],
+        "blue_FOR_SUBAGENTS_ONLY": c['base0D'],
+        "green_FOR_SUBAGENTS_ONLY": c['base0B'],
+        "yellow_FOR_SUBAGENTS_ONLY": c['base0A'],
+        "purple_FOR_SUBAGENTS_ONLY": c['base0E'],
+        "orange_FOR_SUBAGENTS_ONLY": c['base09'],
+        "pink_FOR_SUBAGENTS_ONLY": c['base10'],
+        "cyan_FOR_SUBAGENTS_ONLY": c['base0C'],
+        "professionalBlue": c['base15'],
+        "chromeYellow": c['base0A'],
+        "clawd_body": c['base09'],
+        "clawd_background": c['base00'],
+        "userMessageBackground": c['base01'],
+        "userMessageBackgroundHover": c['base02'],
+        "composerSidebarBackground": c['base01'],
+        "selectionBg": c['base02'],
+        "bashMessageBackgroundColor": blend(c['base0C'], c['base00'], 0.10),
+        "memoryBackgroundColor": blend(c['base0F'], c['base00'], 0.08),
+        "rate_limit_fill": c['base0D'],
+        "rate_limit_empty": c['base02'],
+        "fastMode": c['base09'],
+        "fastModeShimmer": shimmer('base09'),
+        "effortUltra": c['base0E'],
+        "briefLabelYou": c['base17'],
+        "briefLabelClaude": c['base09'],
+    }
+    for name, key in accents.items():
+        overrides[f"rainbow_{name}"] = c[key]
+        overrides[f"rainbow_{name}_shimmer"] = shimmer(key)
+
+    theme = {"name": meta['name'], "base": "dark", "overrides": overrides}
+
+    (DIST / "claude").mkdir(parents=True, exist_ok=True)
+    (DIST / "claude/human-plus-plus.json").write_text(json.dumps(theme, indent=2) + "\n")
+    print("  ✓ dist/claude/human-plus-plus.json")
+
+
+def generate_herdr(colors, meta):
+    """Generate herdr theme snippet.
+
+    herdr has no theme files or config includes; palettes are token overrides
+    under [theme.custom] in config.toml, so this is a block to paste in.
+    """
+    c = colors
+
+    tokens = {
+        "accent": c['base0D'],
+        "panel_bg": c['base01'],
+        # reset keeps the host terminal background behind the sidebar
+        "sidebar_bg": "reset",
+        "active_row_bg": c['base01'],
+        "selection_bg": c['base02'],
+        "surface0": c['base02'],
+        "surface1": blend(c['base03'], c['base02'], 0.5),
+        "surface_dim": c['base01'],
+        "overlay0": c['base03'],
+        "overlay1": c['base04'],
+        "text": c['base05'],
+        "subtext0": c['base04'],
+        "mauve": c['base16'],
+        "green": c['base0B'],
+        "yellow": c['base0A'],
+        "red": c['base08'],
+        "blue": c['base0D'],
+        "teal": c['base0C'],
+        "peach": c['base09'],
+    }
+    body = '\n'.join(f'{k} = "{v}"' for k, v in tokens.items())
+
+    content = f'''# Human++ - herdr theme
+# Generated from palette.toml
+#
+# Paste into ~/.config/herdr/config.toml (replacing any existing [theme]
+# block), then run: herdr server reload-config
+
+[theme]
+name = "terminal"
+
+[theme.custom]
+{body}
+'''
+
+    (DIST / "herdr").mkdir(parents=True, exist_ok=True)
+    (DIST / "herdr/theme.toml").write_text(content)
+    print("  ✓ dist/herdr/theme.toml")
+
+
 def generate_shell_init(colors, meta):
     """Generate shell-init.sh loader that conditionally sources configs.
 
@@ -1239,6 +1410,23 @@ if command -v omp &>/dev/null; then
   mkdir -p "$OMP_THEMES"
   if [ ! -e "$OMP_THEMES/human-plus-plus.json" ]; then
     ln -sf "$HUMAN_PP_DIR/omp/human-plus-plus.json" "$OMP_THEMES/human-plus-plus.json"
+  fi
+fi
+
+# Codex - syntax theme, selectable via /theme
+if command -v codex &>/dev/null; then
+  CODEX_THEMES="${{CODEX_HOME:-$HOME/.codex}}/themes"
+  mkdir -p "$CODEX_THEMES"
+  if [ ! -e "$CODEX_THEMES/human-plus-plus.tmTheme" ]; then
+    ln -sf "$HUMAN_PP_DIR/codex/human-plus-plus.tmTheme" "$CODEX_THEMES/human-plus-plus.tmTheme"
+  fi
+fi
+
+# Claude Code - custom theme, selectable via /theme
+if command -v claude &>/dev/null; then
+  mkdir -p "$HOME/.claude/themes"
+  if [ ! -e "$HOME/.claude/themes/human-plus-plus.json" ]; then
+    ln -sf "$HUMAN_PP_DIR/claude/human-plus-plus.json" "$HOME/.claude/themes/human-plus-plus.json"
   fi
 fi
 
@@ -2763,6 +2951,9 @@ def main():
     generate_git_colors(colors, meta)
     generate_fastfetch(colors, meta)
     generate_omp(colors, meta)
+    generate_codex(colors, meta)
+    generate_claude_code(colors, meta)
+    generate_herdr(colors, meta)
     generate_shell_init(colors, meta)
     generate_colortest(colors, meta)
 

@@ -7,7 +7,10 @@ All notable changes to Human++ will be documented in this file.
 ### Added
 
 - **oh my pi theme** - `dist/omp/human-plus-plus.json` for the omp coding agent: Zed-matched syntax colors, markdown mappings shared with VS Code/Neovim, base01/base02 elevations, and tinted tool pending/success/error blocks
-- oh my pi theme auto-symlinked into `~/.omp/agent/themes/` by `shell-init.sh` when omp is installed
+- **Claude Code theme** - `dist/claude/human-plus-plus.json` sets every token of the built-in dark theme (Claude orange → base09, `#` memory → lime, subagent/rainbow colors, tinted diff and message backgrounds), so it no longer depends on the terminal's ANSI palette
+- **Codex theme** - `dist/codex/human-plus-plus.tmTheme`, the bat TextMate theme plus tinted `markup.inserted`/`markup.deleted` backgrounds for Codex's diff fills
+- **herdr theme** - `dist/herdr/theme.toml`, a `[theme.custom]` block covering all 19 herdr palette tokens
+- oh my pi, Claude Code, and Codex themes auto-symlinked into their theme directories by `shell-init.sh` when the tool is installed
 
 ---
 
